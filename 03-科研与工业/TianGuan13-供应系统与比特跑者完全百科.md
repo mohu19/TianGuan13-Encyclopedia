@@ -678,15 +678,108 @@
 
 **出口机制**：把物品放进货运出口 → 按物品价值折算信用点 → 增加预算。
 
-## 3.3 市场系统（Markets）
+## 3.3 市场系统（Markets · 70 项全录）
 
-**代码**: `cargo/markets/`（1,727 行）+ `materials_market.dm`（386 行）
+**代码**: `cargo/markets/`（1,727 行）+ `materials_market.dm`（386 行）。此前文档仅 2 行概述，现全量列出 market_items 8 类 70 项（价格以 CARGO_CRATE_VALUE=货箱价值 / PAYCHECK_CREW=船员工资为基准的倍率区间）：
 
-| 市场 | 说明 |
+### 3.3.1 商品全录（70 项）
+
+| 类别 | 商品 | 价格区间 |
+|---|---|---|
+| **服装** | Chameleon Hat | CARGO_CRATE_VALUE * 0.5 ~ CARGO_CRATE_VALUE |
+| **服装** | Collar Bomb Kit | CARGO_CRATE_VALUE * 3.5 ~ CARGO_CRATE_VALUE * 4.5 |
+| **服装** | Durathread Helmet | CARGO_CRATE_VALUE * 0.5 ~ CARGO_CRATE_VALUE |
+| **服装** | Durathread Vest | CARGO_CRATE_VALUE ~ CARGO_CRATE_VALUE * 2 |
+| **服装** | Floor-tile Camouflage Uniform | CARGO_CRATE_VALUE * 0.5 ~ CARGO_CRATE_VALUE |
+| **服装** | MedSec HUD | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 3.5 |
+| **服装** | Rocket Boots | CARGO_CRATE_VALUE * 5 ~ CARGO_CRATE_VALUE * 10 |
+| **服装** | Space Ninja Mask | CARGO_CRATE_VALUE ~ CARGO_CRATE_VALUE * 2.5 |
+| **服装** | Strange Pet Collar | CARGO_CRATE_VALUE * 5 ~ CARGO_CRATE_VALUE * 10 |
+| **服装** | Subversive Pin | CARGO_CRATE_VALUE * 0.5 ~ CARGO_CRATE_VALUE * 1.5 |
+| **服装** | \improper Nanotrasen Branded Spacesuit Box | CARGO_CRATE_VALUE * 1.875 ~ CARGO_CRATE_VALUE * 4 |
+| **消耗品** | Bottle of Clown's Tears | CARGO_CRATE_VALUE * 2.6 ~ CARGO_CRATE_VALUE * 3 |
+| **消耗品** | Bottle of Suspicious Pills | CARGO_CRATE_VALUE * 0.625 ~ CARGO_CRATE_VALUE * 1.25 |
+| **消耗品** | Box of Donk Pockets | CARGO_CRATE_VALUE * 1.375 ~ CARGO_CRATE_VALUE * 1.825 |
+| **消耗品** | Crystal Meth | CARGO_CRATE_VALUE * 0.4 ~ CARGO_CRATE_VALUE * 0.5 |
+| **消耗品** | Heroin | CARGO_CRATE_VALUE * 0.35 ~ CARGO_CRATE_VALUE * 0.5 |
+| **消耗品** | Kronkaine | CARGO_CRATE_VALUE * 0.5 ~ CARGO_CRATE_VALUE * 1 |
+| **消耗品** | Maintenance Pump-Up | CARGO_CRATE_VALUE * 0.25 ~ CARGO_CRATE_VALUE * 0.75 |
+| **消耗品** | Strange Pill | CARGO_CRATE_VALUE * 0.05 ~ CARGO_CRATE_VALUE * 0.3 |
+| **消耗品** | Wholesale Kronkaine Shipment | CARGO_CRATE_VALUE * 1 ~ CARGO_CRATE_VALUE * 2 |
+| **消耗品** | Wholesale Methaphemtamine Shipment | CARGO_CRATE_VALUE * 0.5 ~ CARGO_CRATE_VALUE * 1.5 |
+| **消耗品** | Wholesale Opium Shipment | CARGO_CRATE_VALUE * 0.5 ~ CARGO_CRATE_VALUE * 1.2 |
+| **人质** | [mob.real_name] | new_price |
+| **杂项** | /obj/item/skillchip/self_surgery::name | CARGO_CRATE_VALUE * 5 ~ CARGO_CRATE_VALUE * 10 |
+| **杂项** | Cap Gun | CARGO_CRATE_VALUE * 0.25 ~ CARGO_CRATE_VALUE |
+| **杂项** | Clear PDA | CARGO_CRATE_VALUE * 1.25 ~ CARGO_CRATE_VALUE *3 |
+| **杂项** | Fish | PAYCHECK_CREW * 0.5 ~ PAYCHECK_CREW * 1.2 |
+| **杂项** | Fishing Spot Capsule | CARGO_CRATE_VALUE * 1.125 ~ CARGO_CRATE_VALUE * 2.125 |
+| **杂项** | Flask of holy water | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 3 |
+| **杂项** | Genuine V8 Engine (Perserved) | CARGO_CRATE_VALUE * 4 ~ CARGO_CRATE_VALUE * 6 |
+| **杂项** | Girlypop Posters | PAYCHECK_CREW * 2 ~ PAYCHECK_CREW * 5 |
+| **杂项** | Jade Lantern | CARGO_CRATE_VALUE * 0.75 ~ CARGO_CRATE_VALUE * 2.5 |
+| **杂项** | Jawed Fishing Hook | CARGO_CRATE_VALUE * 0.75 ~ CARGO_CRATE_VALUE * 2 |
+| **杂项** | MOD Anti-Gravity Module | CARGO_CRATE_VALUE * 4 ~ CARGO_CRATE_VALUE * 7 |
+| **杂项** | MOD Bulwark Module | CARGO_CRATE_VALUE * 4 ~ CARGO_CRATE_VALUE * 5.75 |
+| **杂项** | MOD Hat Stabilizer Module | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 3 |
+| **杂项** | MOD Riot Foam Dart Recycler Module | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 4.5 |
+| **杂项** | MOD Tanning Module | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 3 |
+| **杂项** | Nutriment Pump Implant Plus Plus Plus | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 3 |
+| **杂项** | Roulette Beacon | CARGO_CRATE_VALUE * 1 ~ CARGO_CRATE_VALUE * 2.5 |
+| **杂项** | Shoulder holster | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 4 |
+| **杂项** | Smuggler's Satchel | CARGO_CRATE_VALUE * 3.75 ~ CARGO_CRATE_VALUE * 5 |
+| **杂项** | Strange Seeds | CARGO_CRATE_VALUE * 1.6 ~ CARGO_CRATE_VALUE * 1.8 |
+| **杂项** | Trick Trick Cigarettes | PAYCHECK_CREW ~ PAYCHECK_CREW * 3 |
+| **赃物** | Stolen [thing.name] | thing_price |
+| **工具** | Binoculars | CARGO_CRATE_VALUE * 1.75 ~ CARGO_CRATE_VALUE * 4 |
+| **工具** | Black Market LTSRBT | CARGO_CRATE_VALUE * 2.5 ~ CARGO_CRATE_VALUE * 3.25 |
+| **工具** | Bootleg Data Disk | CARGO_CRATE_VALUE * 0.75 ~ CARGO_CRATE_VALUE * 2 |
+| **工具** | Experimental Crowbar | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 4 |
+| **工具** | Experimental Screwdriver | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 4 |
+| **工具** | Experimental Wirecutters | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 4 |
+| **工具** | Experimental Wrench | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 4 |
+| **工具** | Riot Shield | CARGO_CRATE_VALUE * 2.25 ~ CARGO_CRATE_VALUE * 3.25 |
+| **工具** | Thermite Bottle | CARGO_CRATE_VALUE * 0.75 ~ CARGO_CRATE_VALUE |
+| **武器** | Ammobox of .310 Strilka | CARGO_CRATE_VALUE ~ CARGO_CRATE_VALUE * 2 |
+| **武器** | Bear Trap | CARGO_CRATE_VALUE * 1.5 ~ CARGO_CRATE_VALUE * 2.75 |
+| **武器** | Big Slappy parts | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 5 |
+| **武器** | Bone Spear | CARGO_CRATE_VALUE ~ CARGO_CRATE_VALUE * 1.5 |
+| **武器** | Box of Buckshot Shells | CARGO_CRATE_VALUE * 1 ~ CARGO_CRATE_VALUE * 3 |
+| **武器** | Box of XL Shotgun Darts | CARGO_CRATE_VALUE * 1.375 ~ CARGO_CRATE_VALUE * 2.875 |
+| **武器** | Carpenter hammer | CARGO_CRATE_VALUE * 1 ~ CARGO_CRATE_VALUE * 1.25 |
+| **武器** | Chainsaw | CARGO_CRATE_VALUE * 1.75 ~ CARGO_CRATE_VALUE * 3 |
+| **武器** | E-1 Earthcracker | CARGO_CRATE_VALUE ~ CARGO_CRATE_VALUE * 3 |
+| **武器** | EMP Grenade | CARGO_CRATE_VALUE * 0.5 ~ CARGO_CRATE_VALUE * 2 |
+| **武器** | Multi-Dimensional Bomb Core | CARGO_CRATE_VALUE * 40 ~ CARGO_CRATE_VALUE * 50 |
+| **武器** | Pattern I 'Iaito' Energy Sword | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 5 |
+| **武器** | SC/FISHER Saboteur Handgun | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 4 |
+| **武器** | Sakhno SKS semi-automatic rifle | CARGO_CRATE_VALUE * 1 ~ CARGO_CRATE_VALUE * 3 |
+| **武器** | Switchblade | CARGO_CRATE_VALUE * 1.25 ~ CARGO_CRATE_VALUE * 1.75 |
+| **武器** | illegal 3D printer designs | CARGO_CRATE_VALUE * 2 ~ CARGO_CRATE_VALUE * 5 |
+
+### 3.3.2 配送方式与费用
+
+| 配送 | 机制 |
 |---|---|
-| **材料市场** | 材料价格波动（事件联动：市场崩盘时硬锁最低） |
-| 其他市场 | 商品价格动态 |
+| **黑市 LTSRBT** | 运费 40（LTSRBT 补给）；上架费 30cr = PAYCHECK_LOWER×1.2；15% 代扣税；上限 40 件；补货费 675cr 翻倍；扫描模块减充能 |
+| **发射** | 运费 0 |
+| **传送** | 运费 75 |
+| **Uplink 合成** | 螺丝刀/剪线钳/多功能工具 + 微激光/信号器/15 电缆/电台/分析仪 |
 
+### 3.3.3 动态类别
+
+| 类别 | 机制 |
+|---|---|
+| **人质市场** | 1 项动态；57% 电击项圈机制 |
+| **赃物市场** | 1 项动态（Stolen [thing]）；spy 赃物定价按难度档位×倍率 |
+| **本地货** | 动态定价 |
+
+### 3.3.4 黑市物品要点
+
+- **MOD 模块**（反重力/堡垒/帽子稳定器/泡沫飞镖回收器/晒黑）——Nova 特色
+- **实验工具**（撬棍/螺丝刀/剪线钳/扳手）——2-4 倍货箱价
+- **稀有武器**（Multi-Dimensional Bomb Core 40-50×、E-1 Earthcracker 0-3×、Sakhno SKS 半自动步枪 1-3×）
+- **毒品**（水晶冰毒 0.4×、海洛因 0.35×、Kronkaine 0.5×、批发装）
 
 ## 3.5 悬赏全录（167 个活跃 + 11 移除）
 
@@ -884,6 +977,25 @@
 | **Light Pink Slime Extract** | 浅粉史莱姆核 |  |
 | **Adamantine Slime Extract** | 精金史莱姆核 |  |
 | **Rainbow Slime Extract** | 彩虹史莱姆核 |  |
+
+### 安保悬赏（6 个 · 整类补全）
+
+| 悬赏 | 需要的物品/条件 | 奖励（信用点） |
+|---|---|---|
+| **Patrol Station 巡逻空间站** | 例行巡逻指定区域（%AREA_NAME%） | 1000（CCV×5） |
+| **Patrol Cargo 巡逻货运** | 巡逻货运区域 | — |
+| **Patrol Medical 巡逻医疗** | 巡逻医疗区域 | — |
+| **Patrol Science 巡逻科研** | 巡逻科研区域 | — |
+| **Patrol Engineering 巡逻工程** | 巡逻工程区域 | — |
+| **Confiscated Contraband 没收违禁品** | 上缴没收的辛迪加违禁品 | 800（CCV×4） |
+
+### 科研悬赏（3 个 · 整类补全）
+
+| 悬赏 | 需要的物品/条件 | 奖励（信用点） |
+|---|---|---|
+| **E.X.P.E.R.I-MENTORially Discovered Devices** | 实验发现装置 | 1600（CCV×8） |
+| **Reformatted Tech Disk 格式化科技盘** | BEPIS 打印的实验科技盘 | 1600（CCV×8） |
+| **Genetics Disability Mutator 基因缺陷突变器** | 基因突变器 | 400（CCV×2） |
 
 ### 特殊悬赏（3 个）
 

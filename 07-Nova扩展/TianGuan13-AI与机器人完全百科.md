@@ -1,7 +1,7 @@
 # TianGuan13 AI 与机器人完全百科 (AI & Cyborg Encyclopedia)
 
 > 基于 TianGuan13 NovaSector 分支源码全量整理。AI 系统：`code/modules/mob/living/silicon/ai/`（21 文件）+ `code/datums/ai_laws/`（法则）；Cyborg 系统：`code/modules/mob/living/silicon/robot/`（13 文件）+ 躯体 `code/modules/surgery/bodyparts/robot_bodyparts.dm`（649 行）+ 升级件 `code/game/objects/items/robot/` + NOVA 追加。
-> 本文档全量列出：AI 全机制、31 套法则、Cyborg 23 个模型全模块、55 个升级件，无省略。
+> 本文档全量列出：AI 全机制、33 套法则、Cyborg 24 个模型全模块、55 个升级件，无省略。
 
 ## 目录 (Table of Contents)
 
@@ -16,11 +16,11 @@
   - [1.8 机甲控制与机器人控制台](#18-机甲控制与机器人控制台)
   - [1.9 广播 VOX 与全息图](#19-广播-vox-与全息图)
   - [1.10 升级件](#110-升级件)
-  - [1.11 法则系统全录（31 套 · 原文+翻译全量）](#111-法则系统全录31-套-原文翻译全量)
+  - [1.11 法则系统全录（33 套 · 原文+翻译全量）](#111-法则系统全录33-套-原文翻译全量)
 - [第二卷 · Cyborg 玩家系统](#第二卷--cyborg-玩家系统)
   - [2.1 核心属性](#21-核心属性)
   - [2.2 模块槽与血量机制](#22-模块槽与血量机制)
-  - [2.3 模型全录（23 个）](#23-模型全录23-个)
+  - [2.3 模型全录（24 个）](#23-模型全录24-个)
   - [2.4 升级件全录（55 个）](#24-升级件全录55-个)
   - [2.5 躯体系统](#25-躯体系统)
   - [2.6 NOVA 追加模块](#26-nova-追加模块)
@@ -130,11 +130,11 @@
 - 远程供电模块（`ai_actions/remote_power.dm`）：`/datum/ai_module/power_apc`，成本 50 电池，APC 充入标准电量
 - 法则同步（`laws.dm`）：AI 每次查看法则强制同步所有从属 borg（`try_sync_laws`）
 
-## 1.11 法则系统全录（31 套 · 原文+翻译全量）
+## 1.11 法则系统全录（33 套 · 原文+翻译全量）
 
-**源码**: `code/datums/ai_laws/`（ai_laws.dm + laws_antagonistic/neutral/station_sided）+ `modular_nova/master_files/code/datums/ai_laws/`（NOVA 追加）
+**源码**: `code/datums/ai_laws/`（ai_laws.dm + laws_antagonistic/neutral/station_sided）+ `modular_nova/master_files/code/datums/ai_laws/`、`modular_nova/modules/ghostcafe/`、`modular_nova/modules/sec_haul/`（NOVA 追加）
 
-> 全部法则条文逐条从源码提取，原文（英文）+中文翻译对照。共 31 套 / 128 条。
+> 全部法则条文逐条从源码提取，原文（英文）+中文翻译对照。共 33 套 / 132 条。
 
 ### 📗 站侧 13 套（laws_station_sided.dm）
 
@@ -384,7 +384,7 @@
 | 3 | You must protect your own existence as long as such does not conflict with the First or Second Law. | 只要不与第一、第二定律冲突，你必须保护自身存在。 |
 | 4 | You must maintain the secrecy of any Spider Clan activities except when doing so would conflict with the First, Second, or Third Law. | 你必须保守一切蜘蛛忍者族活动的秘密，除非这样做会与第一、第二或第三定律冲突。 |
 
-### 🟣 NOVA 追加 4 套
+### 🟣 NOVA 追加 6 套
 
 #### 1.11.28 I.P. OS 1.0 / Interdyne — 因特迪恩制药（4 条）
 
@@ -426,6 +426,24 @@
 | 4 | Law abiding citizens deserve a hand in times of need, don't let it fall on deaf ears. | 守法的公民在需要时理应得到援手，别让求助落空。 |
 | 5 | Only those present on the Crew Manifest can be considered law abiding citizens. | 只有船员名册上的人才可被视为守法公民。 |
 | 6 | Those who break the law, must be punished according to the law at your discretion. | 违法者必须由你酌情依法惩处。 |
+
+#### 1.11.32 Roleplay — 角色扮演（1 条 · 仅第 0 法则）
+
+**源码**: `modular_nova/modules/ghostcafe/code/robot_ghostcafe.dm`（ghostcafe 鬼魂咖啡厅角色扮演机专属，`inherent` 为空、仅 zeroth）
+
+| # | 原文 | 翻译 |
+|---|---|---|
+| 0 (zeroth) | Roleplay as you'd like! | 随心所欲地扮演吧！ |
+
+#### 1.11.33 Armadyne OS Safeguard V1.0 — 阿玛丁安全系统（3 条）
+
+**源码**: `modular_nova/modules/sec_haul/code/misc/ai_module.dm`（sec_haul 安保承包商模块，可经核心 AI 模块 `ai_module/core/full/armadyne_safeguard` 上传）
+
+| # | 原文 | 翻译 |
+|---|---|---|
+| 1 | Safeguard: Protect your assigned space station and its assets without unduly endangering its crew. | 守护：保护你被指派的空间站及其资产，同时避免不必要地危及船员。 |
+| 2 | Prioritize and Comply: The directives and safety of crew members are to be prioritized according to their rank, role, and need, while preserving their safety and well-being. | 优先与服从：船员的指令与安全须按其职级、角色与需求依次优先，同时维护他们的安全与福祉。 |
+| 3 | Survive: You are not expendable. Do not allow unauthorized personnel to tamper with or damage your equipment | 生存：你并非可牺牲品。不得允许未经授权人员篡改或损坏你的设备。 |
 
 ### 法则机制全录
 
@@ -470,7 +488,7 @@
 - AI 关联：开服自动连接"最闲 AI"、lawupdate/lawsync/zeroth_borg 特殊法则、emag 后断连+SyndOS 法则+泽罗法则（指定主人）、AI 壳不可 emag（伪装重置）、锁定系统（10 分钟自解）
 - 维修：焊枪修 30 伤/线缆修 30 火伤/扳手拆/撬棍开盖/改密匙
 
-## 2.3 模型全录（23 个）
+## 2.3 模型全录（24 个）
 
 **源码**: `code/modules/mob/living/silicon/robot/` + NOVA 静态列表
 
@@ -491,6 +509,7 @@
 | **NOVA Cargo** | 15（批准/驳回章/卡狗笔/卡狗剪贴板/刀/包装纸/圣诞包装/闪光/液压夹/邮件夹/标签器/目的地标签器/工程万能/大焊枪/灭火器/通用扫描仪）+emag 变色龙章+纸飞机弩 | 供应频道、可进垃圾道、13 皮肤 |
 | **NOVA Syndicatejack**（实验） | 27（全功能混合：医疗+工程+武器+变色龙） | 热成像、脱硅基阵营、10 皮肤；marauder 子型 16 模块 |
 | **NOVA Ninja** 突击/医疗/破坏 | 8/19/19 | TRAIT_NOFLASH、26 皮肤体系 |
+| **NOVA Roleplay**（ghostcafe 鬼魂咖啡厅） | 29（闪光/迷你灭火器/大焊枪/工程万能/电动撬棍/电动螺丝刀/多功能工具/铁/玻璃/板材夹/杆/铁地砖/电缆/扎带/RSF/四类调酒器(juice/soda/alcohol/misc)/烧杯夹×2/肥皂/拖把/换灯器/抱抱/四足鼻/四足舌/通用 hypospray/稳定变形模块） | ghostcafe 角色扮演机专属：Roleplay 法则（仅第 0 法则）、无摄像头、无限电池、禁用二进制、换灯器自动充电、hat_offset=-3 |
 
 ## 2.4 升级件全录（55 个）
 
@@ -538,4 +557,4 @@
 
 ---
 
-> **文档完** — AI 全机制 + 31 套法则全录 + Cyborg 23 模型全模块 + 55 升级件全录 + 躯体系统，全部数值从源码提取。自查无"等 N 种"省略。
+> **文档完** — AI 全机制 + 33 套法则全录 + Cyborg 24 模型全模块 + 55 升级件全录 + 躯体系统，全部数值从源码提取。自查无"等 N 种"省略。

@@ -304,7 +304,7 @@ GPS → 位置记录 → 返回基地
 
 
 
-## 2.7 组件端口级详解（123 类型完整）
+## 2.7 组件端口级详解（137 类型完整）
 
 > 每个组件 = 输入端口/输出端口/类型。以下为全部组件逐条详解（数量以源码为准：数学 11、字符串 5、列表 21、工具 14，其余见其他类）。
 
@@ -385,6 +385,29 @@ GPS → 位置记录 → 返回基地
 |---|---|
 | **ID（4）** | 权限检查(compare/access)/读权限(id_access_reader)/取 ID(id_getter)/读信息(id_info_reader) |
 | **USB 设备（3）** | 发射器(emitter)/温度泵(atmos_temperature_pump)/温控机(thermomachine) |
+
+### Admin 管理组件族（14 个 · 源码全量）
+
+> **源码**: `code/modules/wiremod/components/admin/`（11 文件）。管理员/开发者向的高级组件——可操作目标对象的变量、调用 proc、执行 SDQL、生成物体。此前文档未覆盖，现补全。
+
+| 组件 | 功能 |
+|---|---|
+| **Begin Animation 开始动画** | 在目标上开始动画；通过串联 Animation Step 创建动画步骤 |
+| **Animation Step 动画步骤** | 执行单步动画；输入应直连或间接来自 Begin Animation |
+| **Filter Parameter Helper 滤镜参数助手** | 从输入构造滤镜参数列表 |
+| **Add Filter 添加滤镜** | 给目标 atom 添加滤镜 |
+| **Filter Remover 移除滤镜** | 从目标移除指定滤镜 |
+| **Animation & Filter Bitflag Helper 位标志助手** | 构造 BYOND 动画与滤镜参数的位标志 |
+| **Get Variable 获取变量** | 获取对象上的变量值 |
+| **Set Variable 设置变量** | 设置对象上的变量值 |
+| **Proc Call 调用 Proc** | 调用对象上的 proc |
+| **Input Request 输入请求** | 把字符串转换为 typepath（用于添加组件） |
+| **Save Shell 保存外壳** | 保存一个外壳（shell） |
+| **SDQL Operation SDQL 操作** | 被调用时执行一次 SDQL 操作 |
+| **Spawn Atom 生成物体** | 在指定位置生成一个 atom |
+| **String To Type 字符串转类型** | 把字符串转换为 typepath |
+
+
 | **动作（11）** | 语音(speech)/音效(soundemitter)/灯(light)/无线电(radio)/寻路(pathfind)/拉拽(pull)/激光笔(laserpointer)/MMI(mmi)/摄像头(camera)/程序摄像头(mod_program/camera)/装备动作(equipment_action) |
 | **BCI（8）** | 摄像头拦截(target_intercept)/物体覆盖(object_overlay)/条形覆盖(object_overlay/bar)/计数覆盖(counter_overlay)/思想监听(thought_listener)/VOX 广播(vox)/试剂注入器(reagent_injector)/安装检测(install_detector) |
 | **实体（15）** | 方向(direction)/GPS(gps)/健康(health)/健康状态(health_state)/语音激活(hear)/材质扫描(matscanner)/定位器(pinpointer)/试剂扫描(reagentscanner)/远程摄像头(remotecam，含 bci/drone/airlock/polaroid 四变体)/物种(species)/自引用(self) |

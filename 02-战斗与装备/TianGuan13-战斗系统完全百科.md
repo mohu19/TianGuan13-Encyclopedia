@@ -2,7 +2,7 @@
 
 > **项目**: TianGuan13 (Nova Sector → /tg/station)
 > **代码**: `code/datums/martial/`（武术 3,309 行）+ `code/game/objects/items/weaponry/melee/`（近战 5,659 行）+ `code/modules/projectiles/guns/`（枪械 12,000+ 行）+ `code/modules/projectiles/ammunition/`（弹药）
-> **范围**: 武术、近战武器、弹道枪械、能量/魔法武器、弓箭，按获取难度分级
+> **范围**: 武术、近战武器、弹道枪械、能量/魔法武器、弓箭、手雷爆炸物、法术系统、NOVA 武器模块，按获取难度分级
 
 ---
 
@@ -15,6 +15,9 @@
 - [第四卷 · 能量武器](#第四卷--能量武器)（激光系/能量枪/PKA/致晕/特殊 + 弹药伤害表）
 - [第五卷 · 魔法武器](#第五卷--魔法武器)（17 法杖 + 19 魔杖）
 - [第六卷 · 弓箭系统](#第六卷--弓箭系统)（弓 5 种/箭矢 7 种/钢筋弩箭 7 种）
+- [第七卷 · 手雷与爆炸物系统](#第七卷--手雷与爆炸物系统)（手雷 13 类全录 + 地雷 15 种 + 机关陷阱）
+- [第八卷 · 法术系统本体](#第八卷--法术系统本体)（17 子类施法机制 + 法术全录）
+- [第九卷 · NOVA 武器模块群](#第九卷--nova-武器模块群)（17 模块概述）
 - [附录A · 获取途径速查（按难度）](#附录a--获取途径速查按难度)（S/A/B/C 阵营表）
 - [附录B · 代码路径索引](#附录b--代码路径索引)
 
@@ -901,6 +904,283 @@
 
 ---
 
+---
+
+# 第七卷 · 手雷与爆炸物系统
+
+**代码**: `code/game/objects/items/grenades/`（14 文件 / 2,450 行）+ `code/game/objects/effects/mines.dm`（293 行）+ 陷阱组件（interaction_booby_trap / trapdoor）
+
+## 7.1 手雷基类机制（_grenade.dm）
+
+| 机制 | 数值/说明 |
+|---|---|
+| 通用引信 det_time | 默认 5 秒；可选引信 "Instant / 3 / 4 / 5" 秒 |
+| 调引信 | 螺丝刀循环切换；多功能工具直接选秒数（上限 5 秒） |
+| 引爆链 | `arm_grenade()` 拉环（播放 armed 音效、发 COMSIG_GRENADE_ARMED、倒计时）→ `detonate()` 起爆（发 COMSIG_GRENADE_DETONATE） |
+| 爆炸半径 | ex_dev / ex_heavy / ex_light / ex_flame 四档（devastation/heavy/light/flame） |
+| 弹片云 | 设定 shrapnel_type + shrapnel_radius 后起爆时附加 `pellet_cloud` 组件散射弹片 |
+| 失效机制 | dud_flags（GRENADE_DUD 哑弹 / GRENADE_USED 已用）；已起爆不再爆 |
+| 笨拙判定 | TRAIT_CLUMSY 50% 掉在地上 5 秒速爆；非笨拙型特殊手雷另有判定 |
+| 粘性胶带 | sticky → TRAIT_NODROP 黏手，需 7 秒 do_after 撕开 |
+| 被弹命中 | 手持时被投射物击中 15% 概率直接引爆并销毁 |
+| 被炸 | flags_1 = PREVENT_CONTENTS_EXPLOSION_1，被炸毁时引爆 |
+| 食用引爆 | 可当食物配料，被吃/被刀切/擀面杖处理时在腹内引爆（自杀流） |
+| 幻想加成 | apply_grenade_fantasy_bonuses：按品质提升爆炸半径/范围 |
+| 通用属性 | 投掷速度 3 / 射程 7、腰带槽、导电、耐久 40、可挂腰带 |
+
+## 7.2 手雷全录（13 类 + 全部变体）
+
+### 7.2.1 化学手雷 chem_grenade（701 行）—— 自制万能
+
+三阶段组装：**空壳**（GRENADE_EMPTY）→ 塞线缆/装罐 → **接线**（GRENADE_WIRED，可挂组装件）→ 螺丝刀拧紧 → **就绪**（GRENADE_READY）。
+| 属性 | 数值 |
+|---|---|
+| 容器 | 最多 2 个（烧杯/瓶子；禁蓝空间烧杯）；壳内容量 1000u |
+| 爆炸 | 药液飞溅半径 3 格；点火升温 +10 K；威胁倍率 ×1 |
+| 地雷模式 | 可装接近传感器（prox_sensor）当化学地雷 |
+| 拆除 | 起爆后可螺丝刀 2 秒重置（清除 GRENADE_USED） |
+
+**特制外壳**：
+| 外壳 | 差异 |
+|---|---|
+| large 大型 | 扩散 5 格、升温 +25 K、倍率 ×1.1；可装任意杯/调味瓶/玻璃杯/**史莱姆核心**（用核心反应） |
+| cryo 低温 | 起爆快速降温 **−100 K**、扩散 2 格（银材料） |
+| pyro 高温 | 起爆快速升温 **+500 K**（等离子材料） |
+| adv_release 多次释放 | 可多次引爆（每次释放可配置 5–100u，默认 10u），多功能工具配置 |
+
+**预制成品（14 种 + instant 变体，stage 直接就绪）**：
+| 手雷 | 配方（试剂） | 效果 |
+|---|---|---|
+| metalfoam 金属泡沫 | 铝 30 + 发泡剂 10 + 氟酸 10 | 紧急堵漏金属泡沫 |
+| smart_metal_foam 智能金属泡沫 | 铝 75 + 智能发泡剂 25 + 氟酸 25 | 堵漏同时保留通道 |
+| incendiary 燃烧弹 | 磷 25 + 稳定血浆 25 + 酸 25 | 大面积纵火清场 |
+| antiweed 除草剂 | 植物除灭剂 25 + 钾 25 + 磷 25 + 糖 25 | 清除大片植物 |
+| cleaner 清洁剂 | 氟表面活性剂 40 + 水 40 + 清洁剂 10 | BLAM! 品牌泡沫清洁 |
+| ez_clean 便捷清洁剂 | 氟表面活性剂 40 + 水 40 + EZ 清洁剂 60 | Waffle Corp 加厚版 |
+| teargas 催泪瓦斯 | 浓缩辣椒素 60 + 钾 40 + 磷 40 + 糖 40 | 非致命镇暴烟雾；instant 版生成即爆 |
+| facid 强酸 | 氟酸 290×2 + 钾/磷/糖各 10（蓝空间烧杯） | 融化装甲目标 |
+| colorful 彩绘 | 彩绘试剂 25 + 钾 25 + 磷 25 + 糖 25 | 大面积喷涂 |
+| glitter 白色闪光粉 | 闪光粉 25 + 钾 25 + 磷 25 + 糖 25 | 白闪光粉；pink/blue 变体（粉/蓝） |
+| clf3 三氟化氯 | 氟表面活性剂 250 + clf3 50 + 水 250（蓝空间） | BURN! 品牌：恐怖化学燃烧 |
+| bioterrorfoam 生化恐怖泡沫 | 隐孢子碱 75 + 水 50 + 哑毒 50 + 孢子毒 75 + 痒粉 50 + 氟表面活性剂 150 + 诱变剂 150 | 刺激/致盲/混乱/失语/变异+孢子毒 |
+| tuberculosis 真菌结核 | 钾 50 + 磷 50 + 真菌孢子 200 + 血 250 + 糖 50 | 释放致命结核孢子 |
+| holy 圣水手雷 | 钾 150 + 圣水 150（meta 烧杯） | 集中宗教之力（对圣职相关目标） |
+
+### 7.2.2 闪光弹 flashbang（197 行）+ 变体
+| 手雷 | 效果 |
+|---|---|
+| flashbang 闪光弹 | 7 格范围；**闪光**（致盲硅基生物、甜蜜点内麻痹 20/距离 + 击倒 200/距离、掉双手武器）+ **巨响**（soundbang：0 距离 OVERWHELMING 20 秒；1 格内 STRONG 3 秒；甜蜜点内 NORMAL 20 秒/距离；需最低气压否则无音爆）；甜蜜点 = 范围/3，亮红色灯光指示 |
+| stingbang 针刺弹 | 射程仅 1 格；弹片 stingball×5；**手持引爆直接炸断持有者手部**；安保售货机/货运可得 |
+| mega stingbang 巨型针刺弹 | 弹片 stingball×12 |
+| rotfrag grenade 旋转破片雷 | 拉环后在手中旋转可累积弹片量（每 3 次旋转 +1 弹片半径），弹片为金属破片；admin 用 |
+| rotsting 旋转针刺雷 | 同上但弹片为 stingball（每 2 次旋转 +1） |
+
+### 7.2.3 烟雾弹 smokebomb（51 行）
+4 格有害烟雾（bad smoke）；对 blob 生物造成 30/(距离+1) 燃烧伤害；检查时随机生成网络梗描述（Dank/Hip/Lit/Based/Robust/Bruh/Gamer/Sigma 等）。
+
+### 7.2.4 经典 EMP 手雷 empgrenade（13 行）
+`empulse(范围 4, 强度 10)` —— 摧毁电子系统（机甲/机械/装备）。
+
+### 7.2.5 塑胶炸弹 plastic.dm（194 行）—— C-4 / X-4
+| 属性 | C-4 | X-4 |
+|---|---|---|
+| 爆炸 | 0 / 0 / 3（dev/heavy/light） | **0 / 5 / 7 定向**（120° 弧形，瞄准方向） |
+| 引信 | 10–60000 秒可调（默认 10） | 同左 |
+| 安装 | 对目标 3 秒 do_after 粘贴（目标越重投掷越差）；死后目标不可贴 | 同左 |
+| 改装 | 电线可拆改（explosive/c4 wires） | 同左 |
+| 自杀 | 喊反派口号（"FOR NO RAISIN!!" 或阵营台词）后自爆并碎尸 | — |
+| 说明 | 渗透/拆科技 | 重型破门/狭小空间，站在背面安全 |
+| 获取 | 叛徒 Uplink、核战小队 | 替代 C4 的核战标配/随机叛徒购买 |
+
+### 7.2.6 辛迪加迷你核弹 syndieminibomb（78 行）
+| 手雷 | dev/heavy/light/flame |
+|---|---|
+| syndieminibomb 辛迪加迷你核弹 | 1 / 2 / 4 / 2 |
+| HE Grenade 高爆手雷 | 0 / 2 / 3 / 3 |
+| frag 破片手雷 | 0 / 1 / 3 / 4 + 金属破片弹片×4 |
+| FRAG 巨型破片手雷 | 0 / 1 / 3 / 4 + **巨型破片×12** |
+| gluon 胶子破片手雷 | 4 格辐射脉冲（极限绝缘阈值）+ 4 格地板永久冻土 6 分钟 + 30 体力伤害 + 体温 −230 K |
+
+### 7.2.7 反重力手雷 antigravity（21 行）
+7 格范围内强制零重力 30 秒（forced_gravity 元素，数值 0），之后恢复。
+
+### 7.2.8 集群炸弹 clusterbuster（199 行）+ 15 载荷
+母弹起爆后散出 **4–8 枚子炸弹**（35% 概率额外生成次级段，子段 1–4 格随机散布、1.5–6 秒随机引爆），避免刷管理员日志（type_cluster）。
+| 载荷变体 | 名称 | 载荷 |
+|---|---|---|
+| 默认 | clusterbang | 闪光弹×4–8 |
+| emp | Electromagnetic Storm 电磁风暴 | EMP 手雷 |
+| smoke | Ninja Vanish 忍者消失 | 烟雾弹 |
+| metalfoam | Instant Concrete 速凝混凝土 | 金属泡沫化学雷 |
+| inferno | Inferno 地狱火 | 燃烧化学雷 |
+| antiweed | RoundDown | 除草化学雷 |
+| cleaner | Mr. Proper | 清洁化学雷 |
+| teargas | Oignon Grenade 洋葱手雷 | 催泪瓦斯化学雷 |
+| facid | Aciding Rain 酸雨 | 强酸化学雷 |
+| syndieminibomb | SyndiWrath 辛迪加之怒 | 迷你核弹 |
+| spawner_manhacks | iViscerator | 绞肉机投放雷×10 |
+| spawner_spesscarp | Invasion of the Space Carps 太空鲤鱼入侵 | 鲤鱼投放雷×5 |
+| spawner_soap | Slipocalypse 滑倒末日 | 辛迪加肥皂 |
+| clf3 | WELCOME TO HELL 欢迎来到地狱 | 三氟化氯化学雷 |
+| slime | Blorble Blorble | 随机史莱姆核心（volatile 变体自动激活反应） |
+| random | 随机集群炸弹 | 随机上述一种 |
+
+### 7.2.9 节日爆炸物 festive.dm（122 行）
+| 物品 | 效果 |
+|---|---|
+| sparkler 烟火棒 | 点燃后燃烧 120 秒（火焰 1000 K）、灼烧伤害 6、2 格光照；烧完剩铁棒 |
+| firecracker 大鞭炮 | 需手动点燃（打火机/焊接枪），引信 3 秒，爆炸 0/0/2；剪线钳可缩短引信（每次 −1 秒） |
+
+### 7.2.10 催眠手雷 hypnotic（70 行）
+7 格范围紫色闪光 + 催眠音波（screech）：0 距离麻痹 1 秒/击倒 10 秒 + 催眠短语 + 幻觉 150 秒；1 格内 0.5 秒/3 秒；无听力保护者吃催眠短语+幻觉；闪光命中且 hypnosis_vulnerable（无心灵护盾/无听力保护）→ **恍惚状态 10 秒**；否则昏睡 20 秒/混乱 10 秒/眩晕 20 秒。魔法学院可用。
+
+### 7.2.11 土制炸弹 ghettobomb（290 行）—— 管道炸弹
+| 属性 | 数值 |
+|---|---|
+| 基座 | iedcasing：功率 5；引信由**组件**驱动（定时器/信号器/接近传感器/捕鼠器/语音/线控） |
+| 填充物 | 肉块→爆内脏、纸→彩带、碎片→弹片云、精炼蓝空间晶体→范围内受害者随机传送（最多 12 格×数量×3） |
+| 爆炸 | heavy = 功率×0.2、light = 功率×0.7、flame ≈ 功率±1 |
+| 燃料功率 | 燃料 0.5 / 等离子体 0.75 / 火药 1 / 硝化甘油 2 / **TATP 2.5**（20u 容器按体积折算） |
+| 制作 | 半切管（sliced_pipe）：最多塞 3 填充物 + 15 线缆 + ≥5u 燃料 + 允许的组件（信号器/接近/捕鼠器/定时器/线控/语音） |
+| 变体 | spawned（地图生成版：功率 2.5 + 定时器） |
+
+### 7.2.12 大气手雷 atmos_grenades.dm（128 行）—— 气体晶体
+| 晶体 | 效果 |
+|---|---|
+| healium crystal 氦晶 | 7 格内大气重置为默认混合气（灭火/抢救缺氧） |
+| proto nitrate crystal 原硝酸盐晶 | 5 格内喷氮气 80/距离 + 氧气 30/距离（273 K） |
+| N2O crystal 笑气晶 | 1 格内喷 N2O 10/距离 |
+| crystal foam 晶体泡沫 | 7 格内化学飞溅：铝 75 + 智能发泡剂 25 + 氟酸 25（封堵+破墙） |
+
+### 7.2.13 投放手雷 spawnergrenade（81 行）—— 送货手雷
+| 变体 | 召唤物 |
+|---|---|
+| viscerator delivery 绞肉机 | 辛迪加绞肉机×10 |
+| carp delivery 鲤鱼 | 太空鲤鱼×5 |
+| Mister Scrubby 肥皂 | 辛迪加肥皂×1 |
+| Buzzkill 蜂杀 | 毒蜂×10 |
+| C.L.U.W.N.E. | 随机 1 只小丑生物（血小丑/小丑浩克/长脸/Chlown/Honkmunculus/暴食变异/香蕉/Honkling/润滑油 共 9 种） |
+| stuffed C.L.U.W.N.E. 塞满版 | 变异小丑×5（劣质塞入） |
+| Catnade 猫雷 | 野猫×5 |
+
+## 7.3 地雷（mines.dm，293 行）
+
+压力板机制：踏上不立即爆（foot_on_mine），**踩雷者离开才引爆**；被任何伤害（射击/近战）直接引爆；可设定 arm_delay 延迟武装；相位/飞行者踩上后再飞走仍会爆。
+| 地雷 | 效果 |
+|---|---|
+| explosive 爆炸地雷 | 爆炸 0/1/2 + 闪光 3 |
+| light 低当量爆炸地雷 | 0/0/3 + 闪光 2 |
+| flame 燃烧地雷 | 0/0/1 + 火焰 3 |
+| flash 致盲地雷 | 0/0/1 + 闪光 6 |
+| stun 眩晕地雷 | 麻痹 8 秒（需相邻） |
+| kickmine 踢出地雷 | **把踩中者的客户端踢下线**（恶搞） |
+| gas 氧气地雷 | 释放 360u O2 |
+| plasma 等离子地雷 | 释放等离子体 |
+| n2o N2O 地雷 | 释放笑气 |
+| water_vapor 冷蒸气地雷 | 释放 500u 水蒸气（冷凝） |
+| sound 喇叭地雷 honkblaster 1000 | 播放自行车喇叭声 |
+| bwoink 管理员地雷 | 播放管理员呼叫音（adminhelp） |
+| shrapnel 弹片地雷 | 弹片云环（默认 3 阶） |
+| sting 针刺地雷 | stingball 弹片 |
+| capspawn **AP 地雷**（资产保护） | 4 阶 AP 弹片、撕裂触发者、3 秒武装延迟、红色警示灯；配套 **minespawner 地雷部署器**（使用后 3 秒原地部署） |
+
+## 7.4 机关陷阱
+
+| 陷阱 | 机制 |
+|---|---|
+| interaction_booby_trap 组件（`code/datums/components/interaction_booby_trap.dm`） | 附着任意物体：**互动即爆**（light 3 / heavy 1，0.5 秒延迟），触发前循环哔哔声预警，螺丝刀可拆除，可自定义触发信号/回调 |
+| trapdoor 组件（`code/datums/components/trapdoor.dm`，511 行） | 地板翻板陷阱：接到信号（配套 trapdoor 组装件，4 格内链接）后把目标**掉落到下一层**，默认 5 秒自动关闭，可隐藏（conspicuous）或带贴花记忆 |
+
+---
+
+# 第八卷 · 法术系统本体
+
+**代码**: `code/modules/spells/spell.dm`（基类 511 行）+ `code/modules/spells/spell_types/`（87 文件 / 6,894 行）
+
+## 8.1 法术基类机制（/datum/action/cooldown/spell）
+
+| 机制 | 说明 |
+|---|---|
+| 冷却制 | 法术是冷却型动作按钮，冷却中不可用 |
+| 施法链 | PreActivate（校验目标）→ before_cast（最后一次取消机会）→ spell_feedback（吟唱+音效）→ cast（主体效果）→ StartCooldown（开始冷却）→ after_cast（收尾：火花/烟雾） |
+| 吟唱类型 | INVOCATION_NONE 无 / WHISPER 低语 / SHOUT 大喊 / EMOTE 动作；口头吟唱 50% 概率乱码（空格变反引号）；无舌不能喊、无手不能做动作吟唱 |
+| 等级系统 | 1–5 级（2 Efficient 高效 / 3 Quickened 迅捷 / 4 Free 免费 / 5 Instant 瞬发 / 6 Ludicrous 离谱），每级按 cooldown_reduction_per_rank 减冷却 |
+| 施法需求 | SPELL_REQUIRES_WIZARD_GARB 巫师袍（CASTING_CLOTHES）、SPELL_REQUIRES_NO_ANTIMAGIC 无抗魔、SPELL_REQUIRES_STATION 仅在空间站、SPELL_REQUIRES_MIND、SPELL_REQUIRES_MIME_VOW 哑剧誓言、SPELL_REQUIRES_HUMAN；猴子豁免袍子（香蕉维度赐福） |
+| 反魔法 | antimagic_flags：MAGIC_RESISTANCE / MAGIC_RESISTANCE_MIND / MAGIC_RESISTANCE_HOLY，命中/施法被对应抗性阻挡 |
+| 法术学派 | school（变形/传送/召唤/幻术等），某些圣职会惩罚异端学派 |
+| 收尾特效 | sparks_amt 火花数量、smoke_type/smoke_amt 施法烟雾 |
+
+## 8.2 十七个子类施法机制总表
+
+| # | 子类 | 路径 | 施法机制 | 关键参数 | 代表法术 |
+|---|---|---|---|---|---|
+| 1 | **aoe 范围** | `aoe_spell/` | 遍历施法者周围原子逐一施放 | aoe_radius 默认 7、max_targets 0=无限、shuffle_targets_list | Knock 开锁、Magic Missile 魔法飞弹、Repulse 斥力、Sacred Flame 圣焰、Area Conversion 区域转换、Tail Sweep 尾扫 |
+| 2 | **charged 引导** | `charged/` | 按下后原地引导 channel_time（默认 10 秒），被打断则取消并返还；beam 子类引导后向随机目标发射弹射光束 | channel_time、beam: target_radius 5 / max_beam_bounces 1 | Tesla Blast 特斯拉冲击 |
+| 3 | **cone 锥形** | `cone/` | 朝面向方向生成 3 层锥形区域（1→3→5…逐层加宽），对锥内地面/物体/生物分别施效；staggered 子类每层延迟 0.2 秒逐层扩散 | cone_levels 3、respect_density 是否穿墙 | Cone of Cold 冰锥术 |
+| 4 | **conjure 召唤** | `conjure/` | 在半径内随机格生成召唤物（生物/物体/地块）；可设寿命、密度限制、互斥占位；limit_summons 限制同时存在数量 | summon_radius 7、summon_amount、summon_lifespan 0=永久 | Summon Carp/Cheese/Bees、Summon Simians、Summon Construct、Summon Creature Swarm、Summon ED Swarm（Dispense Wizard Justice）、Invisible Wall、Invisible Chair、The Traps!、Summon Soulstone（教派/净化/神秘 4 版）、Summon Cult Floor/Wall、Link Worlds、Conjure Presents! |
+| 5 | **conjure_item 召唤物品** | `conjure_item/` | 直接在手/脚边生成指定物品；delete_old 施法时清除旧物品；requires_hands 需空手 | item_type、delete_old 默认 TRUE、delete_on_failure | Infinite Guns（Lesser Summon Guns）、Arcane Barrage 奥术齐射、Invisible Box、Thrown Lightning 投掷闪电、Snowball 雪球 |
+| 6 | **jaunt 相位漫游** | `jaunt/` | 把施法者装入 phased_mob 虚体容器自由穿行；NOJAUNT 地块禁止；退场时清除相位特质 | jaunt_type、check_teleport_valid、NOJAUNT | Ethereal Jaunt 以太漫游、Phase Shift 相位转移（+天使/神秘/符文 3 变体）、Blood Crawl 血池潜行（+屠杀恶魔/友好版）、Shadow Walk 暗影行走 |
+| 7 | **list_target 列表选目标** | `list_target/` | 弹出 tgui 目标列表（范围内活体）选定后施放 | target_radius 7 | Telepathy 心灵感应 |
+| 8 | **madness_curse 疯狂诅咒** | `madness_curse.dm` | 全局诅咒：全站（含迟到者）随机脑创伤（1–3 轻度×2 / 4–6 重度 / 7–8 魔法创伤 / 9–10 特殊创伤），抗魔豁免 | GLOB.curse_of_madness_triggered | Curse of Madness 疯狂诅咒（法术书/管理员触发） |
+| 9 | **pointed 指向** | `pointed/` | 激活后劫持点击：点击目标直接施法；带瞄准辅助（自动锁定格内人类）；projectile 子类改为朝目标方向连射弹道（可多发逐发） | cast_range 7、aim_assist、projectile: projectile_amount | Fireball 火球、Lightning Bolt 闪电箭、Blind 致盲、Curse of the Barnyard 谷仓诅咒、Mind Swap 心灵交换、Spell Cards 符卡、Finger Guns 手指枪、Swap 交换、Terrorize 恐吓、Untie Shoes 解鞋带、Dominate 支配、Abyssal Gaze 深渊凝视 |
+| 10 | **projectile 基础弹道** | `projectile/` | 向面向方向直射一发弹道（撞墙停止） | projectile_range 7 | Gauntlet Echo 铁拳回响（主宰）、默认魔法飞弹弹道 |
+| 11 | **right_and_wrong 正义与邪恶** | `right_and_wrong.dm` | 全局事件三连：**Summon Guns 召唤枪械**（60+ 枪型库随机发放全员）、**Summon Magic 召唤魔法**（50+ 法杖/魔杖/法术书，2% 概率特殊魔法：变形杖/混沌杖/亡灵石等）、**Summon Events 召唤事件**（进入巫师事件模式，事件间隔缩至 1–5 分钟）；附带 survivalist 生存主义反派转化 | summoned_guns 60 型、summoned_magic 50+ 品、SPECIALIST_MAGIC_PROB 2% | Summon Guns / Summon Magic / Summon Events（法术书传说级条目） |
+| 12 | **self 自身** | `self/` | 以自身/自身位置为目标直接施放 | — | 见 8.3 全录（16+ 种） |
+| 13 | **shapeshift 变形** | `shapeshift/` | 变形成指定 mob（可多选径向菜单）；可设死亡还原、随形死亡、伤害换算（默认 BRUTE）；通风管内变形会**被挤出并绞碎**（管道外喷出内脏+全站广播） | revert_on_death、die_with_shapeshifted_form、convert_damage、cooldown 10 秒 | Dragon Form 龙形、Gorilla Form 大猩猩、Polar Bear Form 北极熊、Wolf Form 狼形、Wild Shapeshift 野性变形（巫师） |
+| 14 | **summon 召唤仆从** | `summon/` | 把指定/随机仆从拉到身边或召唤新的 | — | Summon Servant 召唤仆从、Summon Dice Servant 骰子仆从 |
+| 15 | **teleport 传送** | `teleport/` | radius_turf：内外环半径随机闪烁传送；area_teleport：选择区域（或随机）传送，强制传送（可穿禁传区），吟唱时喊出目标区名 | inner/outer_tele_radius、force_teleport、destination_flags | Blink 闪现、Minor Blink 小闪现、Teleport 传送、Santa Teleport 圣诞传送 |
+| 16 | **touch 触摸** | `touch/` | 施法生成"触摸之手"实体（High Five!），**拍击目标才生效**；支持右键次级效果、反魔法触发回调、高五传递（把法手递给别人由对方拍出）；手被丢弃返还冷却 | hand_path、can_cast_on_self、cast_on_hand_hit | Flesh to Stone 血肉化石、Smite 天罚、Scream For Me 为我尖叫、Bestow Cursed Duffel Bag 诅咒行李袋 |
+| 17 | **tower_of_babel 巴别塔** | `tower_of_babel.dm` | 全局诅咒：全站语言混乱（含迟到者），硅基免疫、巫师免疫并获得全语言；管理员可施放/解除 | GLOB.tower_of_babel | Tower of Babel 巴别塔（法术书/管理员触发） |
+
+## 8.3 法术全录（self 子类 16+ 种完整列表）
+
+| 法术 | 效果 |
+|---|---|
+| Lesser Heal 次级治疗 | 治疗自身伤势 |
+| Charge 充能 | 为物品充能（电池/充能武器） |
+| Emplosion 电磁爆发 | 自身 EMP 脉冲 |
+| Disable Tech 瘫痪科技 | 大规模瘫痪电子设备 |
+| Forcewall 力场墙 | 面前生成力场墙；cult 版 Shield 教派护盾、mime 版 Invisible Blockade 隐形路障 |
+| Forsake Body 弃身 | 灵魂出窍（幽灵化） |
+| Bind Soul 绑定灵魂（巫妖化） | 死亡后以巫妖形态复活（lichdom） |
+| Break Vow 破除誓言 | 哑剧解除沉默誓言 |
+| Mutate 变异 | 随机基因突变强化（可移除） |
+| Rod Form 铁棍形态 | 变成高速铁棍冲撞 |
+| Sanguine Strike 血之打击 | 附魔近战武器吸血 |
+| Smoke 烟雾 | 释放烟雾（3 秒后）；Holy Smoke 圣烟（治疗友军）、Paralysing Smoke 麻痹烟 |
+| Soul Tap 灵魂汲取 | 从目标汲取灵魂充能 |
+| Spacetime Distortion 时空扭曲 | 扭曲周围空间（错位/减速） |
+| Marrabbio's Splattercasting 溅射施法 | 以血为媒的施法 |
+| Stop Time 时停 | 局部时间停止（stasis） |
+| Instant Summons 即时召唤 | 标记物品随时召回；abductor 版 Baton Recall 电棍召回 |
+| Voice of God 神之声 | 语音命令生效；clown 版 Voice of Clown 小丑之声 |
+
+---
+
+# 第九卷 · NOVA 武器模块群
+
+**代码**: `modular_nova/modules/` 下 17 个武器相关模块（合计约 6,900 行 .dm + gunsgalore 音效包）
+
+| 模块 | 文件/行数 | 概述 |
+|---|---|---|
+| **gunsgalore** 音效包 | 0 dm / ~60 音效 | 纯音效资源：子弹命中血肉/玻璃/砖石/金属的分层冲击音（impact_flesh_01-09 等），供全枪械命中反馈使用 |
+| **armaments** 军火站 | 3 文件 / 484 行 | 军火站子系统（SSarmaments）：编译全局军火条目数据库（类别/子类别/价格/弹匣/装备槽），供商船 guncargo 等军火贩售点按点数购买武器 |
+| **knives** 刀具 | 1 文件 / 57 行 | **鲍伊刀 Bowie knife**：近战 20、投掷 15、伤口加成 10（暴露伤口 20）；配套口袋位皮刀鞘（alt 快拔） |
+| **cellguns** 电池枪 | 5 文件 / 1,379 行 | **电池供能枪系统**：cell_loaded 基类（热插拔武器电池，最多 3 节，按电池切换弹药），武器电池（weaponcell）；**医疗枪 medigun 家族**：Vey-Med CWM-479 标准/升级/CMO 三型 + 医疗电池 + 升级套件 + 操作手册/补给包（治疗弹药，不伤友军） |
+| **energy_axe** 能量斧 | 2 文件 / 60 行 | **能量消防斧**（Gorlex Marauders 辛迪加）：单手 10 / 双手 33、破甲 35、挥动时红光照明+能量斩击音；配套收纳箱 |
+| **energy_shield** 能量盾 | 2 文件 / 674 行 | **个人能量护盾投影器**（配件位）：50 盾值、10 秒延迟后按 5/秒回充，挡投射物/近战/体力伤害，EMP 抗性；6 变体：Bolt SafeGuard 个人屏障、NT 战术盾、Gorlex 能量盾、低能量投影器、Gorlex 相位偏转器、Gorlex 壁垒发生器 |
+| **ahabs_spear** 亚哈鱼叉 | 1 文件 / 25 行 | 碎颅者 crusher 外观皮肤：**亚哈船长的鱼叉**（改造套件，仅改外观不改数值） |
+| **mounted_machine_gun** 车载机枪 | 2 文件 / 501 行 | **T90 车载机枪**：250 耐久、0.2 秒射速、散布 5、弹箱供弹、可乘骑；**过热系统**：每发 +5 热（上限 100），50 热枪管发红警告、75 热过热锁定 10 秒，焊接消耗 10 焊料修理；扳手 3 秒折叠成可携带物 |
+| **magfed_turret** 弹匣炮塔 | 6 文件 / 1,454 行 | **弹匣供弹炮塔系统**：框架（200 耐久、2 秒射击间隔、弹匣供弹、目标评估系统 TURRET_FLAG、伤害倍率、可 3 连发点射）、组装件（turret plate/twin_fang/duster）、目标设计器 "Shot Caller"（指谁打谁）、随机生成器；地图变体：玩具炮塔、Cubicle 点防御、前哨防御、殖民者防御、Stinger 蜘蛛炮塔、Twin-Fang 双牙蜘蛛炮塔、Duster 涌现炮塔（各含故障版） |
+| **mining_crushers** 采矿武器 | 2 文件 / 260 行 | 碎颅者衍生**原动动能武器**：砍刀（单手 10/双手 15、15% 格挡）、长矛（15 破甲）、锤（双手 20）、爪（10，背后命中共鸣增伤）；**crusher 转换套件** |
+| **crusher_trophies** 战利品 | 2 文件 / 66 行 | 碎颅者击杀战利品（trophy）的制作配方与掉落逻辑 |
+| **nut_shot** 裆击 | 1 文件 / 54 行 | **裆部打击机制**：精准打击裆部 1 秒击倒，20% 概率呕吐；打机械金属蛋自伤 10 |
+| **gunpoint** 枪口指人 | 2 文件 / 172 行 | **Shift+中键持枪指人**：锁定目标后面朝跟随、限制移动、威慑（目标被指时受罚，乱动可能走火），含瞄准锁定特效 |
+| **gun_safety** 枪械保险 | 3 文件 / 160 行 | **保险机制**：枪械可上保险（键位 toggle_safety），保险期间无法开火，防走火 |
+| **gunhud** 枪械 HUD | 2 文件 / 496 行 | **弹药计数器 HUD 组件**：佩戴相关装备时屏幕显示当前枪械弹匣余弹 |
+| **ammo_workbench** 弹药工作台 | 2 文件 / 634 行 | **弹药工作台**：可建造、用设计盘模块扩展弹药类型（niche nonlethal 特种非致命 / standard lethal 标准致命 / variant lethal 变体 / advanced lethal 高级 / marauder 掠夺者 / niche lethal 特种致命 / esoteric lethal 秘传致命 共 7 类模块），支持平板打包运输 |
+| **ammo_stacks** 弹药堆叠 | 2 文件 / 436 行 | **可堆叠弹药**（42 种，10 口径族）：**.980 Tydhouer 手雷系 7 种**（练习/烟雾/催泪/破片/磷光/动能震荡 + 基础）、**12 号霰弹 16 种**（弹壳/独头/照明/豆袋/大黄蜂/破门/鹿弹/龙息/快枪/撕裂镖/破片/猎人/燃烧/马格南/橡胶/军规独头/易碎/军规鹿弹）、**.35 Sol Short 3 种**（基础/失能/撕裂）、**.27-54 Cesarzowa 2 种**（基础/橡胶）、**.585 Trappiste 3 种**（基础/平头/燃烧）、**.40 Sol Long 4 种**（基础/破片/燃烧/比赛）、**.310 Strilka 4 种**（基础/橡胶/过剩/穿甲）、**.60 Strela 1 种** |
+
 # 附录A · 获取途径速查（按难度）
 
 ## S 档（远古/传奇）
@@ -974,5 +1254,12 @@
 | 能量弹头 | `projectiles/projectile/beams.dm` + `energy.dm` | 38 弹头 |
 | 近战攻击常量 | `code/__DEFINES/combat.dm` | — |
 | 武术 ID | `code/__DEFINES/melee.dm` | — |
+| 手雷基类 | `code/game/objects/items/grenades/_grenade.dm` | 305 |
+| 手雷 13 类 | `code/game/objects/items/grenades/`（14 文件） | 2,450 |
+| 地雷 | `code/game/objects/effects/mines.dm` | 293 |
+| 机关陷阱 | `code/datums/components/interaction_booby_trap.dm` + `trapdoor.dm` | ~571 |
+| 法术基类 | `code/modules/spells/spell.dm` | 511 |
+| 法术子类 | `code/modules/spells/spell_types/`（87 文件 / 17 子类） | 6,894 |
+| NOVA 武器模块 | `modular_nova/modules/`（gunsgalore/armaments/knives/cellguns/energy_axe/energy_shield/ahabs_spear/mounted_machine_gun/magfed_turret/mining_crushers/crusher_trophies/nut_shot/gunpoint/gun_safety/gunhud/ammo_workbench/ammo_stacks） | ~6,900 |
 
-> **文档完** — 战斗系统 6 卷 + 2 附录，覆盖武术 14 种、近战 90+ 武器、弹道枪械 60+、能量武器 40+、魔法武器 36、弓箭 12 类，全部按获取难度（S/A/B/C）分级。
+> **文档完** — 战斗系统 9 卷 + 2 附录，覆盖武术 14 种、近战 90+ 武器、弹道枪械 60+、能量武器 40+、魔法武器 36、弓箭 12 类、手雷 13 类 + 地雷 15 种 + 机关陷阱、法术系统 17 子类、NOVA 武器模块 17 个，全部按获取难度（S/A/B/C）分级。

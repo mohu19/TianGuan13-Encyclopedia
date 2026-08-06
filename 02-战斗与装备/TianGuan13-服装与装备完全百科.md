@@ -18,7 +18,8 @@
 - [第六卷 · 手套/脖子/腰带](#第六卷--手套脖子腰带)
 - [第七卷 · 太空服](#第七卷--太空服)
 - [第八卷 · MOD 模块服（Modular Outerwear Device）](#第八卷--mod-模块服modular-outerwear-device)（35 主题/132 模块/5 核心）
-- [第九卷 · 变色龙伪装系统](#第九卷--变色龙伪装系统)
+- [第九卷
+- [第十卷 · NOVA 外观与装甲](#第十卷--nova-外观与装甲2026-08-06-补全) · 变色龙伪装系统](#第九卷--变色龙伪装系统)
 - [第二卷B · 外套全量总表（252 种）](#第二卷b--外套全量总表252-种)
 - [第三卷B · 制服全量总表（381 种）](#第三卷b--制服全量总表381-种)
 - [第四卷B · 头饰全量总表（241 种）](#第四卷b--头饰全量总表241-种)
@@ -2042,6 +2043,58 @@ check_armor:
 > **变色龙护甲**（suit_chameleon）：10 三防+火酸 50——伪装为主，防护为辅。
 
 ---
+# 第十卷 · NOVA 外观与装甲（2026-08-06 补全）
+
+> **源码**: `modular_nova/modules/` GAGS/jaeger_mod/specialist_armor/modsuit_overrides/clothing_improvements/holdingfashion_port/dogfashion。此前文档 TG 侧全量但 NOVA 层缺失，现补全。
+
+## 10.1 GAGS 染色系统（7,038 行）
+
+**源码**: `modular_nova/modules/GAGS/`（greyscale_configs.dm 3,205 行 + nsfw/ 520 行 + 552 个 JSON）。TG 核心 GAGS 系统（`code/datums/greyscale/` 614 行）= JSON 配置 + DMI 素材 + 配置 datum 三要素。
+
+- **676 个配置**（237 独立基类 + 439 个 Worn/Digi/Vox/Teshari/Snouted/Muzzled 变体）
+- 玩家用**喷漆罐（spraycan）** + `gags_recolorable` 元素弹出染色 UI 重着色
+- 物品通过 `greyscale_colors`（十六进制色串）与 `IS_PLAYER_COLORABLE_1` 标记启用
+
+**可染色部位**：头（贝雷帽/牛仔帽/蘑菇帽/军帽/花针/兜帽/猫耳耳机/蝴蝶结）、面具（小丑/呼吸器/无菌/化装舞会/护颈/防毒面具）、眼（蒙眼布）、脖（披风/斗篷/肩衣/项圈/围巾/泰莎瑞斗篷）、外套（围裙/法兰绒/浴袍/正装/铅笔裙/海军制服/连帽衫/毛衣/大衣/皮夹克/风衣/飞行员夹克/和服等）、内层（连体服/裤装/裙装/礼服/旗袍/水手服/女仆装/毕业礼服）、鞋（靴/牛仔靴/运动鞋/高跟鞋/凉鞋）、手（晚宴手套/设计师手套/布裹手）、腰带（大腿枪套）、ID 卡、勋章（8 种+勋条）、PDA（14 种外型）、NRI 军余装备、部门护甲（depgag 系列 28 种）
+
+**NSFW 染色**（GAGS/nsfw/ 27 个配置）：项圈（细/厚/皮革）、口球/宿舍面具/剥夺头盔/支配帽/口枷（shibari）/乳胶袜/芭蕾跟/捆缚架等
+
+## 10.2 Jaeger 装甲（jaeger_mod 108 行）
+
+`/datum/mod_theme/jaeger_med` "modular infantry"——中型步兵型 MOD 动力外骨骼，**非太空防护**：
+
+| 属性 | 值 |
+|---|---|
+| 护甲 | melee 40/bullet 50/laser 30/energy 40/bomb 40/bio 50/fire 50/acid 60/wound 20 |
+| 导电 | seimens 0.25 |
+| 复杂上限 | −3；部署减速 0.25 |
+| 内置模块 | `/obj/item/mod/module/jaeger_sprint`（腿部伺服超频冲刺，主动耗电 2×、加速 −0.25 减速，不可卸） |
+| 皮肤 | 默认 "infantry" |
+| 预配 | jaeger_med 控制核心（超级电池+大容量储物/磁力挂架/快速手铐） |
+| 获取 | 军械库剩余品补给箱（稀有权重） |
+
+## 10.3 专家装甲 3 系（specialist_armor）
+
+数值映射：TINY=10/WEAK=30/MID=50/INSANE=90，WOUND WEAK=10/HIGH=30。
+
+| 系 | 装备 | 护甲 | 特色机制 |
+|---|---|---|---|
+| **硬化系** | 'Muur' 硬化背心+封闭头盔（EMT 变体 'Archangel'） | melee 30/bullet 50/laser 30/energy 10/bomb 30/fire 50/acid 30/wound 10 | **弹道穿甲归零**（COMSIG_PROJECTILE_PREHIT 信号）；头盔动态遮挡；耐火 |
+| **维和系** | 'Touvou' 维和背心 + 'Kastrol' 头盔（民用版） | melee 30/bullet 50/laser 10/energy 10/bomb 30/fire 50/acid 30/wound 30 | 弹伤中等但**高伤口抗性**；激光直穿弱点 |
+| **牺牲系** | 'Val' 牺牲弹道背心+头盔 | bullet **90（INSANE）**、wound 30、bomb 50/fire 50 | **自我牺牲机制**：`clothing_damaged_by_bullets` 组件，被弹击按 1×弹伤自损（抗弱护甲弹 ×0.5），不可修复，max_integrity 200；头盔面甲（损坏>20 碎裂） |
+
+三系均可通过**补给箱**获取（各 3 套，安全部门军械库，5× 箱价）。
+
+## 10.4 其余 NOVA 服装模块
+
+| 模块 | 行数 | 内容 |
+|---|---|---|
+| **modsuit_overrides** | 225+7 | 17 个 MOD 主题护甲值重定义；卸载 security/safeguard 胡椒肩模块 |
+| **clothing_improvements** | 294 | 功能性切换（Ctrl+Shift+左键外套↔脖子两穿）；织带 3 件套（可重涂）；飞行员储物挂具（2 皮肤）；枪套右击定制加装（1.5 秒）；小背包（腰包/胸包/储物腰带） |
+| **holdingfashion_port** | 102 | 体内存亡包/行李袋（惰性体+蓝空异常核心合成；金×2/钻石/蓝空/铀材料） |
+| **dogfashion** | 12 | 狗头装扮：Yankee 说唱犬（MC %REAL_NAME%）、黄色耻辱圆锥 |
+
+
 # 附录 · 代码路径索引
 
 | 系统 | 文件 | 行数 |

@@ -62,11 +62,11 @@
 | 5 | **BSA Overhaul 蓝图武器** | `modular_nova/modules/bsa_overhaul/` | 蓝图武器改造 | ❌ 无覆盖 |
 | 6 | **Bridge Assistant 舰桥助理** | `modular_nova/modules/bridge_assistant/` | 舰桥助理职业 | ❌ 无覆盖 |
 | 7 | **Telecomms Specialist 通信专家** | `modular_nova/modules/telecomms_specialist/` | 通信专家职业 | ❌ 无覆盖 |
-| 8 | **Capitalism 资本主义经济** | `modular_nova/modules/capitalism/` | 资本主义经济系统 | ❌ 无覆盖 |
+| 8 | **Capitalism 资本主义经济** | `modular_nova/modules/economy/`（49 行，非 capitalism） | 资本主义经济系统（银河市场调价+材料货箱） | ⚠️ 已在 Nova 下卷 #27 经济覆盖 |
 | 9 | **Station Traits 站台特质** | `modular_nova/modules/station_traits/` | 空间站全局特征 | ❌ 无覆盖 |
 | 10 | **Biteng 咬人特质** | `modular_nova/modules/bitey_quirk/` | 咬人特质 | ❌ 无覆盖 |
 | 11 | **Borg Buffs 机器人增强** | `modular_nova/modules/borg_buffs/` | 机器人增强 | ❌ 无覆盖 |
-| 12 | **Brain Tumor 脑瘤** | `modular_nova/modules/brain_tumor/` | 脑瘤系统 | ❌ 无覆盖 |
+| 12 | **Brain Tumor 脑瘤** | base `code/datums/quirks/negative/brain_tumor.dm`（非独立模块） | 脑瘤怪癖 | ✅ 已在开局特质百科覆盖 |
 | 13 | **Cell Guns 细胞枪** | `modular_nova/modules/cellguns/` | 细胞武器 | ❌ 无覆盖 |
 | 14 | **Underworld Connections 地下交易** | `modular_nova/modules/underworld_connections/` | 地下交易 | ❌ 无覆盖 |
 | 15 | **Self Actualization Device** | `modular_nova/modules/self_actualization_device/` | 自我实现装置 | ❌ 无覆盖 |
@@ -77,7 +77,7 @@
 | 20 | **Spider 蜘蛛种族** | `modular_nova/modules/spider/` | 蜘蛛种族 | ❌ 无覆盖（注意生物图鉴 3.5 有蜘蛛家族 48 种，但那是生物非种族） |
 | 21 | **Species Synthesizer 物种合成器** | `modular_nova/modules/species_synthesizer/` | 物种合成器 | ❌ 无覆盖 |
 | 22 | **SEVA Suit** | `modular_nova/modules/SEVA_suit/` | SEVA 防护服（潜行者风格） | ❌ 无覆盖 |
-| 23 | **Fabcraft 以物易物合成** | `modular_nova/modules/fabcraft/` | 以物易物合成 | ❌ 无覆盖 |
+| 23 | **Fabcraft 以物易物合成** | 源码无此独立模块（为 base crafting 系统扩展，见 `code/modules/crafting/`） | 以物易物合成 | 🔍 待核实实际模块名 |
 | 24 | **Solfed Mecha** | `modular_nova/modules/solfed_mechs/` | 机甲战斗 | ⚠️ 载具百科有提及但无专章 |
 | 25 | **Teshari 鸟形族** | `modular_nova/modules/teshari/` | 鸟形族 | ⚠️ 仅提及 2 次 |
 

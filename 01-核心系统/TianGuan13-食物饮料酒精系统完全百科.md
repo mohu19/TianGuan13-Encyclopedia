@@ -2,7 +2,7 @@
 
 > **项目**: TianGuan13 (Nova Sector → /tg/station)
 > **代码**: `code/modules/food_and_drinks/recipes/`（276 配方）+ `code/modules/reagents/chemistry/reagents/{food_reagents,drinks/}.dm`（668 试剂）
-> **范围**: 本篇章覆盖餐饮系统的**化学配方层**（混合饮料/发酵/食物混合）与**试剂效用层**。注：实体食物（汉堡/披萨/蛋糕等成品菜的桌台合成 crafting_recipe）属另一体系，本篇章聚焦 `/datum/chemical_reaction` 定义的部分。
+> **范围**: 本篇章覆盖餐饮系统的**化学配方层**（混合饮料/发酵/食物混合）、**试剂效用层**、**厨房机器全录**（machinery/ 13 种）、**餐厅顾客点单系统**（restaurant/）与 **NOVA 食品模块**（6 个）。注：实体食物（汉堡/披萨/蛋糕等成品菜的桌台合成 crafting_recipe）属另一体系，本篇章聚焦 `/datum/chemical_reaction` 定义的部分。
 
 ## 目录
 
@@ -15,6 +15,9 @@
 - [第七卷 · 试剂效用速查（饮料/酒精效果数值）](#第七卷--试剂效用速查饮料酒精效果数值)
 - [第八卷 · 实体食物桌台合成](#第八卷--实体食物桌台合成crafting_recipe)
 - [第九卷 · 食物试剂效果](#第九卷--食物试剂效果)
+- [第十卷 · 厨房机器全录（machinery/ 13 种）](#第十卷--厨房机器全录machinery-13-种)
+- [第十一卷 · 餐厅顾客点单系统（restaurant/）](#第十一卷--餐厅顾客点单系统restaurant)
+- [第十二卷 · NOVA 食品模块（6 个）](#第十二卷--nova-食品模块6-个)
 - [附录A · 代码路径索引](#附录a--代码路径索引)
 
 ---
@@ -1470,6 +1473,566 @@ results = list(/datum/reagent/consumable/ethanol/XXX = 产量)
 
 ---
 
+# 第十卷 · 厨房机器全录（machinery/ 13 种）
+
+> 来源：`code/modules/food_and_drinks/machinery/`（14 个文件 = 13 种机器 + 1 个炉灶组件）。本卷全量收录每台机器的操作流程与关键数值，与第一卷的化学配方层互补（机器是实体食物的加工载体）。
+
+## 10.1 微波炉 Microwave Oven（`microwave.dm`，959 行）
+
+| 项目 | 数值 | 说明 |
+|---|---|---|
+| 类型路径 | `/obj/machinery/microwave` | 电路板 `/obj/item/circuitboard/machine/microwave` |
+| 容量 | `max_n_of_items = 10 × matter_bin.tier` | 标准 10 件，Matter Bin 升级倍增 |
+| 功率 | `efficiency = Σ micro_laser.tier` | 状态屏显示 `efficiency × 25W` |
+| 烹饪循环 | `cook_loop` 10 cycles，间隔 `max(12 − 2×efficiency, 2)` ds | 标准间隔 10 ds ≈ 1 秒 |
+| 内部试剂 | 100u | 可注水/注液（生成汤等） |
+| 脏污上限 | `MAX_MICROWAVE_DIRTINESS = 100` | 满脏后拒收食物，需清洗（`wash` 或拖把） |
+| 故障档位 | `NOT_BROKEN / KINDA_BROKEN / REALLY_BROKEN` | 中破：焊枪修；大破：剪线钳先修到中破 |
+| 电线 | `wire_disabled`（禁烹饪）、`wire_mode_swap`（交换烹饪/充电） | 接线的两种故障模式 |
+
+**操作流程**：开门放入食材（单件拖入，或用托盘/存储容器批量倾倒，非托盘需 2 秒 do_after）→ 右键/径向菜单选"Cook" → 10 cycle 加热 → 每个物品调用自身 `microwave_act()`（**微波不查配方，靠食物类型自带的 cooked_type**）→ 完成音后自动弹出。
+
+**失败与事故机制**（NOVA 特色）：
+- 脏污度 `dirty`：每次成功加工 +1（堆叠物按数量加）；失败率 `max((5/efficiency) − 5, dirty × 5)%`——干净未升级微波炉 0 风险
+- 非食物物品烹饪：`prob(min(dirty × 5, 100))` 概率进入 **PRE 模式**（4 cycles 后爆炸 → `REALLY_BROKEN`，范围 1/2/火焰 1）
+- 金属含量检测：`loop_finish` 中统计铁材料，>0 即火花 + `prob(max(铁量/2, 33))` 爆炸；**被诅咒厨师（TRAIT_CURSED）**有金属必爆
+- PDA 加热：75% 概率 `pda_failure` → 完成时爆炸（`heavy=1, light=2, flame=1`）
+- 活物电击：循环末尾对内部 mob 造成 100 电击，致死即 gib + `muck`（满脏爆炸态）
+- **吸血鬼充电**（capacitor tier ≥ 2 解锁）：Alt+点击切换"充电"模式，把模块电脑 PDA 塞进去当无线充电宝——充电率 = 电池充电率 × (1 + (efficiency−1)×0.25)，电耗有 12% 热损
+
+**变体**：
+| 变体 | 说明 |
+|---|---|
+| `/obj/machinery/microwave/hell` | 全息甲板"微波天堂"用，无功耗，95% 概率随机自启（永不自动停） |
+| `/obj/machinery/microwave/engineering` | "无线微波炉"，电池供电（`cell_powered`，自带升级+电池），天生吸血鬼充电，蓝灯 |
+| `microwave/engineering/cell_included` | 工程版带电池版 |
+
+## 10.2 烤箱 Oven（`oven.dm`，327 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/oven` |
+| 烤盘 | `/obj/item/plate/oven_tray`：6 格上限、最大承载 `WEIGHT_CLASS_BULKY`、铁制（不可碎） |
+| 烘焙温度 | 未注册烘焙信号的食物 `fire_act(1000)` 直接烧焦 |
+| 烟雾状态 | `NONE/GOOD/NEUTRAL/BAD` → 粒子 `smoke/steam/mild` / `steam` / `smoke` |
+| 功耗 | idle 0.1× 基数 / active 0.8× 基数 |
+
+**操作流程**：点机器开门（`attack_hand` 切换开/关）→ 放入烤盘（`oven_tray`）→ 食材放上烤盘（拖入/托盘倾倒）→ 关门 → 自动开始 `COMSIG_ITEM_OVEN_PROCESS` 烘焙循环 → 每 tick 检查食物反馈的 `COMPONENT_BAKING_GOOD/BAD_RESULT`，取**最差状态**显示烟雾；开门即暂停（`end_processing`）。烤箱盘可拿出单独当普通餐盘用（`AddToPlate`）。
+
+**变体 `range`**（灶台 Range）：烤箱+炉灶一体机，自带 `/datum/component/stove`（容器偏移 x=−6, y=14），出生自带一个汤锅，NOVA 中文化名为"灶台"。功率 1.2× 基数。
+
+## 10.3 油炸锅 Deep Fryer（`deep_fryer.dm`，260 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/deepfryer` |
+| 油容量 | 50u，出生预装 25u 食用油（`nutriment/fat/oil`） |
+| 耗油 | `oil_use = 0.025 − 激光tier × 0.00475` / process |
+| 炸速 | `fry_speed = Σ laser.tier` |
+| 完美时间 | `FRYING_TIME_PERFECT`（叮声 + "炸好了"） |
+| 烧焦时间 | `FRYING_TIME_WARNING`（糊味警告） |
+| 油脂污垢 | `grease_level`：每 tick 50% 概率 +0.1，≥1 显示油腻覆盖层，清洗归零 |
+
+**操作流程**：确认油存在（没有脂肪试剂拒收）→ 放入单品（**一次只炸一件**，`frying` 单槽）→ 自动加热到油试剂 `fry_temperature` → 计时到达完美点 → 徒手/右键取出（`forceMove` 掉落 + `fried_item` element 按 `cook_time` 结算加成）。油炸食品会吸收油试剂（`trans_to` multiplier = fry_speed × 3）。
+
+**黑名单**（不可炸）：工具六件套（螺丝刀/撬棍/扳手/剪线钳/多功能工具/焊枪）、`oilfry_blacklisted_items` 全局表（蓝空间尸袋、包裹、His Grace、MOD 控制装置、调味瓶、杯子、注射器、medipen 药笔、史莱姆自动注射器）、任何储物容器、`TRAIT_NODROP`/ABSTRACT 物品。
+
+**事故**：投入**冻结立方（freeze_cube）**→ 5 秒后**爆炸**（devastation=1 / heavy=3 / light=5 / flame=7）并自毁。**浸人**（dunking）：aggressive 抓握拖行活体 → 头 30 点烧伤 × 生物护甲系数 × 冷系数；体温 < TCMB+10 的冰人直接**熵差 gib**；消耗一半油。
+
+**彩蛋**：炸锅自带钓鱼点组件（`/datum/fish_source/deepfryer`）——可以在油锅里钓鱼；鱼安全存储 element 防止油炸时死亡。
+
+## 10.4 烤盘 Griddle（`griddle.dm`，234 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/griddle` |
+| 容量 | `max_items = 8`（同时烤制） |
+| 外观变体 | `variant` 1–3 随机；`stand` 商用版（食物车用，带 front_bar） |
+| 火候 | 未处理物品 `fire_act(1000)`；地面 `hotspot_expose(800, 100)` |
+| 煎饼 | 每 5u `pancakebatter` 试剂泼洒 → 1 个生煎饼（`/obj/item/food/pancakes/raw`），上限 8 |
+
+**操作流程**：徒手/机器人点击开关电源（`toggle_mode`，开机发 `COMSIG_ITEM_GRILL_TURNED_ON` 给所有物品）→ 点击放置食物（**按点击像素位置落位**，clamp ±16px）→ 烤制中物品接收 `COMSIG_ITEM_GRILL_PROCESS` → 完成时发 `COMSIG_ITEM_GRILLED`，成品自动 `AddToGrill` 续烤；托盘可一键收走全部成品。**泼煎饼糊**：直接对烤盘倾倒含 pancakebatter 的容器即可（≥5u/个，最多加到满）。
+
+## 10.5 烧烤架 Barbeque Grill（`grill.dm`，302 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/grill` |
+| 燃料系统 | `grill_fuel`；无电网（`use_power = NO_POWER_USE`） |
+| 空闲耗燃 | `GRILL_FUELUSAGE_IDLE = 0.5` / tick |
+| 烧烤耗燃 | `GRILL_FUELUSAGE_ACTIVE = 5` / tick |
+| 完美时间 | 默认 20 秒（`/datum/component/grillable` 可覆盖 `required_cook_time`） |
+| 焦化 | 每 tick +0.5u `char` 试剂，`sizzle` 组件记录烤制时间 |
+| 拆解掉落 | 点火器 + 5 铁 + 5 杆（有燃料时喷黑烟） |
+
+**加燃料方式**：
+| 燃料 | 产量 |
+|---|---|
+| 木堆 1 单位 | `5 × (IDLE + ACTIVE) = 27.5` 燃料 |
+| 煤堆 1 单位 | ×2 = 55 燃料 |
+| 试剂（倒入，映射表） | monkey_energy=4 / 油=3 / 通用燃料=2 / 乙醇=1 每 u，**未识别试剂 = −1**（倒水直接灭火） |
+
+**操作流程**：加燃料（堆叠物自动 `burn_stack`，燃料耗尽自动烧新堆）→ 放食物（单件 `grilled_item` 槽）→ 计时 → 完成给 `grilled_item` element → 徒手取出。烤肉串味随烟飘散。`unwrenched` 变体 = 未锚定初始状态。
+
+## 10.6 炉灶 Stove（`stove.dm` 245 行 + `stove_component.dm` 276 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/stove`（组件 `/datum/component/stove` 可挂任意机器） |
+| 汤锅 | `/obj/item/reagent_containers/cup/soup_pot`：**200u 容量**、食材上限 24、转移量 20/50/100/200、`REFILLABLE\|DRAINABLE`、铁 2.5 片 |
+| 加热温度 | `SOUP_BURN_TEMP + 80`（成分 `heat_coefficient = 0.033`） |
+| 升级 | 每级 micro laser ×0.5 乘数 → `heat_coefficient = 初始 × max(round(Σtier×0.5), 1)` |
+| 火焰色 | 普通 `#006eff`（蓝）；原始变体 `#ff9900`（橙） |
+
+**操作流程**：放锅（开放容器自动吸附到炉上，偏移 container_x/y）→ 右键炉子开关火（`toggle_mode`，二次点击）→ 加热汤锅试剂（含食材试剂的完整汤反应）→ 烟雾分级：<沸点无烟、<烧焦 mild steam、≥烧焦 bad smoke。**汤锅特殊交互**：右键从锅中取出单个食材；托盘可批量倒食材进锅；泼洒/投掷时食材全部洒出；`examine` 可看内容物（含水/可食用试剂直接显示，其余显示"未知体积"）。炉灶 + 烤箱一体即 10.2 的 `range` 灶台。
+
+## 10.7 冰激凌缸 Ice Cream Vat（`icecream_vat.dm`，301 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/icecream_vat` |
+| 试剂容量 | 300u（**冰激凌日 400u**），`NO_REACT\|TRANSPARENT`，恒温 T0C |
+| 单球消耗 | `CONE_REAGENT_NEEDED = 1u` / 口味 |
+| 预装试剂 | 17 种 × 6u（冰激凌日 ×2.5） |
+
+**预装 17 试剂全录**：milk、korta_milk、flour、korta_flour、sugar、ice、coco、vanilla、berryjuice、ethanol/singulo（奇异朗姆）、lemonjuice、caramel、banana、orangejuice、cream、peachjuice、cherryjelly —— 各 6u。
+
+**双模式**（右键切换）：
+- **冰激凌模式**：径向菜单选口味（`GLOB.ice_cream_flavours`，隐藏口味不显示）→ 用蛋筒点击机器 = 挖一球（检查口味试剂 ≥1u，扣 1u；蛋筒获得 `chilling` 食物增益 + 手工师特质）；自定义口味（`takes_custom_ingredients`）会额外引用内部烧杯试剂
+- **蛋筒模式**：径向菜单选蛋筒配方（`cone_prototypes` 遍历全部 `/obj/item/food/icecream` 子型）→ 按配方 `ingredients` 各扣 1u 生成蛋筒
+
+**其他交互**：勺子/汤勺右键 = 倒掉指定试剂（`spill_reagents` 列表选择）；烧杯左键 = 插入自定义口味烧杯（再次插入替换并退还旧的）；右键烧杯 = 只转移白名单试剂；Alt+点击 = 取出烧杯。任何玩家可扫描试剂内容（无需科学护目镜）。
+
+## 10.8 绞肉机 Gibber（`gibber.dm`，357 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/gibber` |
+| 绞肉耗时 | `gibtime = 40 − 5×servo.tier` ds |
+| 效率 | `efficiency = 0.25 + 0.25×matter_bin.tier` |
+| 升级 | servo tier ≥ 2 → `ignore_clothing`（可处理穿戴物品的活体） |
+| 彩蛋 | 5% 概率出生名为"meat grinder"且带血渍 |
+
+**操作流程**：拖拽碳基活体（不可捆绑/带骑乘者）→ 徒手点击 → 检查无外来物品（无升级时）→ do_after(gibtime) → 塞入 → 再点击启动 `start_gibbing` → 震动 + 果汁机声 → 产出飞溅到 3 格范围内（随机抛投）。
+
+**产出机制**：
+- **人类**：遍历每个 `bodypart.butcher_drops` 表，`drop_chance += amount × efficiency` 逐件结算（肉类走 `spawn_meat`，皮毛按肤色/物种色堆叠）
+- **非人类**：`butcher_results` / `guaranteed_butcher_results`（肉 + 兽皮），否则用 `type_of_meat`（异形给 xeno 皮）
+- **肉块继承**：命名 `[受害者真名]的肉`、携带受害者 DNA、工作、血液颜色，`infective` 组件**传播病毒**；试剂按产出数量均分（营养转脂肪）
+- 完毕 50% 概率变脏（血渍覆盖层 + 血 DNA），清洗可除
+
+**变体 `autogibber`**：碰撞即吞——活体走到输入方向格自动吸入并 `gib(DROP_ALL_REMAINS)`（处刑/陷阱用）。
+
+## 10.9 食物处理器 Food Processor（`processor.dm`，329 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/processor` |
+| 配方系统 | `/datum/food_processor_process`：`input / output / time / food_multiplier / required_machine / blacklist`，静态缓存 `processor_inputs` |
+| 产量倍率 | `rating_amount = matter_bin.tier`（× food_multiplier） |
+| 速度 | `rating_speed = servo.tier`（处理时间 = Σrecipe.time ÷ rating_speed） |
+
+**操作流程**：投入可处理物品（单品或托盘批量）→ 徒手点击（或拖拽活体进入）→ `processing()` 震动 + 搅拌机声 → 到期 `process_food`：生成 `output × (food_multiplier × rating_amount)` 个，试剂**均分复制**（copy_only）、材料按倍率保留；活体直接 gib。不同处理器类型（`required_machine`）可从相同输入产出不同结果。
+
+**变体 `slime`（史莱姆处理器）**：科学部挪用版。自动吸取 1 格内**死亡史莱姆**（数量 = matter bin tier），产出 `cores + (rating_amount−1)` 个史莱姆核心（`slime_type.core_type`，网格排列掉落），记录 `slime_core_harvested` 黑箱统计；带 USB 端口，支持 `slime_processor` 电路组件（信号激活 + 内容物数量输出）。`fullupgrade` 版自带顶级零件。
+
+## 10.10 智能冰箱 Smartfridge（`smartfridge.dm`，828 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/smartfridge` |
+| 容量 | `max_n_of_items = 1500 × matter_bin.tier` |
+| 筛选 | 各变体覆写 `accept_check()` |
+| 焊接 | 焊枪可焊死/解焊（`welded_down`，阻止拆解和移动）；出生即焊死 |
+| 界面 | tgui "SmartVend"：按类型聚合显示、逐件释放（AI 不能取物）、断电拒收 |
+
+**变体全录（11 种）**：
+| 变体 | 接受物 | 特化 |
+|---|---|---|
+| 基础型 | 农作物/种子/植株/嫁接物（`food/grown`、`seeds`、`grown`、`graft`） | 植物囤积 |
+| `drying` 脱水器 | 带 `TRAIT_DRYABLE` 且未干物品 | 25 上限，UI 带"Dry"按钮；EMP 喷 1000K 热空气；记录 `current_user`（手工师特质） |
+| `drying/rack` 木架 | 同上 | 无电木质版，10 木拆解，防拆部件 |
+| `drinks` 酒柜 | 含试剂的杯/调味瓶（碗/空容器拒收） | 吧台展示 |
+| `food` 食品柜 | 可食用物（<BULKY）+ 有内容的碗 | 厨房 |
+| `extract` 史莱姆核心柜 | 史莱姆提取物/扫描仪 | 预载 2 扫描仪 |
+| `petri` 培养皿柜 | 培养皿 | 预载 3 随机皿 |
+| `organ` 器官柜 | 器官/肢体 | **20×tier 上限**；冷藏标记 `ORGAN_FROZEN`；matter bin ≥2 时**修复器官**（`repair_rate = 标准愈速 × (tier−1) × 0.5`） |
+| `chemistry` 药品柜 | 注射器/管/瓶/烧杯/喷雾/药胶/小瓶/化疗袋/药丸（含瓶） | 预载肾上腺素 12 丸、multiver 5 丸 + 各 1 瓶 |
+| `chemistry/virology` 病毒柜 | 同药品柜 | 预载 9 种（sansufentanyl 2 瓶、抗病毒针 4、感冒/流感/诱变剂/糖/血浆/镇定剂/甲醛瓶各 1） |
+| `disks` 磁盘柜（DSU） | `/obj/item/disk` | 碟片收纳 |
+
+## 10.11 咖啡机 Coffeemaker（`coffeemaker.dm`，706 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/coffeemaker`（Modello 3） |
+| 冲泡时间 | `brew_time = 20 SECONDS`（speed = Σ laser.tier 倍速） |
+| 保温 | 恒温 176°F（80°C） |
+| 咖啡壶 | `/obj/item/reagent_containers/cup/coffeepot`（含蓝空间壶变体） |
+| 耗材库存 | 咖啡杯 15 / 糖包 10 / 甜味剂 10 / 奶精 10（可回填） |
+
+**操作流程**：装胶囊（`/obj/item/coffee_cartridge`）→ 装壶 → 径向菜单 Brew → `operate_for(brew_time)` → 壶内 +120u 咖啡（`cartridge.drink_type`），胶囊 −1 charges。每颗胶囊 4 次。径向菜单另含：取杯/取糖/取甜味剂/取奶精/退壶/退胶囊。
+
+**胶囊全录**：`coffee_cartridge`（基础 4 次 120u）、`fancy`（4 种随机：Miscela di Piccione 拼配 / Montagna Blu 蓝山 / Kilimangiaro 乞力马扎罗 / Moka Arabica，**内容完全相同**——注释明说是故意的）、`decaf` 无咖啡因、`bootleg` 私酿（植物园挤汁式）、空白胶囊（`blank_coffee_cartridge`，服务车床制作，可填咖啡膏）+ 胶囊架（`coffee_cart_rack`）。
+
+**变体 `impressa`（Impressa Modello 5 高级版）**：货船限定、电路板不可研发。**豆仓 10 颗**（`BEAN_CAPACITY`，只收**干燥**咖啡豆，单颗或整盒 `coffeepack`）；brew_time 15 秒；出杯型为无盖外带杯。冲泡时豆子的**非标准试剂**（对照参考豆差集）注入壶中，其余补满 120u 咖啡——**自定义风味咖啡**。
+
+## 10.12 食物车 Food Cart（`food_cart.dm`，140 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/food_cart` |
+| 权限 | `ACCESS_KITCHEN`（无卡/无权限拒用） |
+| 展开耗时 | 5 秒 do_after |
+| 组成 | 烤盘架（`griddle/stand`）+ 食品柜（`smartfridge/food`）+ 加固桌（`table/reinforced`）+ 帐篷（`food_cart_stand`，3×3 遮阳） |
+
+**操作流程**：放置（检查东侧 3 格空间，`check_setup_place` 预览绿/红格）→ ID 刷卡 → 5 秒展开：烤盘架落东侧右、帐篷落东侧、桌子中间、冰箱东侧左。收摊同理。任何部件被破坏/移动 → 整车 `atom_break` 自毁（部件随车删除）。帐篷是 `ABOVE_MOB_LAYER` 的 3×3 遮阳布（"汉堡翻面工没有休息"）。
+
+## 10.13 猴子回收机 Monkey Recycler（`monkeyrecycler.dm`，98 行）
+
+| 项目 | 数值 |
+|---|---|
+| 类型路径 | `/obj/machinery/monkey_recycler` |
+| 回收率 | `cube_production = servo.tier×0.2 + matter_bin.tier×0.2`（NOVA 加强版：T4 双件 = **1.2 猴立方/猴**；原版 0.1/件） |
+| 全局注册 | `GLOB.monkey_recyclers`（出生注册、销毁注销，供其他系统调用） |
+
+**操作流程**：把**死亡**（非 CONSCIOUS）猴子拖拽/鼠标放置到机器上 → 吞入（`qdel`）+ 果汁机声 + 机身摇晃 → `stored_matter += cube_production` → 徒手点击：每满 1 点吐 1 个 `/obj/item/food/monkeycube`（猴立方，注水复活）。支持 multitool 缓存设备引用。出生自带 `grinder_monkey` 覆盖层。
+
+---
+
+# 第十一卷 · 餐厅顾客点单系统（restaurant/）
+
+> 来源：`code/modules/food_and_drinks/restaurant/`（`_venue.dm` 343 行 + `custom_order.dm` 222 行 + `generic_venues.dm` 101 行 + `customers/_customer.dm` 466 行）+ 配套 `code/controllers/subsystem/restaurant.dm`、`code/datums/ai/robot_customer/`（AI 控制器 3 文件）、`code/modules/mob/living/basic/space_fauna/robot_customer.dm`。厨师/酒保通过"餐厅传送门"接待**机器人游客**，游客点单、玩家上菜、系统结账的完整服务玩法。
+
+## 11.1 子系统与场地骨架
+
+**`SUBSYSTEM_DEF(restaurant)`**（`restaurant.dm`，21 行）：`wait = 20 SECONDS`、`SS_NO_FIRE`；初始化时实例化全部 `/datum/venue` 与 `/datum/customer_data` 子型到 `all_venues` / `all_customers`；维护 `food_appearance_cache`（首次点单时缓存菜品外观）。
+
+**`/datum/venue` 基类**（`_venue.dm`）核心字段：
+
+| 字段 | 默认 | 说明 |
+|---|---|---|
+| `venue_type` | `VENUE_RESTAURANT`（另：`VENUE_BAR "Bar Venue"`，定义于 `code/__DEFINES/food.dm`） | 决定顾客点单表分支 |
+| `max_guests` | 6 | 同时在店上限（且 ≤ 座位数+1） |
+| `min/max_time_between_visitor` | 60/90 秒 | 新客间隔（餐厅 80–100s、酒吧 40–60s） |
+| `customer_types` | 加权列表 | 顾客类型池（`is_unique` 类型用后移除） |
+| `req_access` | `ACCESS_KITCHEN` | 餐厅；酒吧为 `ACCESS_BAR` |
+| `customers_served` / `total_income` | 0 / 0 | 接待统计（结账成功时递增） |
+| `mob_blacklist` | 空 | 骚扰者黑名单（第 3 次触发自卫） |
+| `linked_seats` | 空 | 座位全息牌 → 分配机器人 |
+
+**核心流程**：`open()`（开店：4 秒后第一位客人）→ `process()` 每轮冷却后 `create_new_customer()`：`pick_weight(customer_types)` 选型（`can_use` 过滤，如蛾族要求开门者有帽/手套/鞋）→ 在随机传送门处生成 `/mob/living/basic/robot_customer` → 记入 `current_visitors`。`close()` 停业并把所有顾客标记 `BB_CUSTOMER_LEAVING`。
+
+## 11.2 传送门与座位
+
+**`/obj/machinery/restaurant_portal`**（餐厅传送门）：ID 卡左键 = 开店/关店（需 venue 权限）；ID 卡右键 = 径向菜单**切换 venue 类型**（写入电路板 `board.venue_type`）。装甲：近战 50 / 子弹 30 / 激光 50 / 能量 20 / 炸弹 20 / 火 100 / 酸 100。预置变体 `restaurant`、`bar`（`generic_venues.dm`）。
+
+**座位**：`/obj/item/holosign_creator/robot_seat`（"座位指示器放置器"）→ 放置 `/obj/structure/holosign/robot_seat`（eating_zone 图标，登记进 venue `linked_seats`）；再点击（同款投影器 + 空位）可移除。餐厅/酒吧各有一组预置变体。**座位数限制客流**（顾客数 < 座位数 + 1 才生成新客）。
+
+**游客机器人 `/mob/living/basic/robot_customer`**（"tourist bot"）：150 HP、`MOB_ROBOTIC|MOB_HUMANOID`、免疫缺氧/极端温度（TCMB ~ 1000°C）、`damage_coeff` 全 1 但 STAMINA=0、音效过滤（压缩器+高切）、11 种语音（`robot_voices.json`）。生成参数：`customer_data` 类型 + `attending_venue`。固有特质：`TRAIT_NOMOBSWAP / NO_TELEPORT / STRONG_GRABBER`。
+
+## 11.3 点单 → 上菜 → 结账
+
+**点单（`venue.order_food`）**：从 `customer_data.orderable_objects[venue_type]` 加权抽取 → 三类订单：
+1. **实体菜**（`/obj/item/food/...` 路径）：顾客头顶气泡显示菜品外观（`food_appearance_cache` 缓存），喊 `order_food_line`（"I'll take a/an ..."）
+2. **试剂**（`/datum/reagent` 路径）：包装成 `custom_order/reagent`（酒吧饮料/汤）
+3. **自定义订单**（`/datum/custom_order` 子型）：见 11.4
+
+**上菜（AI 控制器 `robot_customer_controller.dm`）**：玩家用物品点顾客 → `is_correct_order(物品, 订单)` 匹配 → `eat_order()`：喊话 + `venue.on_get_order()` → 发 `COMSIG_ITEM_SOLD_TO_CUSTOMER`（试剂发 `COMSIG_REAGENT_SOLD_TO_CUSTOMER`）→ 返回 `TRANSACTION_SUCCESS` 则 `customers_served++`；餐厅会播吃喝声并**销毁食物**（酒吧/汤订单喝掉并清空容器）。错误物品（0 力）→ "No, I don't want that."；**有攻击力的物品或拳打** → 三次警告线（一次警告 → 二次警告 → 自卫宣言 + 转敌对目标）。
+
+**行为状态机**（`robot_customer_controller.dm` 黑板）：`ATTENDING_VENUE / CURRENT_ORDER / CUSTOMERINFO / EATING / LEAVING / MY_SEAT / PATIENCE`（默认 600 秒）等位 → 找座（找不到反复喊 `cant_find_seat_lines`）→ 点单 → 等餐（耐心耗尽喊 `wait_for_food_lines`）→ 用餐 → 满意离店（`leave_happy_lines`）/ 未吃离店（`leave_mad_lines`）。友好拉拽（有权限的店主）→ `friendly_pull_line` 并跟随；无权限拉拽 → 警告计数 + 挣脱（resist）。
+
+## 11.4 顾客类型全录（11 种，`customers/_customer.dm`）
+
+每种顾客有独立：点单表（餐厅/酒吧两分支，**完整加权表见 11.6**）、台词组（找座/没座/生气/满意/等餐）、警告三连、外观（`base_icon_state` + 服装组 + 前缀名表 `strings/names/*.txt`）。
+
+| 类型 | 权重来源 | 餐厅偏好（节选） | 酒吧偏好（节选） | 特色 |
+|---|---|---|---|---|
+| `american`（Amerifat） | 50 | 汉堡/薯条/热狗/苹果派/菠萝披萨/冰激凌 | 啤酒/B52/曼哈顿/老式/萨泽拉克/原子弹 | 自卫 "CASTLE DOCTRINE ACTIVATED!" |
+| `italian` | 30 | 意面系（番茄面/肉丸面/千层面）/披萨/意大利烩饭/卡诺里 | Fanciulli/Branca Menta/教父/格拉巴酒/内格罗尼 | 服装 2 套（pison/godfather） |
+| `french` | 30 | 法棍/大蒜面包/煎蛋卷/法式洋葱汤/浆果克拉芙缇 | 香槟/干邑/莫吉托/侧车/French 75 | 离开时法国旗 overlay；"break you like a baguette" |
+| `japanese` | 30 | 味噌汤/茶碗蒸/刺身/豆腐/牛肉斯特罗加诺夫 | 清酒/拿铁/芦荟汁/巧克力布丁 | 吃饱离开时爱心 overlay |
+| `japanese/salaryman`（社畜） | 20 | 味噌汤/肉包/生鱼片/豆腐 | 啤酒/清酒/咖啡三兄弟 | "Dame da ne~" 台词 |
+| `mexican` | 30 | 塔可/卷饼/玉米片/红番薯派/军团填充 | 龙舌兰/玛格丽塔/Patron/Brave Bull | 西班牙语台词 |
+| `british`（基类） | — | 印度咖喱/炖菜/惠灵顿/班尼迪克蛋/炸鱼薯条/肉派 | 麦酒/金酒/马提尼/金汤力/热托蒂/茶 | 读《暴动法》式警告 |
+| `british/gent`（绅士） | 20 | 同上 | 同上 | 绅士服 |
+| `british/bobby`（巡警） | 20 | 同上 | 同上 | 警服；"tip my helmet" |
+| `moth`（蛾族） | 1（**unique**） | **要你的帽子/手套/鞋子**（`custom_order/moth_clothing`） | — | 翼膜随机配色 + 喷气背包外观；只在你戴帽时出现 |
+| `malfunction`（故障机） | 1（**unique**） | 蜡笔 7 色/罐头桃（维护间版） | failed_reaction/喷晒黑剂/缓冲液 | 程序猿梗台词（"runtime in robot_customer_controller.dm..."）；`is_unique` 每店一次 |
+
+## 11.5 自定义订单类型（`custom_order.dm`，3 种）
+
+| 类型 | 机制 |
+|---|---|
+| `/datum/custom_order/moth_clothing` | 生成时读取开门者的头/手套/鞋，加权点单（帽/手套 5、鞋 1）；无装备则回退厨师帽/黑鞋/黑手套。交付即 `dispense_order` 返回服装路径 |
+| `/datum/custom_order/icecream` | 随机 1–3 球（`DEFAULT_MAX_ICE_CREAM_SCOOPS`）标准口味（非隐藏、非 custom），33% 巧克力蛋筒；头顶气泡绘制彩色冰淇淋球；"I'll take a double vanilla ice cream (cone)" |
+| `/datum/custom_order/reagent` | 需要**指定容器 + 主试剂**：总量 ≥ 需求、主试剂占比 ≥ 1/3（防兑水）。`drink` 子型 = 玻璃杯 `drinkingglass` 15u；`soup` 子型 = 碗，随机小/中/大份（15/20/25u），"I'll take a medium serving of ..." |
+
+## 11.6 顾客点单加权全表（orderable_objects 原文全录）
+
+权重 = 被 `pick_weight` 抽取的概率权重，数值越大越常点。
+
+**american（Amerifat）**：
+| 餐厅（VENUE_RESTAURANT） | 权重 | 酒吧（VENUE_BAR） | 权重 |
+|---|---|---|---|
+| burger/plain 汉堡 | 25 | ethanol/beer 啤酒 | 25 |
+| burger/cheese 芝士汉堡 | 15 | ethanol/b52 | 6 |
+| burger/superbite 巨无霸 | 1 | ethanol/manhattan 曼哈顿 | 3 |
+| butter/on_a_stick 黄油棒 | 8 | ethanol/old_fashioned 老式 | 3 |
+| fries 薯条 | 10 | ethanol/sazerac 萨泽拉克 | 2 |
+| cheesyfries 芝士薯条 | 6 | ethanol/improved_whiskey 精制威士忌 | 1 |
+| pie/applepie 苹果派 | 4 | ethanol/atomicbomb 原子弹 | 1 |
+| pie/pumpkinpie 南瓜派 | 2 | | |
+| hotdog 热狗 | 8 | | |
+| pizza/pineapple 菠萝披萨 | 1 | | |
+| burger/baconburger 培根堡 | 10 | | |
+| pancakes 煎饼 | 4 | | |
+| eggsausage 蛋香肠 | 5 | | |
+| custom_order/icecream 冰激凌 | 14 | | |
+| danish_hotdog 丹麦热狗 | 3 | | |
+
+**italian**：
+| 餐厅 | 权重 | 酒吧 | 权重 |
+|---|---|---|---|
+| spaghetti/pastatomato 番茄意面 | 20 | ethanol/fanciulli | 5 |
+| spaghetti/copypasta 抄袭意面 | 6 | ethanol/branca_menta | 3 |
+| spaghetti/meatballspaghetti 肉丸意面 | 4 | ethanol/beer 啤酒 | 5 |
+| spaghetti/butternoodles 黄油面 | 4 | lemonade 柠檬水 | 8 |
+| pizza/vegetable 蔬菜披萨 | 2 | ethanol/godfather 教父 | 5 |
+| pizza/mushroom 蘑菇披萨 | 2 | ethanol/wine 葡萄酒 | 3 |
+| pizza/meat 肉披萨 | 2 | ethanol/grappa 格拉巴酒 | 3 |
+| pizza/margherita 玛格丽特披萨 | 2 | ethanol/amaretto 杏仁利口酒 | 5 |
+| lasagna 千层面 | 4 | ethanol/amaretto_sour | 3 |
+| cannoli 卡诺里 | 3 | cucumberlemonade 黄瓜柠檬水 | 2 |
+| salad/risotto 意式烩饭沙拉 | 5 | ethanol/negroni 内格罗尼 | 2 |
+| eggplantparm 茄子帕玛森 | 3 | ethanol/garibaldi 加里波第 | 2 |
+| cornuto 牛角包 | 2 | ethanol/spritz 斯普利兹 | 5 |
+| custom_order/icecream 冰激凌 | 10 | | |
+| salad/greek_salad 希腊沙拉 | 6 | | |
+
+**french**：
+| 餐厅 | 权重 | 酒吧 | 权重 |
+|---|---|---|---|
+| baguette 法棍 | 20 | ethanol/champagne 香槟 | 10 |
+| garlicbread 大蒜面包 | 5 | ethanol/cognac 干邑 | 5 |
+| omelette 煎蛋卷 | 15 | ethanol/mojito 莫吉托 | 5 |
+| custom_order/icecream 冰激凌 | 6 | ethanol/sidecar 侧车 | 5 |
+| soup/french_onion 法式洋葱汤 | 4 | ethanol/between_the_sheets | 4 |
+| pie/berryclafoutis 浆果克拉芙缇 | 2 | ethanol/beer 啤酒 | 5 |
+| | | ethanol/wine 葡萄酒 | 5 |
+| | | ethanol/gin_garden 金花园 | 2 |
+| | | ethanol/french_75 | 5 |
+| | | ethanol/herbal_liqueur 草药利口酒 | 2 |
+| | | ethanol/pousse_cafe 咖啡伴侣酒 | 1 |
+
+**japanese**：
+| 餐厅 | 权重 | 酒吧 | 权重 |
+|---|---|---|---|
+| custom_order/icecream 冰激凌 | 4 | ethanol/sake 清酒 | 8 |
+| soup/miso 味噌汤 | 10 | cafe_latte 拿铁 | 6 |
+| soup/vegetable_soup 蔬菜汤 | 4 | ethanol/aloe 芦荟酒 | 6 |
+| beef_stroganoff 牛肉斯特罗加诺夫 | 2 | chocolatepudding 巧克力布丁 | 4 |
+| breadslice/plain 白面包片 | 5 | tea 茶 | 4 |
+| chawanmushi 茶碗蒸 | 4 | cherryshake 樱桃奶昔 | 1 |
+| fish_poke 鱼生饭 | 5 | ethanol/bastion_bourbon 堡垒波本 | 1 |
+| muffin/berry 浆果玛芬 | 2 | | |
+| sashimi 刺身 | 4 | | |
+| tofu 豆腐 | 5 | | |
+
+**japanese/salaryman（社畜）**：
+| 餐厅 | 权重 | 酒吧 | 权重 |
+|---|---|---|---|
+| soup/miso 味噌汤 | 6 | ethanol/beer 啤酒 | 14 |
+| soup/vegetable_soup 蔬菜汤 | 4 | ethanol/sake 清酒 | 9 |
+| beef_stroganoff 牛肉斯特罗加诺夫 | 2 | cafe_latte 拿铁 | 3 |
+| chawanmushi 茶碗蒸 | 4 | coffee 咖啡 | 3 |
+| meat_poke 肉生饭 | 4 | soy_latte 豆奶拿铁 | 3 |
+| meatbun 肉包 | 4 | ethanol/atomicbomb 原子弹 | 1 |
+| sashimi 刺身 | 4 | | |
+| tofu 豆腐 | 5 | | |
+
+**moth（蛾族）**：餐厅仅 1 项——`custom_order/moth_clothing`（要开门者的帽/手套/鞋），权重 1；酒吧无点单（`is_unique`，每 venue 一次）。
+
+**mexican**：
+| 餐厅 | 权重 | 酒吧 | 权重 |
+|---|---|---|---|
+| taco/plain 素塔可 | 25 | ethanol/whiskey 威士忌 | 6 |
+| taco 塔可 | 15 | ethanol/tequila 龙舌兰 | 20 |
+| burrito 卷饼 | 15 | ethanol/tequila_sunrise 龙舌兰日出 | 1 |
+| fuegoburrito 火焰卷饼 | 1 | ethanol/beer 啤酒 | 15 |
+| cheesyburrito 芝士卷饼 | 4 | ethanol/patron | 5 |
+| nachos 玉米片 | 10 | ethanol/brave_bull 勇牛 | 5 |
+| cheesynachos 芝士玉米片 | 6 | ethanol/margarita 玛格丽塔 | 8 |
+| pie/dulcedebatata 红薯派 | 2 | | |
+| cubannachos 古巴玉米片 | 3 | | |
+| stuffedlegion 军团填充 | 1 | | |
+| custom_order/icecream 冰激凌 | 2 | | |
+
+**british（基类，gent 绅士 / bobby 巡警共用此表）**：
+| 餐厅 | 权重 | 酒吧 | 权重 |
+|---|---|---|---|
+| custom_order/icecream 冰激凌 | 8 | ethanol/ale 麦酒 | 10 |
+| soup/indian_curry 印度咖喱 | 3 | ethanol/beer 啤酒 | 10 |
+| soup/stew 炖菜 | 10 | ethanol/gin 金酒 | 5 |
+| beef_wellington_slice 惠灵顿牛排片 | 2 | ethanol/hcider 烈苹果酒 | 10 |
+| benedict 班尼迪克蛋 | 5 | ethanol/alliescocktail 盟军鸡尾酒 | 5 |
+| fishandchips 炸鱼薯条 | 10 | ethanol/martini 马提尼 | 5 |
+| full_english 英式全餐 | 2 | ethanol/gintonic 金汤力 | 5 |
+| sandwich/grilled_cheese 烤芝士三明治 | 5 | tea 茶 | 10 |
+| pie/meatpie 肉派 | 5 | ethanol/hot_toddy 热托蒂 | 5 |
+| salad/ricepudding 米布丁 | 5 | | |
+
+**malfunction（故障机）**（`is_unique`，每 venue 一次）：
+| 餐厅 | 权重 | 酒吧 | 权重 |
+|---|---|---|---|
+| toy/crayon 红蜡笔 | 1 | failed_reaction 失败反应物 | 1 |
+| toy/crayon 橙蜡笔 | 1 | spraytan 喷晒黑剂 | 1 |
+| toy/crayon 黄蜡笔 | 1 | reaction_agent/basic_buffer 碱性缓冲液 | 1 |
+| toy/crayon 绿蜡笔 | 1 | reaction_agent/acidic_buffer 酸性缓冲液 | 1 |
+| toy/crayon 蓝蜡笔 | 1 | | |
+| toy/crayon 紫蜡笔 | 1 | | |
+| canned/peaches/maint 维护间桃罐头 | 6 | | |
+
+---
+
+# 第十二卷 · NOVA 食品模块（6 个）
+
+> 来源：`modular_nova/modules/` 下 6 个食品相关模块。NOVA（NovaSector）分支特色内容，与主线 `code/` 分层共存。
+
+## 12.1 酒精加工模块 Alcohol Processing（`alcohol_processing/`，53 行）
+
+修改乙醇代谢率：`metabolization_rate = 0.3 × REAGENTS_METABOLISM`（更慢的酒精代谢）。新增**血液酒精浓度（BAC）8 档情绪系统**（`/datum/mood/proc/get_drunk_mood`）：
+
+| 档位 | BAC 区间 | 心情文本 |
+|---|---|---|
+| 1 | 0.01 – 0.05 | 喝了一杯，该放松了 |
+| 2 | 0.05 – 0.07 | 开始有感觉了 |
+| 3 | 0.07 – 0.11 | 微醺，感觉不错 |
+| 4 | 0.11 – 0.13 | 上头了！ |
+| 5 | 0.13 – 0.17 | 记不清喝了多少，但很爽 |
+| 6 | 0.17 – 0.19 | 喝太多了，该停了……喝点水…… |
+| 7 | 0.19 – 0.23 | 不太舒服了…… |
+| 8 | ≥ 0.23 | 有医生吗？真的很难受…… |
+
+另有 `get_alcohol_processing` 心情条目（体内仍有酒精代谢时显示"还在消化酒精"）。醉酒状态描述文案同步改写。
+
+## 12.2 食品复制机模块 Food Replicator（`food_replicator/`，1,114 行）
+
+**核心机器 `/obj/machinery/biogenerator/food_replicator`**（"Pioneer-Class Matter Resequencer" 先驱级物质重序机）：生物发生器子类，用**生物质材料**打印民用必需品；效率与生产力**各 ×0.75**（印得慢但免费材料）；三类设计页：HC 食物 / HC 医疗 / HC 服装；附平装版 `flatpack`。
+
+**设计全录（按材料成本）**：
+
+*HC 食物（`replicator_food.dm`，12 项）*：殖民口粮盒（550 生物质，6 格锁定盒：1 主食+1 副菜+1 甜点+咖啡杯+口香糖+餐具）、主食随机器（200）、副菜随机器（150）、甜点随机器（100）、EVA 葡萄糖注射笔（150）、餐具盒（75）、殖民口香糖盒（100）、空纸杯（10）、粉末红茶/咖啡/热可可/柠檬水/奶粉（各 4–5）、水（1）、糖（5）。
+
+*HC 医疗（`replicator_medical.dm`，8 项）*：空口袋急救包、空药笔袋、通用袋、止血缝线（`suture/bloody`）、止血网（`mesh/bloody`）、瘀伤贴、烧伤贴、纱布、肾上腺素丸、Convermol 丸、Multiver 丸。配套止血清创系列（医疗 3 文件：`medical.dm` 70 行 + `clothing.dm` 71 行 + `storage.dm` 62 行）含"血红"缝线/网与殖民药袋三件套。
+
+*HC 服装（`replicator_clothing.dm`，7 项）*：殖民制服、半靴、斗篷、细织带背心、殖民帽、黑手套。
+
+**殖民菜肴全录（`rationpacks.dm` 620 行，东欧主题）**：
+
+| 类别 | 菜品 | 营养构成 |
+|---|---|---|
+| 主食（5） | pljeskavica 巴尔干肉饼堡 / pierogi-ravioli 波兰-意式饺子（20% 概率倒扣装） / cevapi 肉肠拼盘（50% 概率 alt 摆盘） / sarma 卷心菜卷 / borscht 罗宋汤碗（50u 白甜菜汤，开罐式） | 蛋白 6–9 / 维他命 2–4 / 营养 3–4 |
+| 副菜（5） | chigirtma 恰奇玛盘 / kasha kiev 鸡肉基辅粥 / 腌菜拼盘 / draniki 土豆煎饼 / mushroom barley 蘑菇大麦饭 | — |
+| 甜点（9） | blins 炼乳可丽饼 / kolache 5 味（杏/草莓/蓝莓/奶油奶酪/巧克力釉） / medovik 蜂蜜坚果蛋糕片 / syrniki 奶酪煎饼管 / 水果饺子袋（`fruit_dumplings` 袋，6 格） | — |
+| 附件 | 殖民咖啡杯（含 30u 咖啡版 + 空版）/ 殖民餐巾（脏版）/ 塑料餐具盒 / 垃圾 8 种（对应各菜包装） | — |
+
+口粮包装机制：`preserved_food = TRUE` 密封态不可吃，`attack_self` 开包（发出开罐声）。
+
+**粉末试剂（`reagents.dm`，116 行）**：粉末茶/咖啡/可可/柠檬水/奶粉（`REAGENT_CAN_BE_SYNTHESIZED`，生物质 4u 成本）+ 5 个瞬时冲调反应（1u 粉 + 1u 水/奶 → 2u 成品）。**合成葡萄糖**（`nutriment/glucose`）：营养 1，on_mob_life 补 15 营养并累计 `delayed_satiety_drain`，代谢完毕一次性扣除（先吃后还的糖）。convermol 药丸（治缺氧、致醉）。
+
+## 12.3 原始烹饪扩展模块 Primitive Cooking Additions（`primitive_cooking_additions/`，10 文件 1,307 行）
+
+"无需通电的多种烹饪方式"。**原始技能（`/datum/skill/primitive`）**影响速度（`SKILL_SPEED_MODIFIER`）与经验获取（操作 +2~+5 经验）。
+
+**机器全录（8 种结构 + 2 类器具）**：
+
+| 结构 | 类型路径 | 材料 | 机制要点 |
+|---|---|---|---|
+| 石炉 | `/obj/machinery/oven/primitive` | 石 5 片 | 烤箱子类；随机铜/黄铜/锡仿制烤盘；禁螺丝刀/撬棍，撬棍 = 拆解掉 5 石 |
+| 黏土炉 | `oven/primitive/clay` | 黏土 10 片 | 石炉黏土版 |
+| 石灶 | `/obj/machinery/primitive_stove` | 石 5 片 | `stove/primitive` 组件：**橙色火焰**（#ff9900）+ 火光照明（3 光强、火焰色）；出生带汤锅 |
+| 黏土灶 | `primitive_stove/clay` | 黏土 10 片 | 同上 |
+| 石烤盘 | `/obj/machinery/griddle/stone` | 石 5 片 | 固定 variant 1；无电（`use_power = FALSE`）；其余同普通烤盘 |
+| 石锅（大锅） | `/obj/machinery/cauldron` | 石 5 片 | 微波炉式：10 容量、10 cycles × 12ds、`microwave_act` 结算；撬棍 2 秒拆解掉 5 石 |
+| 石磨 | `/obj/structure/millstone` | 石 6 片（拆解掉） | 装 10 个植物/农作物 → 右键转磨：5 秒 × 技能修正，**全部 `seedify` 出种子**；体力消耗 100、体力 ≥50 拒绝；Ctrl+Shift 锚定切换 |
+| 大研钵 | `/obj/structure/large_mortar` | 木 10 片 | 200u 开放容器 + 10 物品；**杵（`/obj/item/pestle`）径向三选**：Grind 研磨 / Juice 榨汁 / Mix 混合（**奶→黄油、蛋黄→蛋黄酱、奶油→打发奶油**，各 +2 经验）；体力消耗 70 |
+| 案板 | `/obj/item/cutting_board` | 木 5 片 | **手动食物处理器**：复用 `food_processor_process` 配方表；放 1 件 → 刀（`TOOL_KNIFE`）切 3 秒 → 出成品；可锚定；可投掷（throwforce 7） |
+| 烟熏炉 | `/obj/machinery/smartfridge/drying/rack/smoker` | 木 6 + 石 4 + 铁 2.5 + 杆 1（合成配方 5 秒） | 脱水架子类；**燃料**：木堆 1 片 = 10 秒、原木 = 20 秒；干燥启动需燃料，耗完自动停；冒烟粒子 + 防 EMP |
+| 石器汤锅 | `soup_pot/material` | 材料化（铜/黄铜/锡预设） | 与 10.6 汤锅同规格，材料统计加成 |
+| 石器烤盘 | `oven_tray/material` | 材料化（同上） | 烤盘材料版（"Time to bake hardtack!"） |
+| 亚麻植物袋 | `/obj/item/storage/bag/plants/primitive` | 皮肤组件 | 原始人/灰烬行者合成自动变亚麻皮（`reskinable_item`）；portaseeder 不变 |
+
+## 12.4 更多植物发酵模块 More Plant Fermentation（`morefermentplants/`，20 文件）
+
+为原本无蒸馏产物的植物补全 `distill_reagent`。**52 条映射全录**：
+
+| 植物 | 蒸馏产物 | 植物 | 蒸馏产物 |
+|---|---|---|---|
+| ambrosia/vulgaris | 嬉皮士喜悦 | ambrosia/deus | 教父 Godfather |
+| ambrosia/gaia | 教母 Godmother | banana/bluespace | 小丑之泪汤 |
+| koibeans | 蘑菇粉碎 Mush Crush | berries/poison | 毒刺 Stinger |
+| berries/death | 白雪公主 Snow White | berries/glow | 奇异朗姆 Singulo |
+| cherries | 樱桃奶昔 | bluecherries | 蓝樱桃奶昔 |
+| cherrybulbs | 合成醇 Synthanol/Uplink | cannabis | 三英里岛 |
+| cannabis/rainbow | 绿啤酒 | cannabis/death | 裂缝尖刺 Crevice Spike |
+| cannabis/white | 医生快乐 Doctor Delight | cannabis/ultimate | Thirteen Loko |
+| chili | 红蜂蜜酒 Red Mead | icepepper | 热冰咖啡 |
+| ghost_chili | 流苏织者 Fringe Weaver | citrus/lime | 神风 Kamikaze |
+| citrus/lemon | 柠檬水 | firelemon | 威士忌酸 |
+| eggplant | 蛋黄 Eggyolk | garlic | 干邑 Cognac |
+| kudzupod | 除草剂 Weedkiller | watermelon | 绑架果酒 Abduction Fruit |
+| galaxythistle | Wizz Fizz | cabbage | 冷鳞 Coldscales |
+| gatfruit | 地狱火 Hellfire | cherry_bomb | 热酸橙迈阿密 |
+| mushroom/reishi | 罪恶之城 Quadruple Sec | mushroom/amanita | 果冻龙 Jell Wyrm |
+| mushroom/angel | 空骨 Hollow Bone | mushroom/libertycap | 迈阿密风云 |
+| mushroom/chanterelle | 熔岩吐息 Laval Spit | mushroom/jupitercup | 天鹅绒之吻 Velvet Kiss |
+| mushroom/glowshroom | 龙舌兰日出 | mushroom/glowshroom/shadowshroom | 恶触 Badtouch |
+| nettle | 酸液吐息 Acid Spit | nettle/death | 特殊毒素 |
+| onion | 原子弹 Atomic Bomb | onion/red | B52 |
+| pineapple | 巴哈马妈妈 | pumpkin | 南瓜拿铁 |
+| pumpkin/blumpkin | 醉南瓜 Drunken Blumpkin | carrot | 香堡 Shamblers |
+| parsnip | 欧防风汁 | whitebeet | 私酿 Moonshine |
+| redbeet | 天鹅绒之吻 Velvet Kiss | tobacco/space | 薄荷醇 Menthol |
+| tomato/blue/bluespace | 灼烧 Blazaam | | |
+
+（注：部分产物与主线重复为设计使然——模块只补"本来没有蒸馏"的植物。）
+
+## 12.5 烹饪台配方模块 Cook Console Recipes（`cook_console_recipes/`，2 文件 261 行）
+
+"不依赖农产品控制台的烹饪台配方"——把原本只有控制台能做的中间食材搬进手工合成/化学台：
+
+| 配方 | 原料 | 产物 | 菜系 |
+|---|---|---|---|
+| 自制柴鱼高汤 | 水 40u + 柴鱼花 20u + 海苔片 1 | 高汤 40u | 火星 |
+| 椰奶替代品 | 科塔奶 1u + 水 1u + 酶 1u | 椰奶 2u | 火星 |
+| 咖喱粉 | 辣椒粉 10u + 黑胡椒 10u | 咖喱粉 20u | 火星 |
+| 红月桂调味 | 辣椒粉 10u + 干香草 1 | 红月桂 20u | 火星 |
+| 伍斯特酱 | 洋葱汁/大蒜/醋/柴鱼花/糖 各 1u | 伍斯特酱 4u | 火星 |
+| 醋（配方入口） | 挂接 `wine_vinegar` 反应 | — | 调味 |
+| 清酒（配方入口） | 挂接 `sake` 反应 | — | 调味 |
+| CHAP 罐头 | 铁 1 + 生肉 1（铁/肉材料黑名单） | `/obj/item/food/canned/chap` | 肉菜 |
+| 辣椒粉（研磨） | 干辣椒 1 | 辣椒粉 | 火星 |
+| 柴鱼花（研磨） | 干鱼 1 | 柴鱼花 | 火星 |
+| 月光鱼卵（处理器） | 矮月光鱼 1 | 月光鱼卵 | 蜥蜴 |
+| 干鱼 / 干辣椒 / 干香草（干燥） | 鱼片/辣椒/香草 1 | 干货 | 火星 |
+
+**中间食材（`intermediatefoods.dm`）**：干鱼片（可磨柴鱼花）、干辣椒、干香草束、bonito 柴鱼花试剂、Chili Powder、Onion Juice（洋葱片研磨）+ 3 个汤类玻璃风格（椰奶/咖喱粉/红月桂）。固有修复：CHAP 罐头/切片含 `intrinsic_food_materials`（肉+铁，可回收）。
+
+## 12.6 应急口粮模块 Emergency Rations（`emergency_rations/`，180 行）
+
+**应急口粮袋 `/obj/item/storage/box/ration`**（"emergency ration"）：蓝色塑料袋，厨师缺席/灾难时发放；普适多物种可食用。**内容固定 6 件**：
+1. 随机主菜 A（3 选 1）：豆香黄米饭 / 豌豆胡萝卜酱汁 / 意式土豆团子番茄酱
+2. 随机主菜 B（3 选 1）：豆玉米炖 / 野米蔬菜 / 豌豆汤炖
+3. 随机副菜 A（3 选 1）：红薯曲奇 / 红糖烤馅饼 / 酥饼条
+4. 随机副菜 B（3 选 1）：格兰诺拉棒 / 椒盐脆饼块 / 玉米坚果
+5. 脆饼（配花生酱）+ 花生酱包（10u，新增调味包类型）
+6. 全部为素食（`VEGETABLES` 标签），甜点额外 `SUGAR`；双主/副随机器避免重复
+
+附带垃圾 2 种（空副菜包/空袋）。售价 `PAYCHECK_CREW × 1.8`、塑料可折叠回收。
+
+---
+
 # 附录A · 代码路径索引
 
 | 文件 | 行数 | 内容 |
@@ -1482,9 +2045,20 @@ results = list(/datum/reagent/consumable/ethanol/XXX = 产量)
 | `code/modules/food_and_drinks/recipes/tablecraft/` | 7,820 | **实体食物桌台合成 571 配方（19 文件）** |
 | `code/modules/food_and_drinks/recipes/tablecraft/recipes_guide.dm` | 968 | 非合成指引 173 条（未纳入） |
 | `code/modules/food_and_drinks/recipes/processor_recipes.dm` | — | 处理器配方（榨汁等） |
+| `code/modules/food_and_drinks/machinery/`（14 文件） | 5,362 | **厨房机器 13 种全录**（微波炉/烤箱/油炸锅/烤盘/烧烤架/炉灶+组件/冰激凌缸/绞肉机/食物处理器/智能冰箱/咖啡机/食物车/猴子回收机） |
+| `code/modules/food_and_drinks/restaurant/`（4 文件） | 666 | **餐厅系统**：venue 场地 / custom_order 自定义订单 / generic_venues 餐厅+酒吧 / customers 顾客 11 种 |
+| `code/controllers/subsystem/restaurant.dm` | 21 | 餐厅子系统（all_venues / all_customers / 外观缓存） |
+| `code/datums/ai/robot_customer/`（3 文件） | — | 游客机器人 AI：控制器 / 行为 / 子树 |
+| `code/modules/mob/living/basic/space_fauna/robot_customer.dm` | — | tourist bot 实体（150 HP 机器人顾客） |
+| `modular_nova/modules/alcohol_processing/` | 53 | **NOVA 酒精加工**：乙醇代谢 0.3× + BAC 8 档醉酒心情 |
+| `modular_nova/modules/food_replicator/`（9 文件） | 1,114 | **NOVA 食品复制机**：先驱级重序机 + 殖民口粮全系列 + 粉末试剂 |
+| `modular_nova/modules/primitive_cooking_additions/`（10 文件） | 1,307 | **NOVA 原始烹饪**：石炉/黏土炉/石灶/石烤盘/大锅/石磨/大研钵/案板/烟熏炉/石器厨具/亚麻袋 |
+| `modular_nova/modules/morefermentplants/`（20 文件） | 137 | **NOVA 更多植物发酵**：52 条植物→蒸馏产物映射 |
+| `modular_nova/modules/cook_console_recipes/`（2 文件） | 261 | **NOVA 烹饪台配方**：高汤/椰奶/咖喱粉/伍斯特酱/CHAP 等 12 配方 |
+| `modular_nova/modules/emergency_rations/`（1 文件） | 180 | **NOVA 应急口粮**：6 件套口粮袋（2 主菜+2 副菜+脆饼+花生酱） |
 | `code/modules/reagents/chemistry/reagents/food_reagents.dm` | 1,393 | 食物试剂 81 种定义（营养+效果） |
 | `code/modules/reagents/chemistry/reagents/drinks/drink_reagents.dm` | 1,501 | 饮料试剂 95 种定义（56 种有效果） |
 | `code/modules/reagents/chemistry/reagents/drinks/alcohol_reagents.dm` | — | 酒精试剂 200+ 种定义（198 种有效果） |
 
 > **文档完** — 基于 TianGuan13 源码提取
-> 覆盖: 847 配方（饮品 276 + 桌台食物 571）+ 668 试剂 | 输出: 1 篇
+> 覆盖: 847 配方（饮品 276 + 桌台食物 571）+ 668 试剂 + 厨房机器 13 种 + 餐厅系统（11 顾客类型）+ NOVA 食品模块 6 个（52 发酵映射） | 输出: 1 篇（12 卷 + 附录）

@@ -39,6 +39,7 @@
     - [3.12 气阀警报系统](#312-气阀警报系统)
     - [3.13 默认端口分配速查](#313-默认端口分配速查)
     - [3.14 工程实务指南](#314-工程实务指南)
+    - [3.15 专项补录：气体流量表 / 桥接管 / 层流歧管 / 色彩适配器](#315-专项补录气体流量表--桥接管--层流歧管--色彩适配器)
   - [第4章 · 压力安全与爆炸系统](#第4章--压力安全与爆炸系统)
     - [4.1 所有容器压力等级总表](#41-所有容器压力等级总表)
     - [4.2 手持气罐爆炸系统](#42-手持气罐爆炸系统)
@@ -47,6 +48,15 @@
     - [4.5 Hypernoblium晶体抑爆原理](#45-hypernoblium晶体抑爆原理)
     - [4.6 固定气罐损伤机制](#46-固定气罐损伤机制)
     - [4.7 工程安全策略](#47-工程安全策略)
+  - [第4A章 · LINDA 大气模拟系统](#第4a章--linda-大气模拟系统-turf-级物理)
+    - [4A.1 定位与核心常量](#4a1-定位与核心常量)
+    - [4A.2 气流与相邻判定](#4a2-气流与相邻判定-linda_systemdm)
+    - [4A.3 turf 大气状态](#4a3-turf-大气状态-linda_turf_tiledm)
+    - [4A.4 LINDA 主循环](#4a4-linda-主循环-process_cell)
+    - [4A.5 空间风](#4a5-空间风-spacewind)
+    - [4A.6 超导热传导](#4a6-超导热传导-superconductivity)
+    - [4A.7 火灾蔓延与灭火](#4a7-火灾蔓延与灭火-linda_firedm)
+    - [4A.8 太空泄漏行为](#4a8-太空泄漏行为)
 - [第三卷：发电引擎](#第三卷发电引擎)
   - [第5章 · 超物质引擎](#第5章--超物质引擎)
     - [5.1 SM核心属性](#51-sm核心属性)
@@ -1005,6 +1015,106 @@ TEG发电: 热端和冷端**温差越大, 发电越多**
 2. **配气站**: N₂罐+O₂罐→混合器(79/21)→恒温机→供应管
 3. **气体精炼**: 原料气→过滤器#1(提Plasma)→燃烧室(造Tr)→冷却→过滤器#2(分Tr/CO₂)
 
+### 3.15 专项补录：气体流量表 / 桥接管 / 层流歧管 / 色彩适配器
+
+#### 3.15.1 气体流量表 (Gas Flow Meter)
+
+**代码**: `machinery/other/meter.dm` (216行)
+
+| 参数 | 值 |
+|---|---|
+| 类型 | `/obj/machinery/meter`（贴在管道上的仪表，非管道本体） |
+| 名称/描述 | "gas flow meter" — "It measures something." |
+| 图层 | HIGH_PIPE_LAYER (2.54) |
+| 耗电 | idle = BASE_MACHINE_IDLE_CONSUMPTION×0.05 = **5W**；active = BASE_MACHINE_ACTIVE_CONSUMPTION×0.03 = **30W**；电力通道 AREA_USAGE_ENVIRON |
+| 结构完整性 | max_integrity = 150；护甲 energy=100, fire=40 |
+| 外观 | 灰阶配置 `/datum/greyscale_config/meter`，默认 COLOR_GRAY (#808080) |
+
+**挂管机制**: 建造/初始化时在所在格寻找 `piping_layer == target_layer` 的管道作为 target；默认 target_layer = PIPING_LAYER_DEFAULT (3)。派生型 `/meter/layer2`、`/meter/layer4` 固定测第2/4层；`/meter/turf` 直接以所在 turf 为测量对象（测房间空气而非管道）。目标管道被拆时通过 COMSIG_QDELETING 信号自动掉落 (`drop_meter` → `deconstruct(FALSE)`)。
+
+**测量与显示 (process_atmos)** — 读取 target 管道 `return_air()` 压力分档:
+
+| 压力区间 | 图标 |
+|---|---|
+| ≤ 0.15 atm (≤15.2 kPa) | meter0 |
+| 0.15 ~ 1.8 atm | meter1_x（每 0.3 atm 一档） |
+| 1.8 ~ 30 atm | meter2_x（每 5 atm 一档） |
+| 30 ~ 59 atm | meter3_x（每 5 atm 一档） |
+| > 59 atm | meter4 |
+
+**温度色带**（灰阶染色，BODYTEMP_HEAT_WARNING_1/2/3 = 340/460/700K，BODYTEMP_COLD_WARNING_1/2/3 = 270/200/120K）:
+
+| 温度区间 | 颜色 |
+|---|---|
+| ≥ 700K | 红 (COLOR_RED) |
+| 460 ~ 700K | 橙 (COLOR_ORANGE) |
+| 340 ~ 460K | 黄 (COLOR_YELLOW) |
+| 270 ~ 340K | 亮绿 (COLOR_VIBRANT_LIME) |
+| 200 ~ 270K | 青 (COLOR_CYAN) |
+| 120 ~ 200K | 蓝 (COLOR_BLUE) |
+| 其余 | 紫 (COLOR_VIOLET) |
+
+**读数 (status)**: `"The pressure gauge reads [压力] kPa; [温度] K ([摄氏]°C)."` — examine 与右键互动均输出；无目标管道时 "The connect error light is blinking."，管道无气体时 "The sensor error light is blinking."
+
+**电路集成**: 内置 USB 端口，支持 `/obj/item/circuit_component/atmos_meter` 电路组件（"Atmospheric Meter"）：输入端口 **Request Meter Data**（信号触发），输出端口 **Pressure / Temperature**（数值）。
+
+**拆解**: 扳手 40 tick (volume 50) → `deconstruct()` → 掉落 `/obj/item/pipe_meter` 物品。被五阶以上奇点引力拉拽也会拆解。
+
+#### 3.15.2 桥接管 (Bridge Pipe)
+
+**代码**: `machinery/pipes/bridge_pipe.dm` (33行)
+
+| 参数 | 值 |
+|---|---|
+| 类型 | `/obj/machinery/atmospherics/pipe/bridge_pipe`，BINARY 双端 |
+| 名称/描述 | "bridge pipe" — "A one meter section of regular pipe used to connect pipenets over pipes." |
+| 图层 | HIGH_PIPE_LAYER (2.54)；underfloor 时 BELOW_CATWALK_LAYER+1 |
+| 连接 | dir=SOUTH，initialize_directions 按朝向自动归一（南北或东西） |
+| pipe_flags | PIPING_CARDINAL_AUTONORMALIZE \| PIPING_BRIDGE |
+| 建造 | construction_type = `/obj/item/pipe/binary`，pipe_state = "bridge_center" |
+| 气体视觉 | has_gas_visuals = FALSE（不显示管内气体） |
+
+用途：跨越同格其他管道连接两端管网（桥接位）。属 PIPING_BRIDGE 家族，与同格下层管道共存不冲突。
+
+#### 3.15.3 层流歧管 (Layer Manifold / layer adaptor)
+
+**代码**: `machinery/pipes/layermanifold.dm` (143行)
+
+| 参数 | 值 |
+|---|---|
+| 类型 | `/obj/machinery/atmospherics/pipe/layer_manifold`，device_type = 0（非设备） |
+| 名称/描述 | "layer adaptor" — "A special pipe to bridge pipe layers with." |
+| 内部体积 | **200L** |
+| 管道层 | 固定 piping_layer = PIPING_LAYER_DEFAULT (3)；set_piping_layer 强制回第3层 |
+| pipe_flags | PIPING_ALL_LAYER \| PIPING_DEFAULT_LAYER_ONLY \| PIPING_CARDINAL_AUTONORMALIZE \| PIPING_BRIDGE |
+| 可涂色 | paintable = TRUE |
+| 显示层 | 高于所有管道：PIPING_LAYER_MAX × PIPING_LAYER_LCHANGE = 5 × 0.005 = 0.025 |
+| 变体 | `/visible` 恒可见（layer = GAS_PIPE_VISIBLE_LAYER 2.47） |
+
+**核心功能**: 同一位置把第 1~5 层 (PIPING_LAYER_MIN..MAX) 的管道全部桥接起来——`find_all_connections()` 对每个层在前/后两个方向 `find_connecting(dir, iter)` 收集 front_nodes / back_nodes。连接规则与普通管道相同（同层/同色或 omni/相邻/不被阻挡）。
+
+**特殊处理**:
+- 气闸泵 (airlock_pump)：只接 distro 节点（第4层，蓝色贴图），不合并 waste 管网
+- 色彩适配器 / omni 管道：沿用歧管自身颜色
+- 爬管 (vent crawl)：在歧管内沿 NORTH/EAST 移动 → `ventcrawl_layer + 1`；SOUTH/WEST → `−1`；clamp 在 1..5 层之间（可在管道层间切换爬行）
+
+#### 3.15.4 色彩适配器 (Color Adapter)
+
+**代码**: `machinery/pipes/color_adapter.dm` (74行)
+
+| 参数 | 值 |
+|---|---|
+| 类型 | `/obj/machinery/atmospherics/pipe/color_adapter`，BINARY 双端 |
+| 名称/描述 | "color adapter" — "A one meter section of regular pipe used to connect different colored pipes." |
+| 连接 | dir=SOUTH，initialize_directions 按朝向归一（南北或东西） |
+| pipe_flags | PIPING_CARDINAL_AUTONORMALIZE \| PIPING_ALL_COLORS \| PIPING_BRIDGE |
+| 可涂色 | paintable = FALSE（自身不可涂，专用于桥接异色网络） |
+| 显示 | hide = FALSE 恒可见；中心图标 "adapter_center" 按层缓存 (center_cache) |
+| 层变体 | layer1 / layer2 / layer4 / layer5（icon adapter_map-1/2/4/5） |
+| 气体视觉 | has_gas_visuals = FALSE |
+
+**核心功能**: 连接两个不同颜色的管道网络。端节点贴图颜色取 `nodes[i].pipe_color`；链式连接时（相邻节点也是 color_adapter 且方向含南/东，或节点为 omni 色）沿用本适配器颜色，保证整条桥颜色连续。PIPING_ALL_COLORS 使其无视颜色规则参与管网连接（颜色规则见 §3.3）。
+
 ---
 
 ## 第4章 · 压力安全与爆炸系统
@@ -1152,6 +1262,220 @@ max_pressure = (当前HP/初始HP) × 初始max_pressure
 | 气罐压力高但没炸 | 转移空地→开阀泄压 |
 | 固定气罐裂纹声 | 金属变形声→焊枪修(25HP/次) |
 | 外界火烤气罐 | 加隔热护盾(需电池)/搬走 |
+
+---
+
+## 第4A章 · LINDA 大气模拟系统 (turf 级物理)
+
+**代码**: `code/modules/atmospherics/environmental/` (3文件, 1,394行)
+- `LINDA_system.dm` (223行) — turf 级气流 / 压力扩散 / 风
+- `LINDA_turf_tile.dm` (699行) — turf 大气状态与主循环
+- `LINDA_fire.dm` (472行) — 火灾蔓延与灭火
+
+LINDA 是 turf 级气体模拟框架（Giacom 系 atmos 重构），构成"工程气体"最底层的物理：管道/组件/气罐只负责把气体倒进 turf，而 turf 之间的扩散、空间风、燃烧蔓延、固体热传导全部由 LINDA 处理。本章数值全部提取自上述 3 文件 + `controllers/subsystem/air.dm` + `__DEFINES/atmospherics/`。
+
+### 4A.1 定位与核心常量
+
+**单元体积**: CELL_VOLUME = **2500L**（每格 turf 标准气体体积）
+**标准摩尔数**: MOLES_CELLSTANDARD = ONE_ATMOSPHERE × CELL_VOLUME / (T20C × R_IDEAL_GAS_EQUATION) = 101.325 × 2500 / (293.15 × 8.31) ≈ **103.98 mol**
+**基础常量**: ONE_ATMOSPHERE = 101.325 kPa；R_IDEAL_GAS_EQUATION = 8.31；TCMB = 2.7K（太空）；T0C = 273.15K；T20C = 293.15K
+**默认初始大气**: OPENTURF_DEFAULT_ATMOS = `O2=22;N2=82;TEMP=293.15`
+
+| 常量 | 值 | 含义 |
+|---|---|---|
+| MINIMUM_AIR_RATIO_TO_SUSPEND | 0.1 | 摩尔差 >10% 视为显著分享 |
+| MINIMUM_AIR_RATIO_TO_MOVE | 0.001 | 摩尔差 >0.1% 即需移动气体 |
+| MINIMUM_AIR_TO_SUSPEND | ≈10.4 mol | 显著分享阈值（103.98×0.1） |
+| MINIMUM_MOLES_DELTA_TO_MOVE | ≈0.104 mol | 触发分享的最小摩尔差 |
+| MINIMUM_TEMPERATURE_TO_MOVE | 393.15K | 温差传热触发阈值 |
+| MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER | 0.5K | 温度差低于此值不传热 |
+| EXCITED_GROUP_BREAKDOWN_CYCLES | 5 | 激发组每5帧均衡一次 |
+| EXCITED_GROUP_DISMANTLE_CYCLES | 11 | 2次均衡后无反应则休眠 |
+| CELL_VOLUME × 0.95 | 2375 | 火点被动模式体积阈值 |
+
+### 4A.2 气流与相邻判定 (LINDA_system.dm)
+
+**can_atmos_pass 四级制** — 每个 atom 都有 `can_atmos_pass` 变量:
+
+| 值 | 行为 |
+|---|---|
+| ATMOS_PASS_YES | 完全通透 |
+| ATMOS_PASS_NO | 完全阻挡 |
+| ATMOS_PASS_DENSITY | 看 density（density=TRUE 挡气） |
+| ATMOS_PASS_PROC | 走自定义 proc（开放 turf 用） |
+
+- 封闭 turf（墙/地板）默认 ATMOS_PASS_NO；开放 turf (`/turf/open`) 用 PROC 逐格判定
+- 开放 turf 判定顺序：垂直方向需 `zAirOut(direction) && target.zAirIn(direction)` 双向通过 → 本格或目标格任一 `blocks_air` 为真则不通 → 遍历两格 contents 所有对象，任一 `CANATMOSPASS()` 返回假则不通
+- 阻挡对象若 `block_superconductivity()` 为真，把该方向记入 `atmos_supeconductivity` 位域（注释原文："Superconductivity is a bitfield of directions we can't conduct with"）——即"被实体挡住的格仍可传热，但不可换气"
+
+**相邻缓存 atmos_adjacent_turfs**: 每格缓存"能与之换气的相邻 turf"（assoc list）。初始化时走优化版 `init_immediate_calculate_adjacent_turfs()`（假设 a→b 与 b→a 对称，省约 1.2 秒），运行时走 `immediate_calculate_adjacent_turfs()`。两者都遍历 GLOB.cardinals_multiz（4 方向 + UP + DOWN 共 6 向，UP/DOWN 即 z+1/z−1），只登记开放 turf，双向确认后互相加入列表，完成后发 `COMSIG_TURF_CALCULATED_ADJACENT_ATMOS` 信号。NOVA 分支额外调用 `update_adjacent_pollutants()`（相邻关系解锁/封锁污染物）。
+
+**get_atmos_adjacent_turfs(alldir)**: alldir=1 时额外包含对角格——条件：该对角格与两个相邻直角格都能换气（matching_directions ≥ 2）。
+
+**air_update_turf(update, remove)**: update=TRUE → 重建相邻列表；remove=TRUE → 移出激活列表（拆墙）；否则加入激活列表。NOVA 分支额外调用 `liquid_update_turf()`。
+
+**atmos_spawn_air(text)**: 用字符串直接向 turf 注气（如 `"o2=100;n2=500;TEMP=300"`），merge 后归档并入激活——调试/事件刷气的标准入口。
+
+### 4A.3 turf 大气状态 (LINDA_turf_tile.dm)
+
+**/turf 基础变量**:
+
+| 变量 | 默认 | 含义 |
+|---|---|---|
+| thermal_conductivity | 0.05 | 超导热传导系数 |
+| heat_capacity | INFINITY | 烧毁所需热量（默认无穷=不可烧毁，opt-in） |
+| temperature_archived | — | 上一帧温度快照 |
+| atmos_adjacent_turfs | — | 相邻可换气 turf 列表 |
+| atmos_supeconductivity | NONE | 无法超导的方向位域 |
+| archived_cycle / current_cycle | 0 | LINDA 循环帧号 |
+| initial_gas_mix | OPENTURF_DEFAULT_ATMOS | 出生/行星大气字符串 |
+
+**/turf/open 专属变量**:
+
+| 变量 | 默认 | 含义 |
+|---|---|---|
+| pressure_difference / pressure_direction | 0 | 空间风：压差与来向（高压→低压） |
+| excited_group | — | 所属激发组 |
+| excited | FALSE | 是否在激活处理中 |
+| air | — | 本格 gas_mixture |
+| active_hotspot | — | 本格活跃火点引用 |
+| planetary_atmos | FALSE | 行星大气（自动回归初始混合） |
+| run_later | FALSE | 请求"常规分享后做一次100%分享"（太空抽真空通道） |
+| significant_share_ticker | 0 | 显著分享计数器 |
+
+**气体接口**:
+- `create_gas_mixture()`: 解析 initial_gas_mix 生成混合；turf 温度与初始值不同则用当前温度
+- `assume_air(giver)` / `remove_air(amount)`: 机器注气/抽气入口（merge/remove 后更新视觉并入激活）
+- `copy_air_with_tile(target)` / `copy_air(copy)`: 整格复制气体
+- `return_air()`: 开放 turf 返回自身 air；封闭 turf 返回新建混合
+- 行星大气：`SSair.planetary[initial_gas_mix]` 共享一个不可变混合 (immutable)，同 mix 的所有行星 turf 共用同一份"无限大气"
+
+**气体视觉 (update_visuals)**: 按 moles 组成生成 GAS_OVERLAYS（vis_contents 增删覆盖层），气体浓度变化自动增删气体覆盖贴图。
+
+### 4A.4 LINDA 主循环 (process_cell)
+
+SSair (`controllers/subsystem/air.dm`) 每 tick 按固定顺序执行:
+
+```
+① ATMOSMACHINERY(机器) → ② ACTIVETURFS(process_cell) → ③ HOTSPOTS(火点) → ④ EXCITEDGROUPS(激发组) → ⑤ HIGHPRESSURE(空间风) → ⑥ SUPERCONDUCTIVITY(固体导热) → ⑦ PROCESS_ATOMS → ⑧ PIPENETS(管网)
+```
+
+**process_cell(fire_count)** 单格处理流程:
+1. **归档**: `LINDA_CYCLE_ARCHIVE`（air.archive + archived_cycle = times_fired + temperature_archived），保证本帧所有分享基于同一快照
+2. **分享系数**: `our_share_coeff = 1/(相邻数+1)`——每格向每个邻居转移 1/(n+1) 的摩尔差
+3. **相邻遍历**: 双方同组且都 excited → 直接分享；否则 `air.compare()` 判定（某气体差 > MINIMUM_MOLES_DELTA_TO_MOVE 且 > 自身摩尔×0.001 → 需要分享）
+4. **激活与建组**: 需要分享时把邻居加入激活，双方并入同一激发组（`existing_group = our || enemy || new`）
+5. **air.share(enemy, our_coeff, 1/(敌相邻数+1))**: 按归档快照算每气体差，双向转移摩尔并同步热焓（温度差 >0.5K 时附带热传导；热容变化 <10% 时叠加 OPEN_HEAT_TRANSFER_COEFFICIENT 温度分享）
+6. **压力差记录**: share 返回差值 ≠ 0 → `consider_pressure_difference()`（供空间风阶段使用）
+7. **LAST_SHARE_CHECK**: 本帧分享量 > MINIMUM_AIR_TO_SUSPEND (≈10.4 mol) → 重置激发组冷却；> MINIMUM_MOLES_DELTA_TO_MOVE → 只重置 dismantle 冷却
+8. **run_later 通道**: 标记过的邻居（太空 run_later=TRUE）在常规分享结束后做一次 `share(enemy, 1, 1)` 100% 全量分享
+9. **反应**: `air.react(src)` 触发气体反应（燃烧等），标志写入激发组 turf_reactions
+10. **睡眠判定**: 无超导、无火点、无反应（REACTING/STOP_REACTIONS）且 `significant_share_ticker > EXCITED_GROUP_DISMANTLE_CYCLES (11)` → `sleep_active_turf()`；否则从激活列表移除（连带清激发组）
+
+**激发组 (excited_group)**:
+- `self_breakdown(roundstart)`: 每5帧把全组气体按能量加权平均（温度 = Σ能量/Σ热容，各气体摩尔取平均）写回每个成员；行星成员直接拷贝行星混合；roundstart 时若有 immutable/行星成员则整组采用该混合（地图加载优化）
+- `dismantle()`: 11帧无显著分享且无反应 → 全部成员 excited=FALSE 移出激活（休眠）
+- `merge_groups()`: 相邻组相遇合并（大组吞小组），取较小 breakdown_cooldown，重置 dismantle_cooldown
+- 调试: `display_turfs` 用 GLOB.colored_turfs 给整组染色
+
+**行星大气 (planetary_atmos)**: 与共享行星混合差异触发激活，分享系数 **0.8**（每次交换 4/5 的摩尔差），温度分享用 OPEN_HEAT_TRANSFER_COEFFICIENT (0.4) 且行星热容×5（模拟巨大大气快速换热）。
+
+### 4A.5 空间风 (Spacewind)
+
+- 换气产生摩尔差 → `consider_pressure_difference(邻居, 差值)`: 差值更大则更新 `pressure_direction`（从高压指向低压），并把本格加入 `SSair.high_pressure_delta`
+- SSair 每 tick 的 HIGHPRESSURE 阶段: 对 high_pressure_delta 逐格 `high_pressure_movements()`，处理完清零 `pressure_difference`
+- **推动公式** (`experience_pressure_difference`):
+  - `max_force = sqrt(压差) × (MOVE_FORCE_DEFAULT/5)` = sqrt(pd) × **200**
+  - `move_prob = (压差 / pressure_resistance × 75) − 25`（PROBABILITY_BASE_PERCENT=75, PROBABILITY_OFFSET=25）
+  - 默认 `pressure_resistance = 10`（atom/movable 基类）
+  - 移动条件: move_prob > 25 且概率通过 且（未锚定: max_force ≥ move_resist × MOVE_FORCE_PUSH_RATIO(1)；锚定: ≥ move_resist × MOVE_FORCE_FORCEPUSH_RATIO(2)）
+  - MOVE_FORCE_DEFAULT = 1000；`move_resist != INFINITY` 才可推
+- 锚定物 / 被拉拽物（pulledby）: 不推动，改发 `COMSIG_MOVABLE_RESISTED_SPACEWIND` 信号
+- 每格每 tick 同一物体只推一次（`last_high_pressure_movement_air_cycle` 帧号检查）
+
+### 4A.6 超导热传导 (Superconductivity)
+
+目的：模拟热量穿过固体（墙/窗/门）——先把地板/墙本身加热（thermal_conductivity 系数），再向相邻格传导（"model heat moving through solid objects… by heating up the floor itself"）。
+
+**触发条件**:
+- 开放 turf: `air.temperature ≥ MINIMUM_TEMPERATURE_START_SUPERCONDUCTION (693.15K)`（启动）或 ≥ MINIMUM_TEMPERATURE_FOR_SUPERCONDUCTION (373.15K)（维持），且 `air.heat_capacity() ≥ M_CELL_WITH_RATIO`（≈0.52 mol 标准热容）
+- 封闭 turf: temperature ≥ 同样阈值（无热容要求）
+- 无 thermal_conductivity 的 turf 永不超导
+
+**传导方向**: `conductivity_directions()` = 不在 atmos_adjacent_turfs 且不在超导阻塞位域的方向——即"被墙/窗挡住的相邻格"，热量穿墙而过
+
+**传导系数**: 开放↔开放用 WINDOW_HEAT_TRANSFER_COEFFICIENT (0.1)；开放↔固体 / 固体↔固体用双方 thermal_conductivity（默认 0.05）；`share_temperature_mutual_solid` 能量公式 = 系数 × CALCULATE_CONDUCTION_ENERGY(温差, 双方热容)
+
+**向太空辐射 (radiate_to_spess)**: 温度 > T0C (273.15K) 即向太空散热，delta 基准 TCMB (2.7K)，热容系数用 HEAT_CAPACITY_VACUUM (7000)
+
+**烧毁判定 (atmos_expose / burn_turf)**: 暴露温度 ≥ heat_capacity → `to_be_destroyed = TRUE`；已标记且温度 ≥ max_fire_temperature_sustained 时累计；`burn_turf()` 烧毁概率 = `max_fire_temperature_sustained / heat_capacity × 8`，成功则 `Melt()`（融化/烧穿）。默认 heat_capacity = INFINITY 的 turf 永不触发。
+
+### 4A.7 火灾蔓延与灭火 (LINDA_fire.dm)
+
+**火点创建 — hotspot_expose(exposed_temperature, exposed_volume, soh)**:
+- 氧气 < 0.5 mol → 不点火（无氧化剂）
+- 燃料阈值: plasma > 0.5 或 tritium > 0.5 或 hydrogen > 0.5（普通火）；或 freon > 0.5（冷火）
+- 点火判定: 暴露温度 > PLASMA_MINIMUM_BURN_TEMPERATURE (= FIRE_MINIMUM_TEMPERATURE_TO_EXIST = **373.15K**) 且有燃料；或暴露温度 < FREON_MAXIMUM_BURN_TEMPERATURE (**283K**) 且有 freon
+- 新火点: `new /obj/effect/hotspot(src, exposed_volume × 25, exposed_temperature)`，并把 turf 加入激活列表
+- soh=1（持续热源）: 已有火点时按燃料/冷火规则放大温度与体积（上限取大值）
+
+**火点对象 /obj/effect/hotspot**:
+
+| 属性 | 默认 | 含义 |
+|---|---|---|
+| volume | 125 | 火势体积（除以 turf 体积得温度设定比例） |
+| temperature | 373.15K | 点火温度（FIRE_MINIMUM_TEMPERATURE_TO_EXIST） |
+| just_spawned | TRUE | 首帧保护（首帧做全量点燃） |
+| bypassing | FALSE | 被动模式：跟随气体温度而非改变它 |
+| cold_fire | FALSE | 冷火（freon 燃烧，≤283K） |
+| 光照 | LIGHT_RANGE_FIRE = 3, LIGHT_COLOR_FIRE = "#FAA019" | 火光 |
+| 图层 | GASFIRE_LAYER = 5.05, ABOVE_GAME_PLANE | 气体火焰层 |
+| 贴图 | 'icons/effects/fire.dmi', fire_stage 平滑 | 火焰图标 |
+
+**点燃过程 (perform_exposure)**:
+- 首帧（just_spawned）: 从 turf 气体按 `volume/air.volume` 比例 `remove_ratio()` 抽出混合 → 温度设为火点温度 → `react()`（触发燃烧反应）→ 注回 turf（首帧全量点燃）
+- 被动模式判定: `bypassing = !just_spawned && volume > CELL_VOLUME×0.95 (2375)`
+- 后续帧: `volume = Σ(各热点反应产热) × FIRE_GROWTH_RATE (40000)`；温度跟随参考气体
+- 对 turf 上所有物体调用 `fire_act(temperature, volume)`（烧毁/点燃物品）
+- 生物走入火点: `on_entered` → `fire_act`（灼烧）
+
+**蔓延机制 (process 每帧)**:
+- 死亡条件（自灭）: 温度 < 373.15K 且非冷火；或 volume ≤ 1；或氧气/燃料不足（< 0.5 mol）→ `qdel(src)`
+- 火势阶段: bypassing → "heavy"（重火，`location.burn_tile()` 烧地）；volume > CELL_VOLUME×0.4 (1000) → "medium"；否则 "light"
+- **辐射蔓延**: `air.temperature > FIRE_MINIMUM_TEMPERATURE_TO_SPREAD (423.15K)` 或冷火时，向所有相邻 turf 以 `radiated_temperature = air.temperature × FIRE_SPREAD_RADIOSITY_SCALE (0.85)`（冷火 × COLD_FIRE_SPREAD_RADIOSITY_SCALE = 0.95）调用 `hotspot_expose(radiated, CELL_VOLUME/4 = 625)` —— 热辐射点燃邻居
+- 视觉: `visual_update_tick` 每 7 帧更新一次火色
+- 火点分组 (hot_group): 相邻火点 Initialize 时自动并入同一组（上限 tiles_limit = 80 格），组平均中心播放循环火焰音效（volume 30, mid_length 2 SECONDS, falloff = 组宽，组 ≥ 2 格才播，5 秒冷却）；火点诞生播放 fire_puff.ogg（每格 5 秒冷却, volume 30）
+
+**灭火手段（源码路径）**:
+1. **缺氧/缺燃料**: 任意格氧气 < 0.5 mol 或燃料 < 0.5 mol → 火点自灭
+2. **降温**: 温度降至 < 373.15K（非冷火）→ 自灭
+3. **抽真空**: 太空/真空 turf 经 run_later 100% 分享抽走燃料与氧气 → 自灭（§4A.8）
+4. **冷火 (Freon)**: freon 在 ≤283K 吸热燃烧，天然压制高温火焰（§2.2.4）
+5. **Halon 反应**: §2.5.3 Halon 灭火反应直接抑制燃烧反应
+6. NOVA 液体系统: turf 上有液体且 `liquids.check_fire(TRUE)` → 液体进入 `SSliquids.processing_fire`（液体可燃/参与火处理）
+
+**火色渲染 (update_color)**: 温度 <5000K 偏橙（gauss_lerp 1000~3000K 过渡到标准火焰纹理）；>40000K 偏紫（gauss_lerp 40000~200000）；200000~500000K 加 shieldsparkles 闪光（nitryl 区间）；400000~1500000K 加闪电贴图 overcharged；>4500000K 融合效果（noblium 区间，fusion_gas + rainbow druggy 覆盖层）。冷火: R=0, G=LERP(255,temp,1.2), B=LERP(255,temp,0.9), alpha=100。
+
+### 4A.8 太空泄漏行为
+
+**太空 turf (`/turf/open/space`, space.dm)**:
+| 参数 | 值 |
+|---|---|
+| temperature | TCMB = **2.7K** |
+| thermal_conductivity | OPEN_HEAT_TRANSFER_COEFFICIENT = **0.4** |
+| heat_capacity | **700,000** |
+| run_later | TRUE（请求 100% 分享） |
+| 气体 | 静态不可变混合 `space_gas`（immutable，永不枯竭） |
+| init_air | FALSE（不参与相邻缓存） |
+| remove_air() | 返回 null（机器抽不走太空） |
+
+**泄漏物理**:
+- 破舱 → 开放 turf 与太空 turf 相邻 → 双方进入同一激发组
+- 常规分享把 1/(n+1) 的摩尔差推向太空；随后 run_later 通道做一次 `share(太空, 1, 1)` **100% 全量转移**——格内气体以最快速度灌入太空（这就是"太空抽真空"的实现）
+- 太空自身 immutable，不会被反向注气；温度恒为 2.7K，thermal_conductivity 0.4 让格内高温快速向太空传导（配合超导系统）
+- 泄漏同时产生空间风（§4A.5）: 压差方向指向破口，未锚定物被推向太空
+- 真空格 (AIRLESS_ATMOS = `TEMP=2.7`) 与空气格同理，只是没有 immutable 太空混合
+- 行星大气 turf 被挖穿时，行星混合不断补气——与太空形成"无限源 vs 无限阱"的稳态对抗
 
 ---
 
@@ -3393,6 +3717,14 @@ explosion_identifier
 | 反应手册 | `code/modules/atmospherics/gasmixtures/reaction_factors.dm` | 216 |
 | 大气连接器 | `code/modules/atmospherics/machinery/components/unary_devices/machine_connector.dm` | 146 |
 | 跨层管道 | `code/modules/atmospherics/machinery/pipes/multiz.dm` | 60 |
+| LINDA 大气系统 | `code/modules/atmospherics/environmental/` (3文件) | 1,394 |
+| LINDA 气流/风 | `code/modules/atmospherics/environmental/LINDA_system.dm` | 223 |
+| LINDA turf 状态 | `code/modules/atmospherics/environmental/LINDA_turf_tile.dm` | 699 |
+| LINDA 火灾 | `code/modules/atmospherics/environmental/LINDA_fire.dm` | 472 |
+| 气体流量表 | `code/modules/atmospherics/machinery/other/meter.dm` | 216 |
+| 桥接管 | `code/modules/atmospherics/machinery/pipes/bridge_pipe.dm` | 33 |
+| 层流歧管 | `code/modules/atmospherics/machinery/pipes/layermanifold.dm` | 143 |
+| 色彩适配器 | `code/modules/atmospherics/machinery/pipes/color_adapter.dm` | 74 |
 | 电力网核心 | `code/modules/power/power.dm` + `powernet.dm` | 667 |
 | 电缆 | `code/modules/power/cable.dm` | 876 |
 | APC | `code/modules/power/apc/apc_main.dm` | 835 |
@@ -3435,3 +3767,4 @@ explosion_identifier
 > **文档完** — 基于 TianGuan13 源码的全量工程气体系统分析
 > 代码覆盖: 90+文件, ~31,000+行（含发电系统+电力网补充） | 输出: 13篇→1篇总章 + 发电系统卷
 > **2026-08 核查补充**: 新增第四卷B发电系统（TEG/涡轮/太阳能/RTG/引力/特斯拉 7,300行）+ 第8I章电力网基础设施（APC/SMES/电缆/电网 3,000行）+ reaction_factors/machine_connector/multiz 补齐
+> **2026-08 核查补充2**: 新增第4A章 LINDA 大气模拟系统专章（environmental/ 3文件 1,394行：气流/空间风/超导/火灾蔓延与灭火/太空泄漏）+ §3.15 四个管道件专项（气体流量表/桥接管/层流歧管/色彩适配器 466行）+ 附录B 索引补齐

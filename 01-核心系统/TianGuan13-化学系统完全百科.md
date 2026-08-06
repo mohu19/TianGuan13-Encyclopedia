@@ -736,6 +736,65 @@ Maint Sludge6 + Nitracid1 + Enzyme1 (催化AcetoneOxide5) ──▶ Maint Powder
 | **Metalgen Imprint** | Metalgen1 + LDM1 | **金属印记**（吸收40u金属, 记录材料） |
 | **Gravitum 重力剂** | Wittel1 + Sorium10 | 10u | 重力相关 |
 
+### 史莱姆萃取全录（52 反应 · 源码全量）
+
+> **源码**: `code/modules/reagents/chemistry/recipes/slime_extracts.dm`（589 行，52 个反应 datum）。产物在 `results` 字段或 `on_reaction()` 中。此前标注"科研内容另行处理"为悬空引用，现补全。
+
+| 提取物 | 试剂 | 产物/效果 |
+|---|---|---|
+| **灰色** | toxin/plasma = 1 | 生成 1 只灰色史莱姆 |
+| **灰色** | water = 5 | medicine/epinephrine = 3 |
+| **灰色** | blood = 1 | monkeycube |
+| **绿色** | toxin/plasma = 1 | mutationtoxin/jelly = 1 |
+| **绿色** | blood = 1 | mutationtoxin = 1 |
+| **绿色** | uranium/radium = 1 | mutationtoxin/lizard = 1 |
+| **绿色** | consumable/milk = 1 | mutationtoxin/felinid = 1 |
+| **绿色** | cellulose = 1 | mutationtoxin/moth = 1 |
+| **绿色** | consumable/liquidelectricity/enriched = 1 | mutationtoxin/ethereal = 1 |
+| **金属** | toxin/plasma = 1 | plasteel、iron |
+| **金属** | water = 1 | rglass、glass |
+| **金色** | toxin/plasma = 15 | 生成随机生物（金色史莱姆召唤） |
+| **银色** | toxin/plasma = 1 | 生成 1-2 个随机物品 |
+| **蓝色** | toxin/plasma = 1 | consumable/frostoil = 10 |
+| **蓝色** | blood = 1 | stabilizer |
+| **蓝色** | water = 5 | 喷射 80 单位泡沫 |
+| **深蓝** | toxin/plasma = 1 | 5 秒后生成氮气（温度 2.7K），提取物 55 秒后消失 |
+| **深蓝** | water = 1 | fireproof |
+| **橙色** | blood = 1 | consumable/capsaicin = 10 |
+| **橙色** | toxin/plasma = 15 | 5 秒后喷出等离子气体（1000K），提取物 55 秒后消失 |
+| **橙色** | water = 5 | phosphorus = 10, potassium = 10, consumable/sugar = 10 |
+| **黄色** | blood = 15 | 产生 EMP 脉冲 |
+| **黄色** | toxin/plasma = 1 | slime |
+| **黄色** | water = 1 | slime |
+| **紫色** | toxin/plasma = 1 | steroid |
+| **紫色** | blood = 1 | medicine/regen_jelly = 5 |
+| **深紫** | toxin/plasma = 1 | plasma |
+| **红色** | toxin/plasma = 1 | mutator |
+| **红色** | blood = 1 | 史莱姆陷入狂暴（嗜血） |
+| **红色** | water = 1 | speed |
+| **粉色** | toxin/plasma = 1 | docility |
+| **粉色** | blood = 1 | genderchange |
+| **黑色** | toxin/plasma = 1 | aslimetoxin = 1 |
+| **油** | toxin/plasma = 15 | 史莱姆爆炸 |
+| **油** | blood = 1 | consumable/nutriment/fat/oil/corn = 10 |
+| **浅粉** | toxin/plasma = 1 | sentience |
+| **浅粉** | water = 1 | renaming |
+| **精金** | toxin/plasma = 15 | adamantine |
+| **蓝空间** | blood = 1 | bluespace |
+| **蓝空间** | toxin/plasma = 1 | 生成水晶 |
+| **蓝空间** | water = 1 | slimeradio |
+| **天蓝** | toxin/plasma = 1 | enhancer |
+| **天蓝** | blood = 1 | slime |
+| **深褐** | toxin/plasma = 1 | timestop |
+| **深褐** | water = 1 | camera、camera_film |
+| **深褐** | blood = 1 | sepia |
+| **黄铁** | toxin/plasma = 1 | 生成颜料/染色 |
+| **黄铁** | blood = 1 | 生成蜡笔 |
+| **彩虹** | toxin/plasma = 1 | 随机效果（彩虹史莱姆） |
+| **彩虹** | toxin/slimejelly = 1 | 爆炸（彩虹史莱姆炸弹） |
+| **彩虹** | blood = 1 | transference |
+| **彩虹** | water/holywater = 5, uranium = 5 | flight |
+
 ---
 
 # 第八卷 · 其他化学品
@@ -1269,7 +1328,7 @@ Maint Sludge6 + Nitracid1 + Enzyme1 (催化AcetoneOxide5) ──▶ Maint Powder
 | `recipes/catalysts.dm` | 98 | 催化剂 6 种 |
 | `recipes/reaction_agents.dm` | 123 | 反应剂 6 种 |
 | `recipes/special.dm` | 320 | 随机配方 3 种（Secret Sauce/Metalgen/Gorgium） |
-| `recipes/slime_extracts.dm` | 589 | 史莱姆萃取（科研内容，另行处理） |
+| `recipes/slime_extracts.dm` | 589 | **史莱姆萃取 52 反应全录（见 7.2 节）** |
 | `reagents/medicine_reagents.dm` | 2,010 | 医疗试剂效果 |
 | `reagents/cat2_medicine_reagents.dm` | 676 | C2 医疗试剂效果 |
 | `reagents/toxin_reagents.dm` | 1,765 | 毒素试剂效果 |

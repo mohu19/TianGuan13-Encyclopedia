@@ -2,7 +2,7 @@
 
 > **项目**: TianGuan13 (Nova Sector → /tg/station)
 > **代码**: `code/modules/vending/`（5,408 行）+ `code/modules/religion/`（4,441 行）
-> **范围**: **售货机**（65 种）+ **宗教/牧师**（10 教派+14 仪式）
+> **范围**: **售货机**（66 种）+ **宗教/牧师**（10 教派+14 仪式）
 >
 > **关联文档**：售货机补货与《供应系统》联动；牧师职业与《职业百科》联动。
 
@@ -10,7 +10,7 @@
 
 ## 目录
 
-- [第一卷 · 售货机全录](#第一卷--售货机全录)（65 种+机制/特殊 18 项）
+- [第一卷 · 售货机全录](#第一卷--售货机全录)（66 种+机制/特殊 18 项）
 - [第二卷 · 宗教系统](#第二卷--宗教系统)（10 教派详表+物品+梦境）
 - [附录 · 代码路径索引](#附录--代码路径索引)
 
@@ -18,7 +18,7 @@
 
 # 第一卷 · 售货机全录
 
-**代码**: `code/modules/vending/`（5,408 行，43 文件）——**65 种售货机**
+**代码**: `code/modules/vending/`（5,408 行，43 文件）——**66 种售货机**
 
 ## 1.1 售货机分类总览
 
@@ -189,7 +189,11 @@
 | **音乐神** | music | 节日/音乐 |
 | **梦神** | dreams | 梦境 |
 
-## 2.2 仪式全录（14 种）
+## 2.2 仪式全录（37 个 · 源码全量）
+
+> **源码**: `code/modules/religion/` 全部仪式定义（15 主系 + burdened 1 + dreams 6 + festival 8 + honorbound 3 + pyre 4 = 37）。此前文档仅列 13 个主系，漏 deaconize 及全部子教派仪式，现补全。
+
+### 主系仪式（15 个）
 
 | 仪式 | 代码 | 效果 |
 |---|---|---|
@@ -206,6 +210,56 @@
 | **锻造仪式装备** | ceremonial_weapon | 仪式武器 |
 | **成为不可破坏** | unbreakable | 不可破坏 |
 | **成为坚韧** | tenacious | 坚韧 |
+| **入教仪式** | deaconize | 让目标入教（此前文档漏掉） |
+| **贪婪** | greed | 贪婪基础仪式 |
+
+### Burdened 教派（1 个）
+
+| 仪式 | 代码 | 效果 |
+|---|---|---|
+| **转化（Transmogrify）** | nullrod_transformation | 灵能者转化仪式 |
+
+### 梦境教派 Dreams（6 个）
+
+| 仪式 | 代码 | 效果 |
+|---|---|---|
+| **驱赶噩梦** | banish_nightmare | 梦境驱逐 |
+| **梦境入教** | deaconize/dreamers | 梦境入教 |
+| **梦境预兆** | dream_portent | 预兆 |
+| **梦境投射** | dream_projection | 投射 |
+| **梦境守护** | dream_protection | 守护 |
+| **睡衣派对** | slumber_party | 睡眠派对 |
+
+### 节日教派 Festival（8 个）
+
+| 仪式 | 代码 | 效果 |
+|---|---|---|
+| **神圣小提琴（Cogitandi Fidis）** | holy_violin | 小提琴 |
+| **便携调音** | portable_song_tuning | 便携调音 |
+| **调音仪式** | song_tuner | 基础调音 |
+| **福音赞歌** | song_tuner/evangelism | 福音 |
+| **照明独奏** | song_tuner/light | 照明 |
+| **灵性摇篮曲** | song_tuner/lullaby | 摇篮曲 |
+| **零波颤音** | song_tuner/nullwave | 零波 |
+| **谋杀和弦** | song_tuner/pain | 伤害和弦 |
+
+### 荣誉教派 Honorbound（3 个）
+
+| 仪式 | 代码 | 效果 |
+|---|---|---|
+| **加入十字军** | deaconize/crusader | 入十字军 |
+| **宽恕** | forgive | 宽恕 |
+| **召唤荣誉规则** | summon_rules | 规则 |
+
+### 篝火教派 Pyre（4 个）
+
+| 仪式 | 代码 | 效果 |
+|---|---|---|
+| **烈焰之星** | blazing_star | 星 |
+| **燃烧献祭** | burning_sacrifice | 献祭 |
+| **不熔保护** | fireproof | 防火 |
+| **不朽蜡烛** | infinite_candle | 蜡烛 |
+
 
 ## 2.3 宗教结构
 

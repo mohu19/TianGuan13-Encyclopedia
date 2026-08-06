@@ -8,7 +8,7 @@
 
 ## 目录
 
-- [第一卷 · 叛徒（Traitor）](#第一卷--叛徒traitor)（Uplink 323 件/承包商契约）
+- [第一卷 · 叛徒（Traitor）](#第一卷--叛徒traitor)（Uplink 395 件/承包商契约）
 - [第二卷 · 核弹队（Nukeop）](#第二卷--核弹队nukeop)（10 结局/挑战模式）
 - [第三卷 · 异端（Heretic）](#第三卷--异端heretic)（8 路径/46 法术/8 升阶）
 - [第四卷 · 巫师（Wizard）](#第四卷--巫师wizard)（50+ 法术/大仪式 8 谢幕）
@@ -53,7 +53,7 @@
 | 限制 | 角色限定/物种限定/population 要求 |
 | 购买锁定 | shop_locked（被 EMP/黑客可锁） |
 
-## 1.3 Uplink 物品全录（323 件，21 分类）
+## 1.3 Uplink 物品全录（395 件，21 分类）
 
 **代码**: `code/modules/uplink/`（20 文件 3,746 行）
 
@@ -582,7 +582,17 @@ DNA 满 6 挤出最旧（初始档案保护）/假死中不可购买/被吸收�
 | 胜利 | 裂隙充能完成 |
 | 限制 | 裂隙只能在特定区域放置 |
 
-## 9.7 其他小型阵营（27 个）
+## 9.7 其他小型阵营（30 个）
+
+### 隐藏小型阵营（3 个 · 2026-08-06 补全）
+
+| 阵营 | 类型 | 生成条件 | 机制 |
+|---|---|---|---|
+| **Greentext 连胜者** | 标记 | Hardcore Random 硬核随机点 | `show_in_antagpanel=FALSE`、`ANTAG_FAKE\|ANTAG_SKIP_GLOBAL_LIST`、`hardcore_random_bonus=TRUE`；forge_objectives 生成已完成=true 的 "Succeed" 目标；roundend 中 greentext 成功得 2× 生存分数奖励 |
+| **Magic Servant 魔法仆从** | 仆从 | 巫师召唤仆从法术触发（butler 装扮、玩家附身） | roundend/antagpanel 均隐藏；`setup_master(M)` 生成 "Serve [M.real_name]" 目标 |
+| **Loyal Shade 忠魂阴影** | 阴影 | 灵魂石 `assign_master` 绑定主人 | 静默、隐藏、主名 master_name；邪教徒则转 cult/shade；神圣主题灵魂石可解除邪教改造 |
+
+
 
 | 阵营 | 行数 | 说明 |
 |---|---|---|
@@ -620,7 +630,7 @@ DNA 满 6 挤出最旧（初始档案保护）/假死中不可购买/被吸收�
 
 ---
 
-# 附录B · Uplink 物品全录（323 件 · 中文翻译版）
+# 附录B · Uplink 物品全录（395 件 · 中文翻译版）
 
 **代码**: `code/modules/uplink/`（20 文件 3,746 行）
 
@@ -628,6 +638,83 @@ DNA 满 6 挤出最旧（初始档案保护）/假死中不可购买/被吸收�
 
 
 ## 角色限定（42）
+
+### Uplink 补录（70 件 · 2026-08-06 源码核对）
+
+> 此前文档附录 B 收录 323 件，经源码全量核对（`code/modules/uplink/` 20 文件 324 件 + NOVA traitor-uplinks 69 件 + 天关 1 件 + modular_implants 1 件 = **395 件**），确认缺失 70 件（61 零重叠 + 9 同名独立 datum）。以下为补录清单：
+
+| 物品 | 分类 | TC | 描述 |
+|---|---|---|---|
+| **Cybersun 'Scalpel' NIF-Cutter** | 未分类 | 3 | A modified version of a NIFSoft remover that allows the user |
+| **Ammo Pouch** | 未分类 | 1 | A small yet large enough pouch that can fit in your pocket,  |
+| **Breacher Twelve-Gauge Box** | 未分类 | =/datum/uplink_item/low_cost/ammunition | A stack of twelve of breacher shells, superb at destroying a |
+| **Buckshot Twelve-Gauge Box** | 未分类 | =/datum/uplink_item/low_cost/ammunition | A standard-sized box of buckshot shells. |
+| **Enforcer 10mm Magazine Case** | 未分类 | =/datum/uplink_item/low_cost/ammunition | A case containing three additional 12-round 10mm magazines,  |
+| **Enforcer 10mm Armour Piercing Magazine** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 12-round 10mm magazine, compatible with the En |
+| **Enforcer 10mm Incendiary Magazine** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 12-round 10mm magazine, compatible with the En |
+| **Enforcer 10mm Hollow Point Magazine** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 12-round 10mm magazine, compatible with the En |
+| **Flechette Twelve-Gauge Box** | 未分类 | =/datum/uplink_item/low_cost/ammunition | A standard-sized box of flechette shells. |
+| **Incendiary Twelve-Gauge Box** | 未分类 | =/datum/uplink_item/low_cost/ammunition | A standard-sized box of incendiary shells. |
+| **Milspec Buckshot Box** | 未分类 | =/datum/uplink_item/medium_cost/ammunition | A standard-sized box of 15 Scarborough-manufactured, hot-loa |
+| **Milspec Slugs Box** | 未分类 | =/datum/uplink_item/medium_cost/ammunition | A standard-sized box of 15 Scarborough-manufactured, hot-loa |
+| **.357 Haywire+ (EMP) speedloader** | 未分类 | =/datum/uplink_item/high_cost/ammunition | A speed loader that contains seven additional .357 Magnum Ha |
+| **Slug Twelve-Gauge Box** | 未分类 | =/datum/uplink_item/low_cost/ammunition | A standard-sized box of slug shells. |
+| **10mm Handgun Magazine (Ansem)** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 8-round 10mm magazine, compatible with the Ans |
+| **10mm Armour Piercing Magazine (Ansem)** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 8-round 10mm magazine, compatible with the Ans |
+| **10mm Hollow Point Magazine (Ansem)** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 8-round 10mm magazine, compatible with the Ans |
+| **10mm Incendiary Magazine (Ansem)** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 8-round 10mm magazine, compatible with the Ans |
+| **.45 SMG Magazine (C-20r)** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 24-round .45 magazine suitable for use with th |
+| **.45 Armor Piercing SMG Magazine (C-20r)** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 24-round .45 magazine suitable for use with th |
+| **.45 Hollow Point SMG Magazine (C-20r)** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 24-round .45 magazine suitable for use with th |
+| **.45 Incendiary SMG Magazine (C-20r)** | 未分类 | =/datum/uplink_item/low_cost/ammunition | An additional 24-round .45 magazine suitable for use with th |
+| **Bulletproof Armor Vest** | 未分类 | =/datum/uplink_item/low_cost | A Type III heavy bulletproof vest that excels in protecting  |
+| **Combat Jackboots** | 未分类 | 1 | High speed, low drag combat boots. |
+| **Guerilla Gloves** | 未分类 | 1 | A pair of highly robust combat gripper gloves that excels at |
+| **Henchmen Bundle** | 未分类 | 4 | A set of five armored henchmen outfits! Each set comes with  |
+| **Syndicate Helmet** | 未分类 | =/datum/uplink_item/low_cost | An extremely robust, space-worthy helmet in a nefarious red  |
+| **Syndicate Bunny Kit** | 未分类 | 8 | Straight from the dens of Carota. The Tactical Rabbit Ensemb |
+| **Alacrán PDW Case** | 未分类 | =/datum/uplink_item/low_medium_cost/weaponry | A compact bullpup PDW chambered in .27-54 Cesarzowa. \ Comes |
+| **Ansem Pistol Case** | 未分类 | =/datum/uplink_item/low_cost/weaponry | A small, easily concealable handgun that uses 10mm auto roun |
+| **Boarder-980 Grenade Launcher Case** | 未分类 | =/datum/uplink_item/medium_cost/weaponry | A weapon case featuring the Boarder-980 grenade launcher, ch |
+| **Carwo-Cawil M64 Shotgun Case** | 未分类 | =/datum/uplink_item/low_cost/weaponry | A twelve guage shotgun with an eight shell capacity undernea |
+| **"Covenant" elite energy sword** | 未分类 | =/datum/uplink_item/low_cost/weaponry | Much like its more conventional sibling, the energy sword, t |
+| **Enforcer-TEN Handgun Case** | 未分类 | =/datum/uplink_item/low_cost/weaponry | A weapon case containing the Enforcer-TEN combat handgun, al |
+| **Energy Shield** | 未分类 | =/datum/uplink_item/medium_cost/weaponry | A highly deflective energy shield, pairs well with the energ |
+| **Donksoft Riot SMG Case** | 未分类 | 1 | A case containing an innocent-looking toy SMG designed to fi |
+| **Modified Sawn-off Shotgun Case** | 未分类 | =/datum/uplink_item/high_cost/weaponry | Range isn't an issue when you can bring your victim to you. |
+| **Allstar Laser-Carbine Case** | 未分类 | 2 | A modified laser gun which can shoot far faster, but each sh |
+| **Scarborough C-20r Case** | 未分类 | =/datum/uplink_item/medium_cost/weaponry | A fully-loaded Scarborough Arms bullpup submachine gun. The  |
+| **Modified Revolver Case** | 未分类 | =/datum/uplink_item/low_cost/weaponry | A .357 Magnum revolver firing ricochet bullets, in case you  |
+| **Cybersun S-120 Case** | 未分类 | =/datum/uplink_item/low_medium_cost/weaponry | A laser gun primarily used by syndicate security guards. It  |
+| **Shitzu Magfed Shotgun Case** | 未分类 | =/datum/uplink_item/high_cost/weaponry | Everyone says a dog is man's best friend, let's change that  |
+| **Carwo-Cawil Sindano Case** | 未分类 | =/datum/uplink_item/low_medium_cost/weaponry | A Sindano SMG, with spare lethal-and-non-lethal ammo, and th |
+| **Carwo-Cawil MMR-2543E Assault Rifle** | 未分类 | =/datum/uplink_item/medium_cost/weaponry | A heavy battle rifle, this one seems to be painted tacticool |
+| **Szot Dynamica 'Wyłom' AMR Case** | 未分类 | =/datum/uplink_item/medium_cost/weaponry | A massive, outdated beast of an anti materiel rifle that was |
+| **Katana** | 未分类 | =/datum/uplink_item/medium_cost/weaponry | An extremely sharp and robust sword folded over nine thousan |
+| **Syndie Fitness Nunchuks** | 未分类 | =/datum/uplink_item/low_cost/weaponry | Heavyweight titanium nunchucks that can be used to knock out |
+| **Ammo Fabricator Advanced Lethal Authentication Module** | 未分类 | =/datum/uplink_item/medium_cost | A Gorlex Marauders-modified ammunition fabricator module, lo |
+| **Syndicate Cyborg Upgrade** | 未分类 | =/datum/uplink_item/low_cost | A marvel of modern syndicate technology; a syndicate borg hi |
+| **Glue** | 未分类 | =/datum/uplink_item/medium_cost | A cheap bottle of one use syndicate brand super glue. \ Use  |
+| **Syndikush Green Crack cart** | 未分类 | =/datum/uplink_item/low_cost | A cheap Chinese vape cart that contains a potent combination |
+| **Syndicate Jaws of Life** | 未分类 | =/datum/uplink_item/low_cost | Based on a Nanotrasen model, this powerful tool can be used  |
+| **Blood Steal NIFSoft** | 未分类 | =/datum/uplink_item/high_cost | A combat-oriented nanite package that transforms the user's  |
+| **Grimoire Asclepius NIFSoft** | 未分类 | =/datum/uplink_item/low_cost | An emergency surgical NIFSoft containing a full set of nanit |
+| **Thermal Lens NIFSoft** | 未分类 | =/datum/uplink_item/medium_cost | A military-grade visual enhancement package that modifies th |
+| **Grimoire Opera NIFSoft** | 未分类 | =/datum/uplink_item/low_cost | A specialized NIFSoft for technicians, creating nanite-based |
+| **Xeno-organ Implant Kit** | 未分类 | =/datum/uplink_item/medium_cost | An organ implant kit filled with illegally obtained xenomorp |
+| **Fake Announcement** | 未分类 | =/datum/uplink_item/low_cost | A device that allows you to spoof an announcement to the sta |
+| **Reinforced Knuckleduster** | 未分类 | =/datum/uplink_item/low_cost | A compact, concealable set of reinforced knuckles. Quiet, fa |
+| **Ransomware Neuroware Chip** | 未分类 | =/datum/uplink_item/low_cost | This Syndicate neuroware chip contains CrypSys, a package of |
+| **Thieves Gloves** | 未分类 | =/datum/uplink_item/low_cost | Gloves which enhance the wearer's ability to strip small ite |
+| **Extra Large Syndicate Shotglasses** | 未分类 | 1 | These modified shot glasses can hold up to 50 units of booze |
+| **MODsuit Flamethrower** | 未分类 | =/datum/uplink_item/low_cost | A custom-manufactured flamethrower, used to burn through you |
+| **MODsuit Ionic Jump Jet** | 未分类 | =/datum/uplink_item/medium_cost | A specialised ionic thruster which provides a short but powe |
+| **Nakamura Standard MODsuit** | 未分类 | =/datum/uplink_item/low_cost/modsuit | A third-generation, modular civilian class suit by Nakamura  |
+| **Contractor MODsuit** | 未分类 | =/datum/uplink_item/low_cost/modsuit | A rare depart from the Syndicate's usual color scheme, this  |
+| **Elite MODsuit** | 未分类 | =/datum/uplink_item/high_cost/modsuit | An evolution of the syndicate suit, featuring a bulkier buil |
+| **MODsuit Donksoft Recycler** | 未分类 | =/datum/uplink_item/low_cost | A mod module collects and repackages fired foam darts (and g |
+| **MODsuit Bulwark** | 未分类 | =/datum/uplink_item/high_cost | Layers upon layers of shock dampening plates, just to stop y |
+| **辛迪加独立旅传呼密信** | 未分类 | 210 | 团结联盟共和国的死敌叛军独立旅的呼叫工具，如果这里需要被彻底摧毁的话。那么我们只需在通讯控制台使用这个，然后静候毁灭到来 |
 
 | 物品 | 花费 | 用途 |
 |---|---|---|
@@ -1088,4 +1175,4 @@ DNA 满 6 挤出最旧（初始档案保护）/假死中不可购买/被吸收�
 | **噩梦/亡魂/其他** | 30+ 小型目录 | ~3,000 |
 | 通用 | `code/modules/antagonists/_common/`（5 文件） | 1,385 |
 
-> **文档完** — 覆盖反派系统全貌：叛徒（Uplink 323 件）、核弹队、异端（8 路径/46 法术/11 召唤物/8 升阶）、巫师（50+ 法术/大仪式）、邪教（12 符文/血魔法）、变形怪（40+ 能力）、绑架者（15 腺体）、菌潮（14 菌株）、恶意 AI（23 模块）+ 30 小型阵营，全部带精确数值与代码索引。
+> **文档完** — 覆盖反派系统全貌：叛徒（Uplink 395 件）、核弹队、异端（8 路径/46 法术/11 召唤物/8 升阶）、巫师（50+ 法术/大仪式）、邪教（12 符文/血魔法）、变形怪（40+ 能力）、绑架者（15 腺体）、菌潮（14 菌株）、恶意 AI（23 模块）+ 33 小型阵营，全部带精确数值与代码索引。

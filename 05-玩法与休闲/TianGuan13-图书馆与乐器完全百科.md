@@ -126,9 +126,61 @@
 | **核弹手册** | 核弹操作（随机池排除） |
 | **古代羊皮纸** | 法师大仪式 |
 
-## 1.11 维基手册（22 本精选）
+## 1.11 维基手册与操作指南全录（34 本 · 源码全量）
 
-化学教科书/工程教科书/太空法/传染病制作/传送科学/黑客手册/调查程序/调酒配方/机器人入门/R&D 101/服务人类（人肉烹饪）/电信指南/大气圣经/医学纲要/脑外科入门/化学手榴弹 DIY 等。
+> **源码**: `code/modules/library/` + 全库 `/obj/item/book/manual/` 定义。此前文档仅一句话带过约 15 本，现全量列出 34 本（22 本 wiki 系列 + 12 本其他手册）。
+
+### wiki 系列（22 本）
+
+| 手册 | 中文名/内容 |
+|---|---|
+| Lexica Atmosia | 大气圣经 |
+| Barman Recipes: Mixing Drinks and Changing Lives | 调酒配方 |
+| Chemistry Textbook | 化学教科书 |
+| To Serve Man | 服务人类（人肉烹饪） |
+| Unethically Grown Organics | 细胞学 |
+| The Film Noir: Proper Procedures for Investigations | 调查程序 |
+| Station Repairs and Construction | 工程建造 |
+| Engineering Textbook | 工程教科书 |
+| Hacking | 黑客手册 |
+| Mentoring your Experiments | 实验指导 |
+| DIY Chemical Grenades | 化学手榴弹 DIY |
+| Infections - Making your own pandemic! | 传染病制作 |
+| Medical Space Compendium, Volume 638 | 医学纲要 |
+| medigun operating manual | 医疗枪操作 |
+| Ordnance for Dummies or: How I Learned to Stop Worrying and Love the Maxcap | 军械入门 |
+| Chemical Factories Without Narcotics | 化学工厂 |
+| Research and Development 101 | R&D 101 |
+| Robotics for Dummies | 机器人入门 |
+| Space Law | 太空法 |
+| 标准作业程序手册 |  |
+| 供应SOP手册 |  |
+| 中央指挥部SOP手册 |  |
+| 指挥SOP手册 |  |
+| 工程SOP手册 |  |
+| 通用SOP手册 |  |
+| 医疗SOP手册 |  |
+| 科研SOP手册 |  |
+| 安全SOP手册 |  |
+| 服务SOP手册 |  |
+| Brain Surgery for Dummies | 脑外科入门 |
+| Subspace Telecommunications And You | 电信指南 |
+| Teleportation Science - Bluespace for dummies! | 传送科学 |
+| Tactical Game Cards - Player's Handbook | TCG 玩家手册 |
+
+### 其他手册（12 本）
+
+| 手册 | 内容 |
+|---|---|
+| ancient parchment | ancient_parchment |
+| Chef Recipes | chef_recipes |
+| Fish Encyclopedia | fish_catalog |
+| The Human Harvest: From Seed to Market | hydroponics_pod_people |
+| Fission Mailed: Nuclear Sabotage 101 | nuclear |
+| APLU \ | ripley_build_and_repair |
+| Starfruit preperation and you! | starfruit |
+| Wargame: Blue Lizard - Example Ruleset | wargame_rules |
+| Wargame: Blue Lizard - Example Ships and Scenarios | wargame_rules/examples |
 
 ## 1.12 emag 隐藏页
 
@@ -271,18 +323,55 @@
 | **BPM** | 首行设定 |
 | 上限 | 1000×300 音符 |
 
-## 3.4 音色（44 个/8 类）
+## 3.4 音色全录（43 个/8 类 · 源码全量）
 
-| 类别 | 音色数 |
+**源码**: `code/modules/instruments/instrument_data/`（10 文件）。此前文档音色表 8 行全是"—"占位，现从源码补全全部 43 个音色：
+
+| 类别 | 音色 |
 |---|---|
-| 键盘 | — |
-| 管乐 | — |
-| 弦乐 | — |
-| 打击 | — |
-| 电子 | — |
-| 合成 | — |
-| 特效 | — |
-| 人声 | — |
+| **铜管** | Crisis Brass Section |
+| **铜管** | Crisis Trombone |
+| **铜管** | Crisis Trumpet |
+| **打击键盘** | Crisis Vibraphone |
+| **打击键盘** | SGM Music Box |
+| **打击键盘** | FluidR3 Celeste |
+| **趣味** | !!HONK!! |
+| **趣味** | Ping |
+| **趣味** | Chime |
+| **趣味** | MeowSynth |
+| **趣味** | Spaceman |
+| **趣味** | Moth Scream |
+| **趣味** | Bilehorn |
+| **吉他** | Crisis Steel String Guitar |
+| **吉他** | Crisis Nylon String Guitar |
+| **吉他** | Crisis Clean Guitar |
+| **吉他** | Crisis Muted Guitar |
+| **硬编码** | Accordion |
+| **硬编码** | Bike Horn |
+| **硬编码** | Electric Guitar |
+| **硬编码** | Glockenspiel |
+| **硬编码** | Guitar |
+| **硬编码** | Harmonica |
+| **硬编码** | Piano |
+| **硬编码** | Recorder |
+| **硬编码** | Saxophone |
+| **硬编码** | Trombone |
+| **硬编码** | Violin |
+| **硬编码** | Xylophone |
+| **硬编码** | Banjo |
+| **风琴** | Crisis Church Organ |
+| **风琴** | Crisis Hammond Organ |
+| **风琴** | Crisis Accordian |
+| **风琴** | Crisis Harmonica |
+| **风琴** | Crisis Tango Accordian |
+| **钢琴** | FluidR3 Grand Piano |
+| **钢琴** | FluidR3 Harpsichord |
+| **钢琴** | Crisis Harpsichord |
+| **钢琴** | Crisis Grand Piano One |
+| **钢琴** | Crisis Bright Piano One |
+| **合成音** | Ideal square wave |
+| **合成音** | Ideal sine wave |
+| **合成音** | Ideal sawtooth wave |
 
 ## 3.5 合成器（可编程）
 

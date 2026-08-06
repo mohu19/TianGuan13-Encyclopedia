@@ -11,9 +11,11 @@
 ## 目录
 
 - [第一卷 · 狼人杀（Mafia）](#第一卷--狼人杀mafia)（17 角色+昼夜循环+7 地图）
-- [第二卷 · 卡牌游戏](#第二卷--卡牌游戏)
+- [第二卷 · 卡牌游戏（普通扑克 + TCG 集换卡牌）](#第二卷--卡牌游戏普通扑克--tcg-集换卡牌)
+  - [2.3 TCG 集换卡牌系统](#23-tcg-集换卡牌系统)
 - [第三卷 · 篮球](#第三卷--篮球)
 - [第四卷 · 全息甲板](#第四卷--全息甲板)
+- [第五卷 · 街机游戏（Arcade）](#第五卷--街机游戏arcade)
 - [附录 · 代码路径索引](#附录--代码路径索引)
 
 ---
@@ -138,7 +140,7 @@
 全部 7 文件仅 I18N 汉化（不改逻辑）——无额外覆盖。
 
 
-# 第二卷 · 卡牌游戏
+# 第二卷 · 卡牌游戏（普通扑克 + TCG 集换卡牌）
 
 **代码**: `code/modules/cards/`（3,456 行）
 
@@ -165,6 +167,88 @@
 | **科塔希** | kotahi.dm | 单牌游戏 |
 
 ---
+
+
+## 2.3 TCG 集换卡牌系统（源码 998+189 行全录）
+
+**源码**: `code/game/objects/items/tcg/tcg.dm`(531) + `tcg_machines.dm`(467) + `code/controllers/subsystem/tcgsetup.dm`(189) + `code/datums/storage/subtypes/others/cards.dm`(44)
+
+### 2.3.1 卡牌与牌堆
+
+| 项目 | 机制 |
+|---|---|
+| 卡牌 `/obj/item/tcgcard` | id/series/flipped(翻转)/tapped(横置) 四态；径向菜单：捡起/横置/翻转；点反面显示 "Trading Card"+卡背 |
+| 牌堆 `/obj/item/tcgcard_deck` | 非堆叠物品（顺序有义）；上限 30 张；径向：抽/洗/捡/翻；抽空自动销毁；`/datum/storage/tcg` 保密存储（关闭界面自动洗牌防舞弊） |
+| 卡包 `/obj/item/cardpack` | 5+1 张；稀有度加权：common900/uncommon300/rare100/epic30/legendary5/misprint1；保底表：legendary1/epic9/rare30/uncommon60 |
+| 卡册 `/obj/item/storage/card_binder` | 收藏册（可燃，防止内容爆炸） |
+
+### 2.3.2 系列与卡牌数据（实测）
+
+| 系列 | 卡数 | 分布 |
+|---|---|---|
+| set_one（Core Set 2020 核心系列） | **105 张** | 45 普/30 稀/17 优/9 史诗/2 传说/2 错印；含币 10% |
+| set_two（Resin Frontier 树脂边疆） | **22 张** | 5/6/7/3/1 |
+
+合计 **127 张**，2 模板。**9 阵营**：Service25/Science17/Medical14/Security14/Syndicate11/Engineering9/Cargo8/Command4/Xeno3。**7 卡种**：Creature70/Equipment16/Instant7/Event6/Battlefield4/Clown1/ERT Medical1。**16 关键词**：Asimov/Blocker/Changeling/Clockwork/Deadeye/Faction/First Strike/Fury/Graytide/Hivemind/Holy/Immunity/On Equip/On Summon/Squad Tactics/Taunt。
+
+### 2.3.3 对战设施
+
+| 设施 | 机制 |
+|---|---|
+| 卡槽机 `/obj/machinery/trading_card_holder` | 只收 Creature 卡；生成 170 透明度全息召唤物+队伍色（蓝 #77abff/红 #ff7777）；径向：捡/横置/标记绿宝石/修改数值（Power/Resolve 可改，改动变绿色）；次击生成空白卡（自定义名） |
+| 法力面板 `/obj/machinery/trading_card_button` | 法力水晶条（蓝宝石 10 格上限）+生命碎晶面板（红宝石 20 格双列）；下一回合=恢复全法力+槽+1（≤9） |
+| 子系统 `SStrading_card_game` | SS_NO_FIRE；启动加载 `strings/tcg/set_one.json`+`set_two.json`；关键词 `{$keyword}`→悬浮解释；按系列+稀有度缓存；admin 动词：reload_cards/validate_cards/test_cardpack_distribution/print_cards |
+
+### 2.3.4 获取途径
+
+- **Good Clean Fun 售货机**（resin+series_one 各 20、卡册 10）
+- **Supply 补给**"Big-Ass Booster Pack Pack"（1000 分 10 包随机）
+- **探索无人机战利品**
+- **全息甲板 TGC 战斗竞技场**（holodeck_card_battle.dmm：蓝/红卡槽对桌+法力/生命面板+TGC 硬币）
+- **TGC Flipper 硬币**（先手判定/计数器）
+
+---
+
+# 第五卷 · 街机游戏（Arcade）
+
+**源码**: `code/game/machinery/computer/arcade/`（1,972 行）
+
+## 5.1 共通机制（`_arcade.dm` 108 行）
+
+- 街机柜可被 **EMP**（爆 1-4 奖+爆炸）、塔罗/钥匙重置
+- **2 张票兑 1 奖**（`/obj/item/stack/arcadeticket` 上限 30）
+- GAMERGOD+传奇级 = 双倍奖品
+- **1/1,000,000 出脉冲步枪**（成就 "way past cool"）
+- 奖池 `code/_globalvars/arcade.dm` **73 项加权**（玩具机甲 16 种/玩偶/全息卡组/假 emag 等）
+
+## 5.2 Mediborg's Amputation Adventure 断肢模拟器（`amputation.dm` 46 行）
+
+名字吓人实为**卖点**——把主力手伸进机器，5 秒后**真的斩手**（dismember+删除肢体）；Gaming 技能 +100 EXP、胜利 6-10 票；提前抽手=输。圣诞变体 `festive`：奖品换 wrapped gift。博格/机械不能玩（文盲可）。
+
+## 5.3 Battle Arcade 战斗街机（`battle.dm` 581 + `battle_gear.dm` 126 行）
+
+JRPG 回合制。**9 大世界**（平原→森林→山脉→沙漠→沼泽→海洋→天空→月球→虚空），难度倍率 1→3。
+
+- 玩家 HP100/MP50/金币起始 30
+- 技能：普通攻击(5-15)/重击(15-25,10MP)/反制(20-30,10MP,成功率 40+技能×5%)/防御(回复 5HP+10MP)
+- **每世界 2 小怪+1 Boss**（Boss 属性×1.25、金币×1.5）；Boss 名=形容词+名词随机生成（万圣/圣诞/情人节变体词库）
+- 商店：旅店睡觉 15 金回满、9 档装备（剑→雷神之锤；皮甲→虚空甲，倍率 1.5→5）
+- 战斗间休息 60% 成功，失败 40% 被劫财半/遇袭
+- **emag=古巴彼得**（+100HP、19 回合炸弹倒计时、胜利送 C4+彼得帽+管理员播报）
+- 奖励：每胜 2 票+EXP50×世界倍率
+
+## 5.4 The Orion Trail 猎户座（`orion.dm` 561 + `orion_event.dm` 550 行）
+
+文字远航，4 名拓荒者（含玩家的名字！）、食物80/燃料60，**第 9 回合到猎户座胜利**赢 2 票。
+
+- 固定节点：第2回陨石→第4回首府 **Tau Ceti Beta 市场**（买/卖船员 10 金/7、换物资 5:5、买零件）→第7回黑洞
+- **11 类事件**按权重抽取：引擎故障/系统故障/船体碰撞/弃船探索/海盗/太空病/乱流/**变形怪渗透与突袭**（内鬼机制，可枪决船员）/黑洞（75%-技能%进事件视界死亡）
+- 船员心情系统
+- **emag=Realism Mode**：真死（饿死饥饿值清零/飘进恒星点燃/黑洞生成奇点；赢=爆浆玩具船 4 级对话迷你炸弹）；连杀船员 2 次以上触发保安+医疗频道暴行警报+成就 "gamer"+电玩宣传册
+- **Kobayashi 变体**：小林丸号测试（柯克/沃尔夫/吉恩，10 事件白名单，奖品星际迷航文凭）
+
+---
+
 
 # 第三卷 · 篮球
 

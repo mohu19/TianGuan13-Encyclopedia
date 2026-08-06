@@ -151,6 +151,19 @@
 | TECHWEB_NODE_HUD | Integrated HUDs | T3 120 |
 | TECHWEB_NODE_NIGHT_VISION | Night Vision Technology | T4 160 |
 
+## 2.2b 大气科技树（atmos_nodes.dm，6 节点）
+
+> **源码**: `code/modules/research/techweb/nodes/atmos_nodes.dm`。此前文档仅 2.1 起始节点提了基础大气，完整大气分支未展开，现补全。
+
+| 节点 | 名称 | 成本 | 描述 | 关键设计 |
+|---|---|---|---|---|
+| TECHWEB_NODE_ATMOS | Atmospherics 大气学 | 起始 | 维护站内空气与生命维持系统 | 大气控制台/警报器/热机/加热器/净化器/各类气罐/灭火器/气体过滤器/分析仪 |
+| TECHWEB_NODE_GAS_COMPRESSION | Gas Compression 气体压缩 | T1 40 | 高压气体蕴含巨大能量潜力 | 罐压缩机/泵/紧急氧气/涡轮部件（压缩/转子/定子）/大气热交换机/气动密封/大焊接工具 |
+| TECHWEB_NODE_PLASMA_CONTROL | Controlled Plasma 可控等离子 | T2 80 | 高压气体与电的实验，结晶化与可控等离子 | 电解器/管道净化器/PacMan 发电机/机甲发电机/等离子切割机 |
+| TECHWEB_NODE_FUSION | Fusion 聚变 | T3 120 | 研究聚变反应堆技术实现可持续高效能源 | 高级灭火器/扳手/RPD/引擎护目镜/结晶器 |
+| TECHWEB_NODE_EXP_TOOLS | Experimental Tools 实验工具 | T4 160 | 增强站内工具的功能与多样性 | 平板打包器/手钻/外焊枪/救生钳/远程分析仪/RTD/RCD/磁靴 |
+| TECHWEB_NODE_RCD_UPGRADE | RCD Upgrades 快速建造升级 | T5 200 | RCD/RPD 的新设计与增强 | 筒仓链接/防打断/冷却/框架/装饰/简易电路/卸螺栓升级 |
+
 ## 2.3 机甲类（mech_nodes.dm，14 节点）
 
 | 节点 | 名称 | 成本 |

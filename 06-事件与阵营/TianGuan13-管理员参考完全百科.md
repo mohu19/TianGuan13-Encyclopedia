@@ -484,7 +484,7 @@
 
 # 第四卷 · SDQL2 与高级工具
 
-## 4.1 天罚全录（44 个 · 源码全量）
+## 4.1 天罚全录（35 个主类型 · 源码全量）
 
 **代码**: `admin/smites/`（32 文件）+ NOVA 追加（smites.dm/pie.dm/bark.dm）
 
@@ -532,6 +532,9 @@
 | **女仆化 Maid-ification（NOVA）** | 变为女仆 |
 | **派 Pie（NOVA）** | 派糊脸 |
 | **搞怪片段 Normal Blooper（NOVA）** | 播放搞怪片段 |
+
+
+> **数字核账（2026-08-06）**：源码 `smites/` 目录 32 文件 − 基类 `_smite.dm` = **31 个主 smite**，NOVA 追加 4 个（cone_of_shame 锥形耻辱帽/maidification 女仆化/pie 派/normalblooper 搞怪片段）= **35 主类型**。此前文档的 44 是把 6 个 divine 子类型（berforate/objectify/dust/gib/lightning/petrify）+ stackout 子类型 + NOVA divine 变体重复计数所致。面板 `GLOB.smites`（`init_smites()` 遍历全 subtype）实际条目为 **43**，但独立主类型为 35。
 
 ## 4.2 SDQL2 数据库语言
 
@@ -626,6 +629,43 @@ PROCCALL（ASYNC/BLOCKING）/SELECT（FORCE/SKIP_NULLS）/PRIORITY（HIGH/NORMAL
 ## 4.9 NOVA 修改
 
 ①admin_delete 蓝移火花+delete_sparks 偏好 ②20 处功能性修改（工单/白名单 SQL 化）③237 处标记绝大多数为 I18N。
+
+
+
+## 4.10 管理面板群全录（17 个 · 源码全量）
+
+**源码**: `code/modules/admin/` 面板文件群。此前文档只覆盖动词/天罚/SDQL2/VV/Lua，这些交互面板全部未写，现补全。
+
+| 面板 | 文件 | 行数 | 功能 |
+|---|---|---|---|
+| **反派面板** | antag_panel.dm | 227 | 浏览/管理所有反派玩家（换阵营/移除/查看目标） |
+| **团队面板** | team_panel.dm | 148 | 团队管理（创建/编辑/移除队伍、成员管理） |
+| **玩家面板** | player_panel.dm | 339 | 玩家总览（在线/离线/记录/操作入口） |
+| **配装管理器** | outfit_manager.dm | 64 | 保存/加载/分享自定义配装（outfit） |
+| **配装编辑器** | outfit_editor.dm | 207 | 可视化编辑 outfit 的每件装备/槽位 |
+| **奖杯管理器** | trophy_manager.dm | 59 | 管理站点奖杯（颁发/回收） |
+| **小号查询** | known_alts.dm | 186 | 查询玩家的已知小号列表 |
+| **白名单** | whitelist.dm | 43 | 白名单管理（核心文件已被 NOVA 注释移除→SQL 化在 `modular_nova/modules/whitelist/code/whitelist.dm`，NOVA 版为 `add_whitelist`） |
+| **音效发射器** | sound_emitter.dm | 156 | 向全服/区域播放自定义音效 |
+| **调色板改色** | greyscale_modify_menu.dm | 367 | 可视化修改物品的 greyscale 颜色参数 |
+| **创建生物** | create_mob.dm | 74 | 快速创建指定类型生物（含参数） |
+| **生成菜单** | spawn_menu.dm | 92 | 物品/生物生成菜单（路径搜索） |
+| **技能面板** | skill_panel.dm | 59 | 管理玩家技能等级 |
+| **调查工具** | admin_investigate.dm | 68 | 调查事件/日志汇总 |
+| **传真面板** | admin_fax_panel.dm | 145 | 管理站内传真收发 |
+| **PDA 消息** | admin_pda_message.dm | 93 | 以管理员身份向玩家 PDA 发消息 |
+| **强制事件** | force_event.dm | 95 | 手动触发任意游戏事件（见下） |
+| 附属：标签 | tag.dm | 105 | 玩家标签管理 |
+
+### force_event 强制事件机制
+
+`ADMIN_VERB(force_event, R_FUN)` → TGUI "ForceEvent" 面板：遍历 `SSevents.control` 按 12 分类展示所有事件；forceevent 动作 → `text2path` 定位 → 可勾选 announce（100%/0% 播报覆盖）→ 有 `admin_setup` 则逐个 `prompt_admins()`（返回 CANCEL 中止）→ `run_event(admin_forced=TRUE)` → 全服/日志广播。
+
+### 动词数字核账（2026-08-06）
+
+- **源码真实数量**：核心纯 `ADMIN_VERB` **241** 个 + 右键专用 9 个 = 250；NOVA **32** 个（此前文档写 30，漏 `migrate_player_ranks` 和 `admin_stasis`）→ 全宏 **282** 个
+- **漏掉的可见动词 14 个**：惩戒(admin_smite)、大气控制面板、更改穿梭机事件、生成电网、删除全部/强制/硬、生成职位配置、装束管理器、运行天气、停止天气、切换 CDN、启用/禁用视野、切换核弹
+- **HIDDEN 类（ADMIN_CATEGORY_HIDDEN）22 个**：纯 15 个（给予/移除动作、给予/移除法术、给予疾病、授予 AI 控制器、给予随机 AI 发言、解除监禁、丢下所有物品、爆炸、电磁脉冲、碎尸、显示赛博格面板、制造赛博格、调试空气状态）+ 右键混合 7 个（OOC 发言、私密/耳机消息、本地/直接旁白、删除、检查内容物、调整组件评级）
 
 
 # 附录 · 代码路径索引
