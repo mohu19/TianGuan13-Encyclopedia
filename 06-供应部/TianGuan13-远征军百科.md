@@ -15,14 +15,14 @@
 
 ## 1.2 服装全录（clothing.dm）
 
-### 3.2.1 远征军制服（`/obj/item/clothing/under/rank/expeditionary_corps`）
+### 1.2.1 远征军制服（`/obj/item/clothing/under/rank/expeditionary_corps`）
 
 - 名称: "expeditionary corps uniform"（远征军制服）；描述: "A rugged uniform for those who see the worst at the edges of the galaxy."（为那些在银河边缘见证最糟糕境况的人准备的耐用制服）。
 - `icon_state = "exp_corps"`；图标位于 `modular_nova/master_files/icons/obj/clothing/uniforms.dmi` 与 `.../mob/clothing/uniform.dmi`。
 - 护甲 `/datum/armor/clothing_under/rank_expeditionary_corps`: **fire 15 / acid 15**。
 - `strip_delay = 7 SECONDS`；`alt_covers_chest = TRUE`；`sensor_mode = SENSOR_COORDS`（默认坐标传感器）；`random_sensor = FALSE`。
 
-### 3.2.2 胸挂（`/obj/item/storage/belt/military/expeditionary_corps`）
+### 1.2.2 胸挂（`/obj/item/storage/belt/military/expeditionary_corps`）
 
 - 名称: "expeditionary corps chest rig"（远征军胸挂）；描述: "A set of tactical webbing worn by the now-defunct Vanguard Expeditionary Corps."（已解散的先锋远征军团穿过的战术织带）。
 - `icon_state / worn_icon_state = "webbing_exp_corps"`。
@@ -39,7 +39,7 @@
 | `/pointman` | "pointman's chest rig"（尖兵胸挂） | 威士忌瓶、**塑钢 ×5**、吗啡瓶 |
 | `/marksman` | "marksman's chest rig"（神射手胸挂） | 双筒望远镜、稳健牌香烟、打火机、骷髅头巾 |
 
-### 3.2.3 靴子与手套
+### 1.2.3 靴子与手套
 
 **远征军靴**（`/obj/item/clothing/shoes/combat/expeditionary_corps`）:
 - "expeditionary corps boots"，描述 "High speed, low drag combat boots."（高速低阻力战斗靴）。
@@ -59,7 +59,7 @@
 - 冷/热保护 HANDS 全开；`FIRE_PROOF`。
 - 护甲 `/datum/armor/nitrile_expeditionary_corps`: **fire 80 / acid 50**。
 
-### 3.2.4 远征军袋（`/obj/item/storage/backpack/duffelbag/expeditionary_corps`）
+### 1.2.4 远征军袋（`/obj/item/storage/backpack/duffelbag/expeditionary_corps`）
 
 - 名称 "expeditionary corps bag"（远征军袋）；描述 "A large bag for holding extra tactical supplies."（装额外战术物资的大包）。
 - `icon_state = "exp_corps"`，`inhand_icon_state = "backpack"`；图标在模块 `icons/backpack.dmi` 与 `icons/mob_backpack.dmi`。
@@ -67,7 +67,7 @@
   - `backpack`: 预览名 "Backpack"，`new_icon_state = "exp_corps"`；
   - `belt`: 预览名 "Belt"，`new_icon_state = "exp_corps_satchel"`（挎包样式）。
 
-### 3.2.5 防弹背心（`/obj/item/clothing/suit/armor/vest/expeditionary_corps`）
+### 1.2.5 防弹背心（`/obj/item/clothing/suit/armor/vest/expeditionary_corps`）
 
 - 名称 "expeditionary corps armor vest"；描述: "An armored vest that provides okay protection against most types of damage. Includes concealable sleeves for your arms."（对大多数伤害提供尚可防护的背心，带可隐藏的臂套）。
 - `icon_state = "exp_corps"`；`body_parts_covered = CHEST|GROIN|ARMS`；冷/热保护同覆盖范围；`dog_fashion = null`。
@@ -87,7 +87,7 @@
 
 **可容纳（allowed）**: `/obj/item/melee`、`/obj/item/ammo_box`、`/obj/item/ammo_casing`、`/obj/item/flashlight`、`/obj/item/gun`、`/obj/item/knife`、`/obj/item/reagent_containers`、`/obj/item/restraints/handcuffs`、`/obj/item/tank/internals/emergency_oxygen`、`/obj/item/tank/internals/plasmaman`、`/obj/item/storage/belt/holster`、`/obj/item/storage/belt/machete`。
 
-### 3.2.6 夜视头盔（`/obj/item/clothing/head/helmet/expeditionary_corps`）
+### 1.2.6 夜视头盔（`/obj/item/clothing/head/helmet/expeditionary_corps`）
 
 - 名称 "expeditionary corps helmet"；描述: "A robust helmet worn by Expeditionary Corps troopers. **Alt+click it to toggle the NV system.**"（远征军士兵佩戴的坚固头盔。Alt+点击可切换夜视系统）。
 - `icon_state = "exp_corps"`；`supports_variations_flags = CLOTHING_SNOUTED_VARIATION_NO_NEW_ICON`。
@@ -104,18 +104,18 @@
 
 ## 1.3 装备全录（gear.dm）
 
-### 3.3.1 远征医疗包（`/obj/item/storage/medkit/expeditionary`）
+### 1.3.1 远征医疗包（`/obj/item/storage/medkit/expeditionary`）
 
 - 名称 "expeditionary medical kit"（远征医疗包）；描述 "Now with 100% less bullshit."（废话含量减少 100%）；`icon_state = "medkit_tactical"`；`damagetype_healed = "all"`（可治疗所有伤害类型）。
 - 注释: "Gateway Medkit, no more combat defibs!"（网关医疗包，不再有战斗除颤器！）
 - **内容**: 纱布卷、`defibrillator/compact/loaded`（紧凑型已装载除颤器）、`hypospray/combat`（战斗注射笔）、高级医用网、含药缝合线、健康 HUD 眼镜。
 
-### 3.3.2 库存过剩医疗包（`/obj/item/storage/medkit/expeditionary/surplus`）
+### 1.3.2 库存过剩医疗包（`/obj/item/storage/medkit/expeditionary/surplus`）
 
 - 描述: "Now with less bullshit. And more dust. But mainly less bullshit. If you have to use this, there's no way you've got insurance."（废话少点，灰尘多点，主要废话少。要是你不得不用它，那你肯定没买保险）。
 - **内容**: 十二卷纱布、`hypospray/combat`（注释: **epi/atro + lepo + omnizine**，即肾上腺素/阿托品 + 左旋麻黄碱 + 万能药）、**含药缝合线 ×2**、**高级医用网 ×2**、健康 HUD 眼镜。
 
-### 3.3.3 骨锯（`/obj/item/circular_saw/field_medic`）
+### 1.3.3 骨锯（`/obj/item/circular_saw/field_medic`）
 
 - 名称 "bone saw"（骨锯）；描述: "An ancient medical instrument used for surgery and amputations, still being used in the 26th century. Well, what are you waiting for? Let's go practice medicine."（26 世纪仍在使用的古老手术与截肢器械。还等什么？去实践医学吧）。
 - 数值: `force = 20`（`/lowforce` 变体 **9**）；`toolspeed = 2`；`throw_range = 3`；`w_class = WEIGHT_CLASS_SMALL`；`hitsound = bladeslice.ogg`；攻击动词 "saws/slashes"（锯/劈）；图标 `icons/bonesaw.dmi` + 左右手持图标。
@@ -132,7 +132,7 @@
 
 **自杀动作（`suicide_act`）**: 除胸口（CHEST）外的**所有身体部位每隔 1 秒依次肢解**，播放 `bladeslice.ogg`（70 音量），结束返回 `BRUTELOSS`（致命钝伤）。
 
-### 3.3.4 尖兵盾（`/obj/item/shield/riot/pointman`）
+### 1.3.4 尖兵盾（`/obj/item/shield/riot/pointman`）
 
 - 名称 "pointman shield"（尖兵盾）；描述: "A shield fit for those that want to sprint headfirst into the unknown. Its heavy, unwieldy nature makes its defensive performance suffer when in the off-hand; wielding will provide best results at the cost of reduced mobility."（适合想一头冲进未知的人。沉重笨重，副手持握时防御性能下降；双手持握效果最佳但牺牲机动性）。
 - 数值: `force = 10`；`throwforce = 5`；`throw_speed = 1`；`throw_range = 1`；`block_chance = 15`；`w_class = WEIGHT_CLASS_BULKY`；`transparent = FALSE`；`max_integrity = 200`；`shield_break_leftover = /obj/item/pointman_broken`。
@@ -156,13 +156,13 @@
 | 分类 | `CAT_MISC` |
 | 工具 | `TOOL_WELDER`（焊枪） |
 
-### 3.3.5 飞刀（`/obj/item/knife/combat/throwing`）
+### 1.3.5 飞刀（`/obj/item/knife/combat/throwing`）
 
 - 名称 "throwing knife"（飞刀）；描述: "While very well weighted for throwing, the distribution of mass makes it unwieldy for use in melee."（投掷配重极佳，但质量分布使其近战笨拙）。
 - 数值: `force = 12`（"别拿它捅人"）；`throwforce = 30`（嵌入时 **38** 伤害，"与手里剑对比一下"）；`throw_speed = 4`；`embed_type = /datum/embedding/combat_knife/throwing`。
 - 嵌入数据: `embed_chance = parent(combat_knife 的 65) + 10 = **75%**`。
 
-### 3.3.6 神射手刀囊（`/obj/item/storage/pouch/ammo/marksman`）
+### 1.3.6 神射手刀囊（`/obj/item/storage/pouch/ammo/marksman`）
 
 - 名称 "marksman's knife pouch"（神射手刀囊）。
 - `setup_reskins()` → return（**禁皮肤**）。
@@ -249,4 +249,4 @@
 
 ---
 
-*本百科依据 NovaSector 分支源码逐行整理，数值均直接取自代码默认值；被偏好设置覆盖的运行时数值以 1.9 节偏好表为准。*
+*本百科依据 NovaSector 分支源码逐行整理，数值均直接取自代码默认值。*

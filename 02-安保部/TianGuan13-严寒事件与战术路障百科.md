@@ -691,6 +691,11 @@ ADMIN_VERB(intensity_credits_panel, R_FUN, "ICES 事件面板", "Opens up the IC
 - 均在 `oview(1)`（邻格）可用，分类 "Object"；已固定（`anchored`）时提示"无法旋转"并拒绝。
 - `attack_hand_secondary`（副手攻击）＝顺时针旋转（`turn(dir, 270)`），同样要求未固定。
 
+### 动物/异形攻击（attack_animal）
+
+- `attack_animal(mob/user)`：**转发给 `attack_alien(user)`**——动物/异形攻击路障的入口（`barricade.dm` L108-109）。
+- 本模块无特化处理，行为委托 TG 基类（动物攻击按常规伤害计算）。
+
 ---
 
 ## 2.3 雪路障（Snow Barricade）

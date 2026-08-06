@@ -54,12 +54,18 @@ for(var/mob/M in GLOB.player_list)
 
 ### 1.4 死信消息类型
 
-| 类型 | 含义 | 第六感能否听到 |
-|---|---|---|
-| `DEADCHAT_REGULAR` | 幽灵普通说话（say_dead） | ✅ 能 |
-| `DEADCHAT_DEATHRATTLE` | 死亡咆哮（死前遗言） | ✅ 能（受 `DISABLE_DEATHRATTLE` 偏好影响） |
-| `DEADCHAT_ARRIVALRATTLE` | 到达咆哮（新玩家进服播报） | ✅ 能（受 `DISABLE_ARRIVALRATTLE` 偏好影响） |
-| `DEADCHAT_LAWCHANGE` | AI 法则变更 | ✅ 能（受 `CHAT_GHOSTLAWS` 偏好影响） |
+> **重要勘误（2026-08-07 审计）**：第六感 override（`SEE_DEADCHAT_NORMAL`）**仅对 `DEADCHAT_REGULAR` 生效**（mobs.dm L384）。濒死玩家是活人（`stat != DEAD`），会触发 L390 `continue` 跳过**所有非 REGULAR 消息**——**只能听到普通幽灵说话**，其他类型一律听不到。
+
+| 类型 | 含义 | 幽灵能听 | **濒死玩家（第六感）** |
+|---|---|---|---|
+| `DEADCHAT_REGULAR` | 幽灵普通说话（say_dead） | ✅ | ✅ **唯一能听到的** |
+| `DEADCHAT_DEATHRATTLE` | 死亡通知（"X 已死于 Y 区域"，death.dm:245） | ✅（受 `DISABLE_DEATHRATTLE` 偏好影响） | ❌ 听不到 |
+| `DEADCHAT_ARRIVALRATTLE` | 到达通知（新玩家进服播报） | ✅（受 `DISABLE_ARRIVALRATTLE` 偏好影响） | ❌ 听不到 |
+| `DEADCHAT_LAWCHANGE` | AI 法则变更 | ✅（受 `CHAT_GHOSTLAWS` 偏好影响） | ❌ 听不到 |
+| `DEADCHAT_LOGIN_LOGOUT` | 玩家进出服 | ✅（受 `CHAT_LOGIN_LOGOUT` 偏好影响） | ❌ 听不到 |
+| `DEADCHAT_ANNOUNCEMENT` | 公告 | ✅ | ❌ 听不到 |
+
+（死信共 6 种，见 ghost.dm 定义；偏好开关只对幽灵生效——`isobserver` 前就已被拦截，濒死活人无偏好开关可调。）
 
 ---
 
@@ -70,7 +76,7 @@ for(var/mob/M in GLOB.player_list)
 | 来源 | 位置 | 说明 |
 |---|---|---|
 | **濒死体验** | carbon.dm | 血量 ≤ -90（本文主题） |
-| **脑创伤（特殊）** | `brain_damage/special.dm` L308 | 某种特殊脑损伤授予（TRAUMA_TRAIT） |
+| **死亡低语脑创伤** | `brain_damage/special.dm` L302-313 | `/datum/brain_trauma/special/death_whispers` 授予；间歇性 `prob(2)` 触发、5-30 秒随机后移除 |
 | **巫师天眼** | `antagonists/wizard/equipment/artefact.dm` L204 | 巫师天眼魔法（Scrying Orb，配合 X 光视觉） |
 | **塔罗牌** | `cards/deck/tarot.dm` L65 | 塔罗牌抽取授予（MAGIC_TRAIT） |
 | **死斗模式** | `deathmatch/deathmatch_modifier.dm` L568 | 死亡竞赛修改器（配合 X 光听觉） |
@@ -79,13 +85,21 @@ for(var/mob/M in GLOB.player_list)
 
 ---
 
-## 三、死亡咆哮（Deathrattle）彩蛋
+## 三、死亡咆哮（Deathrattle）两种机制（勘误）
 
-死亡咆哮是死信的一种——**死亡瞬间自动发出的遗言**，由植入体触发：
+> **重要勘误（2026-08-07 审计）**：此前的"死亡咆哮=植入体向死信广播遗言"描述**张冠李戴**。源码中有两个完全不同的"死亡通知"机制：
+
+### 3.1 死亡植入体（implant_deathrattle）
 
 - **位置**: `code/game/objects/items/implants/implant_deathrattle.dm`
-- **机制**: 植入 `deathrattle implant`（死亡咆哮植入体）后，死亡时自动向死信广播遗言
-- **与濒死听觉的关系**: 濒死玩家（第六感持有者）能听到他人的死亡咆哮
+- **机制**: 植入 `deathrattle implant` 后，宿主死亡时**向同组其他植入者直接 `to_chat` 通知 + 播放音效**（knell 钟声），**不经过死信广播、不产生 DEADCHAT 消息**
+- **与第六感无关**：濒死玩家听不到这种通知（它不走 deadchat_broadcast）
+
+### 3.2 死亡通知（DEADCHAT_DEATHRATTLE）
+
+- **位置**: `code/modules/mob/living/death.dm` L245
+- **机制**: 玩家死亡时 `deadchat_broadcast(" 已死于 <b>[区域]</b>", ...)` —— "X 已死于 Y 区域"的**死亡地点通知**
+- **受众**: 仅幽灵（`stat == DEAD`）；**濒死玩家（第六感）听不到**——override 只对 REGULAR 生效
 
 ---
 
@@ -103,13 +117,13 @@ for(var/mob/M in GLOB.player_list)
 2. **听到的范围**：全服死信（无距离限制）——不仅是身边的幽灵，远处死人也听得到
 3. **怎么触发**：被打到残血（失血/受伤/缺氧到 -90 以下）即触发；通常是昏迷倒地状态
 4. **怎么失效**：血量回升 > -90 立即失效；死亡后变幽灵（本来就听得到）；有 `TRAIT_NODEATH` 的角色（如某些不死种族）永远触发不了
-5. **实用价值**：濒死时幽灵可能给你提示（救援方向/凶手是谁）
+5. **实用价值**：濒死时幽灵可能给你提示（救援方向/凶手是谁）——这是"躺尸听情报"的合法机制；注意只能听到**普通幽灵说话**，听不到死亡通知/到达通知/AI 法则变更
 6. **注意**：听到的幽灵对话是**全局广播**，幽灵说"去东边走廊"可能是说给别人听的，不一定是给你的提示
 
 ---
 
 ## 六、一句话总结
 
-**血量 -90 以下 → 第六感 → 全服幽灵对话广播 → 回血失效** 
+**血量 -90 以下 → 第六感 → 全服幽灵对话广播 → 回血失效** —— 躺尸不是终点，是情报站。
 
 > 源码路径索引：`carbon.dm`（触发）/ `mobs.dm`（广播过滤）/ `combat.dm`（阈值 -90）/ `game_options.dm`（配置开关）/ `mob_say.dm`（say_dead）/ `implant_deathrattle.dm`（死亡咆哮）/ `ghostcafe`（NOVA 扩展）

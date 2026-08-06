@@ -1,7 +1,7 @@
 # TianGuan13 弹药工作台与枪械平衡百科
 
 > **来源分支**：NovaSector ｜ **代码根**：`C:/Users/33922/Desktop/Hermes/TianGuan13/TianGuan13-master/`
-> **合并模块**：`ammo_workbench`（634 行）+ `shotgunrebalance`（599 行）+ `gun_safety`（160 行）+ `gunhud`（496 行）+ `gunpoint`（172 行）= **13 个 .dm，共 2,061 行**
+> **合并模块**：`ammo_workbench`（634 行）+ `shotgunrebalance`（599 行）+ `gun_safety`（160 行）+ `gunhud`（496 行）+ `gunpoint`（172 行）= **12 个 .dm，共 2,061 行**
 > **文档类型**：双语全量百科（弹药制造 + 枪械机制，逐条枚举无省略）｜ 所有数值与源码逐字核对
 
 ---
@@ -416,7 +416,7 @@
 - `/obj/item/gun/ballistic/give_gun_safeties()`：`AddComponent(/datum/component/gun_safety)` —— **所有弹道枪挂保险**。
 - `/obj/item/gun/energy/give_gun_safeties()`：`AddComponent(...)` —— **所有能量枪挂保险**。
 
-**无保险例外全录（override 返回空，10 处核心 + 5 处其他模块）**：
+**无保险例外全录（override 返回空，11 处核心 + 5 处其他模块）**：
 
 | # | 类型路径 | 说明 |
 |---|---|---|
@@ -612,7 +612,7 @@
 
 ## 七、附录 A 代码路径索引 (Appendix A)
 
-> 全部 13 个 .dm，合计 **2,061 行**（ammo_workbench 634 + shotgunrebalance 599 + gun_safety 160 + gunhud 496 + gunpoint 172）。
+> 全部 12 个 .dm，合计 **2,061 行**（ammo_workbench 634 + shotgunrebalance 599 + gun_safety 160 + gunhud 496 + gunpoint 172）。
 
 | 文件 | 行数 | 内容 |
 |---|---|---|
@@ -661,4 +661,4 @@
 
 ---
 
-*本文档由 TianGuan13 源码（NovaSector 分支）五个模块 13 个 .dm、共 2,061 行全量提取生成。所有伤害、容量、时间、材料、价格、概率数值均与源码逐字一致。*
+*本文档由 TianGuan13 源码（NovaSector 分支）五个模块 12 个 .dm、共 2,061 行全量提取生成。所有伤害、容量、时间、材料、价格、概率数值均与源码逐字一致。*

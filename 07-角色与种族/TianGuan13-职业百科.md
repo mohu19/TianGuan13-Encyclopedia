@@ -1,7 +1,7 @@
 # 天关 — 职业百科（2026-08-06 深度翻新版）
 
 > 按心理医生专精深度格式重写：每职业含基础信息表/技能芯片逐个 TRAIT 分析/装备部位表/背包内容/特质（mind_traits+liver_traits）/邮件礼物/Nova 扩展/一句话总结。数据全部从源码精确提取。
-> 覆盖：指挥链 3 + 安保 5 + 部门警卫 6 + 工程 3 + 医疗 9（含心理医生）+ 科研 4 + 货运 4 + 服务 9 + NOVA 特有 10 = 50+ 职业 + 技能芯片全录。
+> 覆盖：指挥链 3 + 安保 5 + 部门警卫 6 + 工程 3 + 医疗 8 + 科研 4 + 货运 4 + 服务 9 + NOVA 特有 10 + 硅基 2（AI/赛博格）+ 通用 1（助手）= 55 职业 + 技能芯片全录。
 
 ---
 
@@ -4149,7 +4149,7 @@ Nova 增加了**大祭司继承系统**:
   3. **Custom Hellfire Laser Carbine**（`hellgun/blueshield`）——「流线型地狱火激光卡宾枪」，蓝色配色，弹药为蓝盾版地狱火（e_cost = LASER_SHOTS(20, STANDARD_CELL_CHARGE)，比标准版多几发）
   4. **NT20 Submachinegun Gunset**（`ntspecial/nt20`）——NT20 冲锋枪组
   5. **Katyusha Shotgun Gunset**（`katyusha`）——喀秋莎霰弹枪组
-- **专属储物柜（secure_closet/blueshield，需舰长权限 ACCESS_CAPTAIN）**：保险公文包、满配安保腰带、闪光弹、手持闪光、手铐、安保HUD墨镜、边疆医疗包、服装袋（garment bag：冬大衣/双贝雷帽/软帽/多套制服/马甲/披肩等 14 件套）、**MOD 装甲**（pre_equipped/blueshield：大容量储物/磁力挂载/手电/弹道阻尼/快速携带/枪套模块）、MOD 喷漆、蓝盾监视器
+- **专属储物柜（secure_closet/blueshield，需舰长权限 ACCESS_CAPTAIN）**：保险公文包、满配安保腰带、闪光弹、手持闪光、手铐、安保HUD墨镜、边疆医疗包、服装袋（garment bag，**17 件全录**：冬大衣 / 蓝贝雷帽 / 海军贝雷帽 / 软帽 / 蓝盾制服 / 蓝盾裙装 / 蓝盾高领 / 蓝盾高领裙 / 护甲背心 / 夹克 / 蓝盾披风 / 顾问制服 / 顾问裙装 / 蓝盾正装 / 蓝盾俄式 / 帝国背心 / 帝国裙背心）、**MOD 装甲**（pre_equipped/blueshield：大容量储物/磁力挂载/手电/弹道阻尼/快速携带/枪套模块）、MOD 喷漆、蓝盾监视器
 - **替代职称**：Blueshield / Command Bodyguard / Corporate Protection Specialist / Executive Protection Agent
 - **ID 权限（id_trim/job/blueshield）**：minimal = 货运/安保/全员个人储物柜/禁闭室入口/中央通用/指挥/施工/工程/EVA/维护隧道/医疗/矿物库/科研/传送器/武器库/**舰长**；extra = 禁闭室/法庭/传送门；template = 舰长+改卡权限
 - **PDA 预装程序**：安保记录（records/security）、机器人控制（robocontrol）
