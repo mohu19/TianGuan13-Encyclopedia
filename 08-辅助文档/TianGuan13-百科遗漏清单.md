@@ -41,13 +41,13 @@
 - **源码**: `code/datums/quirks/`（`_quirk.dm` + positive/neutral/negative 三个子目录）
 - **现状**: 现有百科仅职业百科 L25-26 顺带提了 `mind_traits`/`liver_traits` 字段名，**无任何百科系统介绍特质玩法**
 - **内容量**: 正面特质（酒精耐受/共情/多语种/自由奔跑/快乐/音乐家/太空人/饕餮等）+ 中性特质（秃头/素食/恐惧症/摄影师/菠萝爱/恨/贼眼等）+ 负面特质（失明/耳聋/哑巴/截瘫/四肢截肢/嗜睡/社交焦虑/偏瘫等）
-- **建议**: 新增专篇 `TianGuan13-开局特质完全百科.md`，全量列出三类特质（名称+效果+代价）
+- **建议**: 新增专篇 `TianGuan13-开局特质百科.md`，全量列出三类特质（名称+效果+代价）
 
 ### 1.2 种族选择 Species 系统 — ❌ 无专篇
 - **源码**: `code/modules/mob/living/carbon/human/species_types/`（18 个基础种族）+ `modular_nova/modules/voxes/` `teshari/` `shadekin/`（3 个 NOVA 种族）
 - **现状**: 职业百科 0 提及，仅服装/战斗/休闲等百科顺带提种族外观
 - **内容量**: 人类/蜥蜴人/蛾人/等离子人/蝇人/果冻人/骷髅/植物人/以太体/猫人/暗影人/外星掳掠者/安卓/无头骑士/魔像/蘑菇人/蜗牛人/吸血鬼/丧尸 + NOVA 鸟人/鸟形族/暗影猫
-- **建议**: 新增专篇 `TianGuan13-种族系统完全百科.md`（各种族特性/优劣势/专属机制/配装需求）
+- **建议**: 新增专篇 `TianGuan13-种族系统百科.md`（各种族特性/优劣势/专属机制/配装需求）
 
 ---
 
@@ -131,16 +131,16 @@
 
 | # | 新章节 | 源码范围 | 状态 |
 |---|---|---|---|
-| 1 | `TianGuan13-种族系统完全百科.md` | species_types 21 文件 4.4K 行 + NOVA voxes/teshari/shadekin/synths/spider | ✅ **已完成**（50 种族全录） |
-| 2 | `TianGuan13-开局特质完全百科.md` | quirks 98 文件 4.4K 行（正/中/负三类）+ NOVA quirk | ✅ **已完成**（168 特质全录，2,419 行） |
-| 3 | `TianGuan13-穿梭机与飞船完全百科.md` | shuttle 41 文件 7.1K 行（16 种类型）+ advanced_shuttles | ✅ **已完成**（16 类型 130+ 型号） |
-| 4 | `TianGuan13-AI与机器人完全百科.md` | silicon/ai 21 + robot 13 + ai_laws | ✅ **已完成**（31 法则+23 模型+55 升级件） |
-| 5 | `TianGuan13-通信系统完全百科.md` | telecomms 2.5K + say.dm + radio | ✅ **已完成**（频道 38+机器 30+耳机 39） |
-| 6 | `TianGuan13-天气与远征完全百科.md` | weather 1.5K + awaymissions 2.5K | ✅ **已完成**（天气 18+远征 10 目的地） |
-| 7 | `TianGuan13-成就与记录完全百科.md` | achievements 1.4K + records 678 行 | ✅ **已完成**（95 成就+21 积分） |
-| 8 | `TianGuan13-Nova特色模块完全百科上.md` | synths/teshari/shadekin/voxes/spider/xenomorph/xenoarch/bitrunning | ✅ **已完成**（9 大模块） |
-| 9 | `TianGuan13-Nova特色模块完全百科下.md` | economy/station_traits/bluespace_miner/armaments/cellguns/tarkon 等 25+ 模块 | ✅ **已完成**（26 模块） |
-| 10 | `TianGuan13-天关专属模块完全百科.md` | modular_tianguan 302 行（8 模块） | ✅ **已完成**（22.9KB，8 模块全录+上游对比） |
+| 1 | `TianGuan13-种族系统百科.md` | species_types 21 文件 4.4K 行 + NOVA voxes/teshari/shadekin/synths/spider | ✅ **已完成**（50 种族全录） |
+| 2 | `TianGuan13-开局特质百科.md` | quirks 98 文件 4.4K 行（正/中/负三类）+ NOVA quirk | ✅ **已完成**（168 特质全录，2,419 行） |
+| 3 | `TianGuan13-穿梭机与飞船百科.md` | shuttle 41 文件 7.1K 行（16 种类型）+ advanced_shuttles | ✅ **已完成**（16 类型 130+ 型号） |
+| 4 | `TianGuan13-AI与机器人百科.md` | silicon/ai 21 + robot 13 + ai_laws | ✅ **已完成**（31 法则+23 模型+55 升级件） |
+| 5 | `TianGuan13-通信系统百科.md` | telecomms 2.5K + say.dm + radio | ✅ **已完成**（频道 38+机器 30+耳机 39） |
+| 6 | `TianGuan13-天气与远征百科.md` | weather 1.5K + awaymissions 2.5K | ✅ **已完成**（天气 18+远征 10 目的地） |
+| 7 | `TianGuan13-成就与记录百科.md` | achievements 1.4K + records 678 行 | ✅ **已完成**（95 成就+21 积分） |
+| 8 | `TianGuan13-Nova特色模块百科上.md` | synths/teshari/shadekin/voxes/spider/xenomorph/xenoarch/bitrunning | ✅ **已完成**（9 大模块） |
+| 9 | `TianGuan13-Nova特色模块百科下.md` | economy/station_traits/bluespace_miner/armaments/cellguns/tarkon 等 25+ 模块 | ✅ **已完成**（26 模块） |
+| 10 | `TianGuan13-天关专属模块百科.md` | modular_tianguan 302 行（8 模块） | ✅ **已完成**（22.9KB，8 模块全录+上游对比） |
 
 ---
 
