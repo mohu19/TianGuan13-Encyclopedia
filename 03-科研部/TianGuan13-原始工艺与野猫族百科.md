@@ -542,9 +542,15 @@
 
 - 描述: "Water kept warm through some unknown heat source, possibly a geothermal heat source far underground. Whatever it is, it feels pretty damn nice to swim in given the rest of the environment around here, and you can even catch a glimpse of the odd fish darting through the water."（水被某种未知热源保温，可能是深层地热。不管是什么，在这片环境里泡着可太舒服了，还能瞥见怪鱼在水中穿梭）
 - 基底 turf = icemoon openspace；气体 = "ICEMOON_ATMOS"；钓鱼源 = `/datum/fish_source/icecat_hot_spring`
-- **浸泡（dip_in）定制效果**（无负面心情）: 清洗（CLEAN_RAD \| CLEAN_WASH）→ 活物获得 `hot_spring` 再生状态效果（washing_regen/hot_spring）+ **心情事件 +2**（"The water was enjoyably warm!" 水暖得舒服！）
+- **浸泡（dip_in）定制效果**（无负面心情）: 清洗（CLEAN_RAD | CLEAN_WASH）→ 活物获得 `hot_spring` 再生状态效果（washing_regen/hot_spring）+ **心情事件 +2**（"The water was enjoyably warm!" 水暖得舒服！）→ **该心情事件 datum 全录见 2.8.4**
 
-### 2.8.4 温泉钓鱼表 —— /datum/fish_source/icecat_hot_spring
+### 2.8.4 温泉心情事件（削弱版）—— /datum/mood_event/hotspring/nerfed
+
+- **触发条件**：活体（living）在冰月温泉（`/turf/open/water/hot_spring/icemoon`）内获得沉浸（`TRAIT_IMMERSED`）时经覆写的 `dip_in()` 触发——先调用父级 `..()`（清洗 + 施加 `washing_regen/hot_spring` 状态效果 + 父级心情事件），随后若活体尚未持有该状态效果，则施加状态效果并以键名 `"hotspring"`（**无下划线**，与父级键 `"hot_spring"` 不同，两者可并存）添加此心情事件。
+- **效果**：`mood_change = 2`（心情 **+2**）；描述 `span_nicegreen("The water was enjoyably warm!\n")`（"这水暖得真舒服！"）；**无 `timeout`**——不自动过期，持续存在直到被覆盖或清除。
+- **与父级对比（nerfed = 削弱版）**：基类 `/datum/mood_event/hot_spring`（`code/datums/mood_events/needs_events.dm:112`）为 `mood_change = 5`（"It's so relaxing to bathe in steamy water..."）；此版本数值大幅下调。源码注释：*"Copy of parent proc with custom moodlet (and no negative moodlet)"*（复制父过程、改用自定义心情，且不附带负面心情）。
+
+### 2.8.5 温泉钓鱼表 —— /datum/fish_source/icecat_hot_spring
 
 | 渔获 | 权重 | 目录名 |
 |---|---|---|
@@ -554,7 +560,7 @@
 | 冰裂隙蟹 chasm_crab/ice | 5 | |
 | 骨板 bone sheet | 5 | |
 
-### 2.8.5 营地区域 —— /area/ruin/unpowered/primitive_catgirl_den
+### 2.8.6 营地区域 —— /area/ruin/unpowered/primitive_catgirl_den
 
 - 名称: "**Icewalker Camp**（冰行者营地）"——无电力废墟区域，野猫族聚落
 

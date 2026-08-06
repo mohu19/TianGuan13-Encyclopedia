@@ -31,6 +31,7 @@
 - [8. 偏好设置 preferences.dm Preferences](#8-偏好设置-preferencesdm-preferences)
 - [9. 服务器集成 world_topic.dm World Topic (Discord)](#9-服务器集成-world_topicdm-world-topic-discord)
 - [10. 配置项 Config Entries](#10-配置项-config-entries)
+- [附录 · 导师系统（Mentor）全录](#附录--导师系统mentor全录)
 - [11. 交叉引用 Cross-References](#11-交叉引用-cross-references)
 
 ---
@@ -462,11 +463,237 @@ UPDATE player_rank SET deleted = 1, admin_ckey = :admin_ckey WHERE ckey = :ckey 
 
 ---
 
+## 附录 · 导师系统（Mentor）全录
+
+> 源码模块：`modular_nova/modules/mentor/`（**11 个 .dm 文件，452 行**；另有 readme.md）
+> Source module: `modular_nova/modules/mentor/` (11 .dm files, 452 lines; plus readme.md)
+> 说明：本附录为 §6 / §11 交叉引用处的 mentor 模块**全量展开**。导师（Mentor）是服务器中帮助新玩家解答机制问题的资深玩家角色——玩家可向导师发送类似 ahelp 的求助消息（readme 原文：*"Adds a mentor system, allowing for players to send a-help like messages to mentors, asking them about game mechanics and help."*）。致谢 Credits：**Azarak**（移植与调整 Porting, tweaks）、**Poojawa**（实现 Implementation）。关联 TG 过程修改 TG Proc Changes：`code/modules/client/client_procs.dm > client/Topic()`、`/code/modules/admin/secrets.dm > /datum/admins/proc/Secrets_topic(), /datum/admins/proc/Secrets()`。
+>
+> **English**: This appendix fully expands the `mentor` module referenced in §6/§11. Mentors are veteran players who help newcomers with game mechanics — players can send a-help-like messages to mentors (readme: *"Adds a mentor system, allowing for players to send a-help like messages to mentors..."*). Credits: Azarak (porting, tweaks), Poojawa (implementation).
+
+### A.1 文件清单 File Inventory
+
+| # | 文件 File | 行数 Lines | 职责 Responsibility |
+|---|---|---|---|
+| 1 | `code/mentor.dm` | 74 | 导师 datum 核心：`/datum/mentors` 定义、构造/移除、HREF 鉴权、token 过程与 /client 扩展变量（Core datum, New/remove_mentor/CheckMentorHREF, tokens） |
+| 2 | `code/mentorhelp.dm` | 102 | 求助动词 `mentorhelp`（30 秒冷却）、`get_mentor_counts()` 统计、`key_name_mentor()` 名称格式化 |
+| 3 | `code/mentorpm.dm` | 93 | 导师私聊 `cmd_mentor_pm` 与面板 `cmd_mentor_pm_panel`（已弃用） |
+| 4 | `code/mentorsay.dm` | 20 | 导师频道发言 `cmd_mentor_say`（MSAY，管理员/导师双色渲染） |
+| 5 | `code/mentorwho.dm` | 22 | 在线导师列表 `mentorwho`（含状态后缀与 AFK 标记） |
+| 6 | `code/dementor.dm` | 23 | 撤销导师 `cmd_mentor_dementor` / 恢复 `cmd_mentor_rementor` |
+| 7 | `code/follow.dm` | 28 | 跟随玩家 `mentor_follow` / `mentor_unfollow` |
+| 8 | `code/logging.dm` | 15 | 导师日志 `log_mentor` / 日志浏览器 `MentorLogSecret` |
+| 9 | `code/mentor_verbs.dm` | 12 | 导师动词集 `GLOB.mentor_verbs` 与 `add_mentor_verbs` / `remove_mentor_verbs` |
+| 10 | `code/client_procs.dm` | 60 | client 生命周期挂载：`New()`/`Destroy()`、Topic 分发 `client_procs()`、`mentor_datum_set()`、`is_mentor()` |
+| 11 | `code/_globalvars.dm` | 3 | `GLOB.mentors`（在线导师 client 列表） |
+| — | **合计 Total** | **452** | — |
+
+### A.2 全局变量 Global Vars
+
+| 定义 Definition | 位置 Location | 说明 Description |
+|---|---|---|
+| `GLOBAL_LIST_EMPTY(mentors)` + `GLOBAL_PROTECT(mentors)` | `_globalvars.dm` | 当前**在线且处于导师状态**的 client 关联列表（client → TRUE）。Associative list of all mentor clients. |
+| `GLOBAL_LIST_EMPTY(mentor_datums)` + `GLOBAL_PROTECT(mentor_datums)` | `mentor.dm` | ckey → `/datum/mentors` 的导师数据关联列表（含离线导师）。Associative list of ckey → mentor datum. |
+| `GLOBAL_VAR_INIT(mentor_href_token, GenerateToken())` + `GLOBAL_PROTECT(mentor_href_token)` | `mentor.dm` | 全局导师 HREF token（启动时生成）；导师个人 token 之外的第二重鉴权依据。Global mentor href token. |
+| `GLOBAL_LIST_EMPTY(mentorlog)` + `GLOBAL_PROTECT(mentorlog)` | `logging.dm` | 本轮导师日志列表（`log_mentor()` 写入）。Per-round mentor log. |
+| `GLOBAL_LIST_INIT(mentor_verbs, list(/client/proc/cmd_mentor_say, /client/proc/cmd_mentor_dementor))` + `GLOBAL_PROTECT(mentor_verbs)` | `mentor_verbs.dm` | 导师动词集——**恰好两个动词**：`cmd_mentor_say`（导师发言）与 `cmd_mentor_dementor`（撤销导师）。The mentor verb set — exactly two verbs. |
+
+### A.3 导师数据 /datum/mentors（mentor.dm，74 行）
+
+**中文**：`/datum/mentors` 是导师的身份载体 datum（对导师而言相当于管理员系统中的 admin holder）。每个导师 ckey 一个实例，注册进 `GLOB.mentor_datums[ckey]`；只有**非管理员**的导师会被加入 `GLOB.mentors`（管理员不显示在导师列表中）。
+
+**English**: `/datum/mentors` is the identity datum of a mentor (to mentors what the admin-datum holder is to admins). One instance per mentor ckey, registered in `GLOB.mentor_datums[ckey]`; only **non-admin** mentors are added to `GLOB.mentors` (admins are excluded from the mentor list).
+
+#### 变量 Variables
+
+| 变量 Var | 默认值 Default | 说明 Description |
+|---|---|---|
+| `name` | `"someone's mentor datum"` | datum 显示名；`New()` 时改为 `"[ckey]'s mentor datum"`。 |
+| `owner` | `null` | 实际导师本人，`/client` 类型。The actual mentor, client type. |
+| `target` | `null` | 导师的 ckey（已规范化）。The mentor's ckey. |
+| `href_token` | `null` | 导师命令的 HREF token，**与管理员共用同一套 token 机制**（`GenerateToken()` 生成）。href token for mentor commands, uses the same token used by admins. |
+| `following` | `null` | 当前被该导师跟随的 mob（`/mob`）。Currently followed mob. |
+
+#### `New(ckey)` 构造流程
+
+1. 无 ckey → `QDEL_IN(src, 0)` + `CRASH("Mentor datum created without a ckey")`。
+2. `target = ckey(ckey)`；`name = "[ckey]'s mentor datum"`；`href_token = GenerateToken()`。
+3. `GLOB.mentor_datums[target] = src`（注册进全局表）。
+4. `owner = GLOB.directory[ckey]`（查在线 client）；若在线：
+   - `owner.mentor_datum = src`（挂载到 client）；
+   - `owner.add_mentor_verbs()`（授予导师动词）；
+   - `if(!check_rights_for(owner, R_ADMIN, 0))`（非管理员）→ `GLOB.mentors[owner] = TRUE`（**管理员不入导师列表**）。
+
+#### `remove_mentor()` 移除流程
+
+1. 若 `owner` 存在：`owner.remove_mentor_verbs()`（回收动词）→ `GLOB.mentors -= owner` → `owner.mentor_datum = null` → `owner = null`。
+2. `log_admin_private("[target] was removed from the rank of mentor.")`（管理员私密日志）。
+3. `GLOB.mentor_datums -= target`（注销）→ `qdel(src)`。
+
+#### `CheckMentorHREF(href, href_list)` HREF 鉴权
+
+- `auth = href_list["mentor_token"]`；`. = auth && (auth == href_token || auth == GLOB.mentor_href_token)`——个人 token 或全局 token 任一匹配即通过。
+- 通过 → 返回 `TRUE`。
+- 失败 → `message_admins("[key_name_admin(usr)] clicked an href with [msg] authorization key!")`，其中 `msg` 为 `"no"`（未携带 token）或 `"a bad"`（token 错误）。
+- 若 `CONFIG_GET(flag/debug_admin_hrefs)` 开启（调试模式）→ `message_admins("Debug mode enabled, call not blocked. Please ask your coders to review this round's logs.")` + `log_world("UAH: [href]")` + 返回 `TRUE`（放行并留日志）。
+- 否则 → `log_admin_private("[key_name(usr)] clicked an href with [msg] authorization key! [href]")`，返回空（拦截）。
+
+#### Token 过程（/proc，全量）
+
+- `RawMentorHrefToken(forceGlobal = FALSE)`：`tok = GLOB.mentor_href_token`；若 `!forceGlobal && usr` → 取 `C = usr.client`（源码此处原样保留两行调试残留：`to_chat(world, C)` 与 `to_chat(world, usr)`，无实际作用）→ 无 C 则 `CRASH("No client for HrefToken()!")` → 若 `C.mentor_datum` 存在则 `tok = holder.href_token`（**个人 token 优先**）；返回 `tok`。
+- `MentorHrefToken(forceGlobal = FALSE)`：返回 `"mentor_token=[RawMentorHrefToken(forceGlobal)]"`——可直接拼入 href 的键值对。
+
+#### /client 扩展变量（mentor.dm 尾部）
+
+| 变量 Var | 说明 Description |
+|---|---|
+| `var/datum/mentors/mentor_datum` | 与 admin 的 holder 同理：持有导师 datum。**若非空，该 client 就是导师。** Acts the same way holder does towards admin: it holds the mentor datum; if set, the guy's a mentor. |
+| `var/relay_tip_shown` | 本会话是否已向该 client 提示过 relay（防重复提示）。Whether the relay has been suggested to them this session. |
+
+### A.4 通讯流程 Communication Flow
+
+#### A.4.1 mentorhelp —— 求助（mentorhelp.dm，102 行）
+
+`/client/verb/mentorhelp(msg as text)`（category = `"Mentor"`，name = `"导师帮助"`）：
+
+1. 无 `msg` → 直接返回。
+2. **30 秒冷却**：`remove_verb(src, /client/verb/mentorhelp)` 暂时移除动词 → `spawn(30 SECONDS)` 后 `add_verb(src, /client/verb/mentorhelp)` 加回（源码注释吐槽：*"Gotta love BYOND, god this is disgusting"*）。
+3. `msg = sanitize(copytext_char(msg, 1, MAX_MESSAGE_LEN))`（清理 HTML + 截断至 `MAX_MESSAGE_LEN`）；空或 `!mob` → 返回。
+4. `show_char = CONFIG_GET(flag/mentors_mobname_only)`。
+5. 组消息：`span_mentor("<b>MENTORHELP:</b> <b>[key_name_mentor(src, TRUE, FALSE, TRUE, show_char)]</b>: [msg]")`（含链接 + 跟随链接 F）。
+6. `log_mentor("MENTORHELP: [key_name_mentor(src, FALSE, FALSE, FALSE, FALSE)]: [msg]")`。
+7. 遍历 `GLOB.mentors`：每个在线导师 `SEND_SOUND(mentor_client, 'sound/items/bikehorn.ogg')`（自行车喇叭提示音）+ `to_chat(mentor_client, mentor_msg)`。
+8. 求助者本人收到 `span_mentor(LANG("client.25d147d7", list(msg)))`。
+
+辅助过程：
+- `get_mentor_counts()`：返回 `list("total" = 0, "afk" = 0, "present" = 0)`；遍历 `GLOB.mentors`——`total++`；`mentor_client.is_afk()` → `afk++`，否则 `present++`。
+- `key_name_mentor(whom, include_link = null, include_name = FALSE, include_follow = FALSE, char_name_only = FALSE)`——导师名称格式化（全量规则）：
+  - 无 `whom` → `"*null*"`；类型不是 /client、/mob、文本 → `"*invalid*"`。
+  - 解析 `target_mob` / `target_client` / `key` / `ckey`（文本入参经 `GLOB.directory[ckey]` 反查在线 client）。
+  - 无 `ckey` → 强制 `include_link = FALSE`。
+  - `include_link` 时：`mentors_mobname_only` 开启则 href 用 `REF(target_mob)`，否则用 `ckey`；均附带 `[MentorHrefToken(TRUE)]`（强制全局 token）。
+  - 显示名：`target_client.holder.fakekey`（隐身管理员）→ `"Administrator"`；`char_name_only && mentors_mobname_only` → 大厅（`/mob/dead/new_player`）或观察者（`/mob/dead/observer`）显示 `key`，进行中的玩家显示 `target_client.mob.name`，兜底显示 `key`；其余情况显示 `key`。
+  - 无在线 client → 追加 `"\[DC\]"`（断线标记）。
+  - `include_follow` → 追加跟随链接：`" (<a href='byond://?_src_=mentor;mentor_follow=[REF(target_mob)];[MentorHrefToken(TRUE)]'>F</a>)"`。
+  - 无 key → `"*no key*"`。
+
+#### A.4.2 mentorpm —— 导师私聊（mentorpm.dm，93 行）
+
+- `cmd_mentor_pm_panel()`（category `"Mentor"`，name `"导师私信"`）：非导师 → `span_danger(LANG("client.d0d80bb7", null))`；收集全部在线 client 为 `targets` 关联列表 → `sort_list(targets)` 排序 → `input` 弹窗选择目标 → `cmd_mentor_pm(targets[target], null)` → `SSblackbox.record_feedback("tally", "Mentor_verb", TRUE, "APM")`。**源码注释声明该面板为弃用死代码**：*"We're not using this and I'm debating removing the code as it's dead and useless. We don't need mentors PMing people out of the blue."*
+- `cmd_mentor_pm(whom, msg)` —— 核心私聊过程（`src` 发送方 → `target` 接收方）：
+  1. 解析 `whom`：`ismob` → `mob_target.client`；`istext` → `GLOB.directory[whom]`；`istype /client` → 直接用。
+  2. 无 `target`：发送方是导师 → `span_danger(LANG("client.4abe29ec", null))`；否则（普通玩家回复时导师已离线）→ 转 `mentorhelp(msg)`。
+  3. `is_mentor(whom)`（接收方是导师）→ 先广播：`to_chat(GLOB.mentors, span_purple(span_mentor(LANG("client.fe41380a", list(src, whom)))))`。
+  4. 无 `msg` → `tgui_input_text(src, LANG("client.008d3052", null), LANG("client.cb7a2c2f", null), max_length = MAX_MESSAGE_LEN)` 弹窗输入。
+  5. 输入后仍无 `msg`：若接收方是导师 → 广播取消通知 `span_mentor(span_purple(LANG("client.ccaf83b5", list(src, whom))))`；返回。
+  6. 输入后 `target` 丢失：发送方是导师 → 警告 `LANG("client.4abe29ec")`；否则 → `mentorhelp(msg)`（兜底转求助）。
+  7. **双方都不是导师 → 直接返回**（禁止非导师互发导师 PM）。
+  8. `log_mentor("Mentor PM: [key_name(src)]->[key_name(target)]: [msg]")`。
+  9. `msg = emoji_parse(msg)`；`SEND_SOUND(target, 'sound/items/bikehorn.ogg')`。
+  10. 收发组合着色（均以 `span_mentor` 包裹）：双方都是导师 → 接收方 `span_purple(LANG("client.4f79da08", ...))`、发送方 `span_blue(LANG("client.04a36481", ...))`；仅接收方是导师（玩家→导师）→ 接收方 `span_purple(LANG("client.0339519f", ...))`、发送方 `span_blue`；仅发送方是导师（导师→玩家）→ 接收方 `span_purple(LANG("client.4f79da08", ...))`、发送方 `span_blue`。
+  11. 广播给**其他**导师（排除收发双方，`mentor?.key != key && mentor?.key != target.key`）：`"<B>Mentor PM: [key_name_mentor(src, mentor, FALSE, FALSE, show_char_sender)]-&gt;[key_name_mentor(target, mentor, FALSE, FALSE, show_char_recip)]:</B> [span_blue(msg)]"`；其中 `show_char_sender = !is_mentor() && CONFIG_GET(flag/mentors_mobname_only)`、`show_char_recip = !target.is_mentor() && CONFIG_GET(flag/mentors_mobname_only)`（非导师一方显示角色名）。
+
+#### A.4.3 mentorsay —— 导师频道发言（mentorsay.dm，20 行）
+
+`/client/proc/cmd_mentor_say(msg as text)`（category `"Mentor"`，name `"导师发言"`，`hidden = 1`——不显示在帮助菜单；源码注释：改短名字为 "msay" 便于输入）：
+
+1. `!is_mentor()` → 返回。
+2. `msg = copytext_char(sanitize(msg), 1, MAX_MESSAGE_LEN)`；空 → 返回。
+3. `msg = emoji_parse(msg)`；`log_mentor("MSAY: [key_name(src)] : [msg]")`。
+4. 着色：管理员（`check_rights_for(src, R_ADMIN, 0)`）→ 紫色 `#8A2BE2`；普通导师 → 粉紫 `#E236D8`。格式：`span_mentor("<b><font color ='...'><span class='prefix'>MENTOR:</span> <EM>[key_name(src, 0, 0)]</EM>: <span class='message'>[msg]</span></font></b>")`。
+5. 发送对象：`GLOB.admins | GLOB.mentors`（管理员 ∪ 导师），`avoid_highlighting = (mentor == src)`（自己不高亮）。
+
+#### A.4.4 mentorwho —— 在线导师列表（mentorwho.dm，22 行）
+
+`/client/verb/mentorwho()`（category `"Mentor"`，name `"导师在线"`）：
+
+1. 标题 `"<b>Current Mentors:</b>\n"`。
+2. 遍历 `GLOB.mentors`：client 为 null（源码注释：*"weird runtime that happens randomly"*）→ `GLOB.mentors -= C` 并 `continue`。
+3. **仅当调用者持有管理员 holder**（`if(holder)`——即管理员调用时）附加状态后缀：观察者（`isobserver`）→ `" - Observing"`；大厅（`/mob/dead/new_player`）→ `" - Lobby"`；其他 → `" - Playing"`；`C.is_afk()` → 再追加 `" (AFK)"`。普通导师调用不显示状态后缀。
+4. 每行 `span_infoplain("\t[C][suffix]\n")`；最终 `to_chat(src, msg)`。
+
+### A.5 撤销 / 跟随 / 日志（dementor.dm / follow.dm / logging.dm）
+
+#### dementor.dm（23 行）—— 撤销与恢复导师
+
+- `cmd_mentor_dementor()`（category `"Mentor"`，name `"dementor"`）：
+  1. `!is_mentor()` → 返回。
+  2. `remove_mentor_verbs()`（回收动词）。
+  3. 若 verbs 中仍有 `mentor_unfollow`（`/client/proc/mentor_unfollow in verbs`）→ `mentor_unfollow()`（先停止跟随）。
+  4. `GLOB.mentors -= src`（移出在线导师列表；**保留 `mentor_datum`**，故操作可逆）。
+  5. `to_chat(src, span_interface(LANG("client.5d9efa79", null)))`。
+  6. `log_mentor("MENTOR: [src] dementored.")`。
+  7. `add_verb(src, /client/proc/cmd_mentor_rementor)`（授予恢复动词）。
+- `cmd_mentor_rementor()`（category `"Mentor"`，name `"rementor"`）：
+  1. `!is_mentor()` → 返回。
+  2. `add_mentor_verbs()`；`GLOB.mentors[src] = TRUE`。
+  3. `to_chat(src, span_interface(LANG("client.e350cdc4", null)))`；`log_mentor("MENTOR: [src] rementored.")`。
+  4. `remove_verb(src, /client/proc/cmd_mentor_rementor)`（回收恢复动词）。
+
+#### follow.dm（28 行）—— 跟随玩家
+
+- `mentor_follow(mob/living/M)`：
+  1. `!is_mentor()` → 返回。
+  2. 非观察者（`!isobserver(usr)`）：`mentor_datum.following = M` → `usr.reset_perspective(M)`（视角锁定目标）→ `add_verb(src, /client/proc/mentor_unfollow)` → `to_chat(usr, span_info(LANG("client.18ceac38", list(MentorHrefToken(TRUE), key_name(M)))))` → `orbiting = FALSE`。
+  3. 观察者（ghost）：`O.ManualFollow(M)`（幽灵手动跟随），`orbiting = TRUE`。
+  4. 通知管理员：`to_chat(GLOB.admins, span_mentor(span_prefix(LANG("client.84aab3b1", list(key_name(usr), orbiting ? "orbiting" : "following", key_name(M), key_name(M), orbiting ? " as a ghost" : "")))))`。
+  5. `log_mentor("[key_name(usr)] [orbiting ? "is now orbiting" : "began following"][key_name(M)][orbiting ? " as a ghost" : ""].")`。
+- `mentor_unfollow()`（category `"Mentor"`，name `"停止跟随"`，desc `"Stop following the followed."`）：
+  1. `!is_mentor()` → 返回。
+  2. `usr.reset_perspective()`（恢复视角）→ `remove_verb(src, /client/proc/mentor_unfollow)`。
+  3. `to_chat(GLOB.admins, span_mentor(span_prefix(LANG("client.f5713477", list(key_name(usr), key_name(mentor_datum.following))))))`。
+  4. `log_mentor("[key_name(usr)] stopped following [key_name(mentor_datum.following)].")`。
+  5. `mentor_datum.following = null`。
+
+#### logging.dm（15 行）—— 日志
+
+- `GLOBAL_LIST_EMPTY(mentorlog)` + `GLOBAL_PROTECT(mentorlog)`：本轮导师日志列表。
+- `log_mentor(text, list/data)`：`GLOB.mentorlog.Add(text)` + `logger.Log(LOG_CATEGORY_GAME_MENTOR, text, data)`——双写：内存轮次列表 + 游戏日志分类 `LOG_CATEGORY_GAME_MENTOR`。
+- `/datum/admins/proc/MentorLogSecret()`：构建 `"<B>Mentor Log<HR></B>"` + 每条 `"<li>[l]</li>"`；列表为空 → `"No mentors have done anything this round!"`；`usr << browse(dat, "window=mentor_log")` 弹出浏览器窗口。
+
+### A.6 导师动词集与客户端挂载（mentor_verbs.dm / client_procs.dm）
+
+#### mentor_verbs.dm（12 行）
+
+- `GLOBAL_LIST_INIT(mentor_verbs, list(/client/proc/cmd_mentor_say, /client/proc/cmd_mentor_dementor))` + `GLOBAL_PROTECT(mentor_verbs)`。
+- `add_mentor_verbs()`：**仅当 `mentor_datum` 存在** → `add_verb(src, GLOB.mentor_verbs)`。
+- `remove_mentor_verbs()`：`remove_verb(src, GLOB.mentor_verbs)`。
+
+#### client_procs.dm（60 行）—— client 生命周期与 Topic 挂载
+
+- `/client/New()`：`. = ..()` 后调用 `mentor_datum_set()`（登录即挂载导师身份）。
+- `/client/Destroy()`：若 `GLOB.mentors[src]` → `GLOB.mentors -= src`（下线自动移出在线列表）；返回 `..()`。
+- `/client/proc/client_procs(href_list)`（Topic href 分发钩子——readme 声明的 TG 过程修改点 `client/Topic()` 的落地处）：
+  - `href_list["connect_to_relay"]` → `connect_to_relay()`，返回 `TRUE`。
+  - `href_list["mentor_msg"]` → `mentors_mobname_only` 开启时 `locate(href_list["mentor_msg"])` 解析为 mob（`M`），否则按文本处理；`cmd_mentor_pm(M, null)`，返回 `TRUE`。
+  - `href_list["mentor_follow"]` → `locate` 为 `/mob/living` 且 `istype(M)` 成立 → `mentor_follow(M)`，返回 `TRUE`。
+  - `href_list["mentor_unfollow"]` → `mentor_datum.following` 非空 → `mentor_unfollow()`，返回 `TRUE`。
+- `mentor_datum_set()`：
+  1. `mentor_datum = GLOB.mentor_datums[ckey]`（按 ckey 查找导师数据）。
+  2. 无 datum 且 `is_admin(src)` → `new /datum/mentors(ckey)`（**管理员自动补建 datum**）。
+  3. 有 datum → `mentor_datum.owner = src` → `GLOB.mentors[src] = TRUE` → `add_mentor_verbs()`。
+  4. 管理员（`check_rights_for(src, R_ADMIN)`）且偏好 `auto_dementor`（`/datum/preference/toggle/admin/auto_dementor`）→ 自动 `cmd_mentor_dementor()`（管理员默认自动退出导师）。
+- `is_mentor(admin_bypass = TRUE)`：返回 `mentor_datum || (admin_bypass && check_rights_for(src, R_ADMIN))`——持有导师 datum，或管理员按需绕过（默认 `TRUE`）。`player_ranks` 模块的 `SSplayer_ranks.is_mentor()`（§3.3）即此过程的空安全包装。
+
+### A.7 与 player_ranks 模块的联动 Integration with player_ranks
+
+| 联动点 Hook | 位置 Location | 关系 Relation |
+|---|---|---|
+| `new /datum/mentors(ckey)` | `mentor_controller.add_player()`（§6.2） | 授予导师 = 创建导师 datum（自动挂载动词/列表）。 |
+| `GLOB.mentor_datums[ckey]?.remove_mentor()` | `mentor_controller.remove_player()`（§6.2） | 撤销导师 = 空安全调用 `remove_mentor()`。 |
+| `GLOB.mentor_datums.Cut()` + 逐 client `remove_mentor_verbs()` / `mentor_datum = null` + `GLOB.mentors.Cut()` | `mentor_controller.clear_existing_rank_data()`（§6.2） | 加载前清空导师体系。 |
+| `CONFIG_GET(flag/mentors_mobname_only)` | `mentorhelp.dm` / `mentorpm.dm` / `key_name_mentor()` | 显示 mob 名而非 ckey（配置见 §10）。 |
+| `CONFIG_GET(flag/debug_admin_hrefs)` | `mentor.dm` `CheckMentorHREF()` | 调试模式放行错误 token 的 href。 |
+| `/datum/preference/toggle/admin/auto_dementor` | `client_procs.dm` `mentor_datum_set()` | 管理员自动退导师偏好。 |
+| `LOG_CATEGORY_GAME_MENTOR` | `logging.dm` `log_mentor()` | 导师日志分类。 |
+
+---
+
 ## 11. 交叉引用 Cross-References
 
 | 引用 Reference | 位置 Location | 关系 Relation |
 |---|---|---|
-| `/datum/mentors`、`GLOB.mentor_datums`、`GLOB.mentors`、`remove_mentor_verbs()`、`mentor_datum` | `modular_nova/modules/mentor/code/mentor.dm`、`client_procs.dm` | 导师体系主体在独立 `mentor` 模块；`mentor_controller` 仅桥接。 |
+| `/datum/mentors`、`GLOB.mentor_datums`、`GLOB.mentors`、`remove_mentor_verbs()`、`mentor_datum` | `modular_nova/modules/mentor/code/mentor.dm`、`client_procs.dm` | 导师体系主体在独立 `mentor` 模块；`mentor_controller` 仅桥接。**该模块已全量展开，见文末《附录 · 导师系统（Mentor）全录》。** |
 | `SSdiscord.lookup_ckey()` | Discord 模块（`SSdiscord`） | `set_player_rank` 世界话题用它把 Discord ID 反查为 ckey。 |
 | `GLOB.admin_datums` / `GLOB.deadmins` | 管理模块（admin） | 世界话题校验发送者是否为管理员（含已离职管理员）。 |
 | `R_PERMISSIONS` / `R_DEBUG` / `R_SERVER` | 权限位（admin rights defines） | 分组增删需 `R_PERMISSIONS`；迁移需 `R_PERMISSIONS \| R_DEBUG \| R_SERVER`。 |
@@ -480,3 +707,5 @@ UPDATE player_rank SET deleted = 1, admin_ckey = :admin_ckey WHERE ckey = :ckey 
 
 *本文档由源码 `modular_nova/modules/player_ranks/`（968 行，7 文件）全量提取生成。数值与文案均按源码原文收录。*
 *This document is a full extraction of `modular_nova/modules/player_ranks/` (968 lines, 7 files). All values and messages are recorded verbatim from source.*
+*附录《导师系统全录》由源码 `modular_nova/modules/mentor/`（452 行，11 文件）全量提取生成。*
+*The appendix (full mentor system record) is extracted from `modular_nova/modules/mentor/` (452 lines, 11 files).*
