@@ -184,7 +184,7 @@
 | `/obj/structure/signboard/holosign`<br>`holosign.dm` | 全息招牌 | 破坏 ID 锁并清除注册所有者（registered_owner=null）：任何人无需授权即可编辑招牌文字、且无法重新上锁；冒火花、叠加 "_emag" 图标、写入调查日志 |
 | `/obj/item/clothing/glasses/hud`<br>`hud.dm` | HUD 眼镜（通用基类） | 显示屏扰乱：描述变为"屏幕略微闪烁"（与 EMP 破坏效果相同，纯视觉）；之后该眼镜免疫后续 EMP 的显示扰乱（EMP 检查 EMAGGED 直接跳过） |
 | `/obj/item/clothing/mask/gas/sechailer`<br>`hailer.dm` | 安保喊话器 | 语音电路烧毁（safety=FALSE）：喊话内容固定为 EMAG 专属短语（select_phrase 永远返回 EMAG_PHRASE 索引 1），不再按警戒度随机播报，且无法恢复 |
-| `/obj/item/clothing/suit/space`<br>`_spacesuits.dm` | 宇航服（太空服） | 热调节器限制解除：用螺丝刀调节恒温温度的范围由正常 20~45°C 扩展为 -20~120°C——可把宇航服加热到灼热或制冷到极寒（配合安全阀机制使用） |
+| `/obj/item/clothing/suit/space`<br>`_spacesuits.dm` | 宇航服（太空服） | 热调节器限制解除：用螺丝刀调节恒温温度的范围由正常 20 ~ 45°C 扩展为 -20 ~ 120°C——可把宇航服加热到灼热或制冷到极寒（配合安全阀机制使用） |
 | `/obj/item/survivalcapsule/fishing`<br>`fishing_equipment.dm` | 钓鱼点求生舱 | 解除安全限制：径向菜单解锁全部"不安全"钓鱼点（正常被过滤掉）；部署时无视锚定物体与禁止物体检查（CAPSULE_IGNORE_ANCHORED_OBJECTS、CAPSULE_IGNORE_BANNED_OBJECTS），可强行展开 |
 | `/obj/item/grapple_gun`<br>`grapple_gun.dm` | 抓钩枪 | 压力设置过载：解除低压限制——可在太空/低压环境发射抓钩（正常会被 lavaland_equipment_pressure_check 阻止并提示"压力不足"），实现太空机动 |
 | `/obj/item/mod/control`<br>`mod_control.dm` | MOD 控制单元（动力装甲） | 切换 ID 锁状态（locked 取反）：锁定↔解锁——无需原授权者即可解锁/锁定整套 MOD 装甲的穿戴权限 |
