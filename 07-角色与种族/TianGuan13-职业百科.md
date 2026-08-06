@@ -1,7 +1,7 @@
 # 天关 — 职业百科（2026-08-06 深度翻新版）
 
 > 按心理医生专精深度格式重写：每职业含基础信息表/技能芯片逐个 TRAIT 分析/装备部位表/背包内容/特质（mind_traits+liver_traits）/邮件礼物/Nova 扩展/一句话总结。数据全部从源码精确提取。
-> 覆盖：指挥链 3 + 安保 5 + 部门警卫 6 + 工程 3 + 医疗 8 + 科研 4 + 货运 4 + 服务 9 + NOVA 特有 10 + 硅基 2（AI/赛博格）+ 通用 1（助手）= 55 职业 + 技能芯片全录。
+> 覆盖：指挥链 3 + 安保 5 + 部门警卫 6 + 工程 3 + 医疗 8 + 科研 4 + 货运 4 + 服务 9 + NOVA 特有 10 + 硅基 2（AI/赛博格）+ 通用 1（助手）+ 理发师 1 = 56 职业 + 技能芯片全录。
 
 ---
 
@@ -4553,6 +4553,458 @@ Nova 增加了**大祭司继承系统**:
 | 代码语（Codespeak） | 生成时免费授予 | DS2 特工/指挥、Interdyne 全员 |
 | 技能芯片 | 仅两处：通信专家（engineer）、Interdyne 矿工（miner） | 通信专家、Interdyne |
 
+
+---
+
+
+
+---
+
+> 补写《TianGuan13-职业百科》缺失的 4 个职业：**AI 人工智能**（核心指挥岗位）、**赛博格 Cyborg**（工程岗位）、**助手 Assistant**（通用岗位）、**理发师 Barber**（NOVA 特有职业）。
+> 按心理医生专精深度格式撰写（同船长章节）：基础信息表 / 技能芯片 TRAIT 逐个分析 / 初始物品装备 / 特质（mind_traits + liver_traits）/ 邮件礼物 / Nova 扩展 / 一句话总结。
+> 数值与路径全部提取自 `TianGuan13-master`（NovaSector 分支）源码，双语标注。供父代理合并入主百科。
+
+---
+
+## 第六篇 · 硅基与通用岗位（AI / 赛博格 / 助手）
+
+### 一、AI 人工智能 (AI)
+
+**代码**: `code/modules/jobs/job_types/ai.dm` + `code/modules/mob/living/silicon/ai/`（ai.dm / ai_defines.dm / life.dm / laws.dm / robot_control.dm / multicam.dm / ai_defense.dm / freelook/eye.dm / login.dm / logout.dm / emote.dm / death.dm / examine.dm / ai_say.dm / vox_sounds.dm / _preferences.dm / ai_actions/remote_power.dm） + `code/game/machinery/ai_core/_core.dm` / `core_construction.dm`
+
+#### 基础信息表
+
+| 项目 | 内容 |
+|---|---|
+| 岗位数量 | 1 总 / 1 出生 (`total_positions = 1` / `spawn_positions = 1`，全站唯一) |
+| 上级 | your laws（你的法则）— `supervisors = "your laws"` |
+| 部门 | 硅基部 (`/datum/job_department/silicon`) |
+| 工资等级 | 无（硅基不发薪，无 paycheck / paycheck_department 字段） |
+| 经验要求 | 180 分钟；经验类型 = 船员经验 (EXP_TYPE_CREW)，**要求硅基部门经验** (`exp_required_type_department = EXP_TYPE_SILICON`)；发放船员经验 (`exp_granted_type = EXP_TYPE_CREW`) |
+| 玩家年龄 | 30 天 (`minimal_player_age = 30`)，`req_admin_notify = TRUE`（出生需管理员知晓） |
+| 其他 | `auto_deadmin_role_flags = DEADMIN_POSITION_SILICON`（硅基岗位自动解除管理员）；`random_spawns_possible = FALSE`（无随机出生点）；`allow_bureaucratic_error = FALSE`；`job_flags = JOB_NEW_PLAYER_JOINABLE | JOB_EQUIP_RANK | JOB_BOLD_SELECT_TEXT | JOB_CANNOT_OPEN_SLOTS`（不能手动开槽）；`config_tag = "AI"`；`config_check()` → `CONFIG_GET(flag/allow_ai)`（服务器配置可整体关闭 AI 岗位） |
+
+#### 核心启动流程
+
+**代码**: `ai.dm` L6-111（Initialize）、L64-100（出生点）、`ai_core/_core.dm` L127-166（中途加入核心）、`transform_procs.dm` L88-134（AIize）
+
+1. **回合开始出生**：`spawn_type = /mob/living/silicon/ai` 直接以 AI 机体出生；出生点 `get_roundstart_spawn_point()` → `get_latejoin_spawn_point()`：优先扫描 `GLOB.latejoin_ai_cores`（网络化 AI 核心），否则按 `landmark start/ai`（`primary_ai` 主出生点优先，用完标记 `used = TRUE`）。
+2. **无玩家脑自毁**：`Initialize` 若没有目标大脑 (`!target_ai`) → 在出生点生成一个空 AI 核心结构 (`CORE_STATE_FINISHED`) 并自我 qdel —— 地图上留一个空壳终端。
+3. **法则初始化**：`make_laws()` → 新建 `/datum/ai_laws` + `set_laws_config()`（`ai_laws.dm` L199，按服务器 `default_laws` 配置的权重表随机选法则集，默认 Asimov；站台特征 `STATION_TRAIT_UNIQUE_AI` 时剔除 Asimov）；`laws.associate(src)` 并记录 `lawcheck`。
+4. **本体装配**：`create_eye()`（摄像机眼）→ `create_modularInterface()`（模块化界面）→ `set_core_display_icon`（核心外观）→ 火花特效系统 → 广播新 AI 上线（二进制频道 "[SYSTEM] NEW REMOTE HOST HAS CONNECTED"）→ `GLOB.ai_list += src`。
+5. **after_spawn 同步赛博格（Nova 覆写）**：遍历全站 `GLOB.silicon_mobs`，跳过非站内 Z 层（幽灵咖啡厅/Interlink/冰层遗迹地下）与 emagged 赛博格；对未连接 AI 的赛博格强制 `set_connected_ai` + `lawsync()` + `lawupdate = TRUE`（"LawSync protocol engaged."）；外壳（shell）赛博格强制 `undeploy()`。TG 原版的同段代码已被移除（NOVA EDIT REMOVAL）。
+6. **中途加入**：`latejoin_inactive` 网络化 AI 核心（"connected by bluespace transmitters to NTNet, allowing for an AI personality to be downloaded to it on the fly mid-shift"）——multitool 可开关 `active`；可用条件：站内 Z 层 + 地板 turf + 区域 `power_equip` 供电 + 非 blob 区域（`is_available()`）。
+7. **死亡/重生**：`on_respawn()` → `AIize()`（`transform_procs.dm` L88，人形→AI 转化，落在 AI 出生点 landmark）。
+
+#### 核心元件（AI 核心结构 `/obj/structure/ai_core`）
+
+**代码**: `code/game/machinery/ai_core/_core.dm`
+
+| 元件 | 内容 |
+|---|---|
+| 材料 | 4 片塑钢 (`custom_materials = /datum/material/alloy/plasteel × 4`)；`max_integrity = 500`；初始未锚定 |
+| 电路板 | `/obj/item/circuitboard/aicore`（`circuit.battery` 存核心电量，卡片化 AI 转核心时继承） |
+| 大脑 | MMI（`/obj/item/mmi` + 人脑）或机械脑 posibrain；`posibrain_inside = TRUE` 默认（拆解时产出 posibrain） |
+| 建造状态机 | `CORE_STATE_EMPTY(0)` → `CIRCUIT(1)` 插电路板 → `SCREWED(2)` 拧螺丝 → `CABLED(3)` 接线（放入 MMI）→ `GLASSED(4)` 装强化玻璃 ×2 → `FINISHED(5)` 完成（`code/__DEFINES/construction/structures.dm` L4-9） |
+| 拆解掉落 | 2 片强化玻璃 (rglass)、5 段线缆 (cable_coil)、MMI、电路板、4 片塑钢（`atom_deconstruct`） |
+| 电源 | `battery = 200`（应急电量）；`power_requirement = POWER_REQ_ALL`（需要区域 `power_equip` 供电且非太空地板；卡进 aicard/机甲时豁免） |
+| 断电流程 | `ai_lose_power` → 临时失明 2 秒 → `start_RestorePowerRoutine` 分阶段恢复（检查区域供电 → 搜索 APC → `apc_override` 直接操作 APC 界面）；`battery ≤ 0` 且断电 → 每次 200 点缺氧伤害（`life.dm` L17-19） |
+
+#### 初始装备/机体
+
+AI 无 `/datum/outfit/job/ai`（不存在 outfit），直接 spawn 机体；以下为机体自带组件（`ai_defines.dm` / `ai.dm`）：
+
+| 组件 | 内容 |
+|---|---|
+| 耳机 | `/obj/item/radio/headset/silicon/ai`（硅基耳机）；`radiomod = ";"`（默认在内部频道播报法则）；`:b` 二进制频道与赛博格/其他 AI 通话 |
+| 摄像机 | `builtInCamera`（无 c_tag，**不出现在摄像机控制台**）+ `aicamera`（`siliconcam/ai_camera` 拍照机） |
+| 多功能工具 | `aiMulti`（假 multitool，用于电信机械维修） |
+| HUD | `silicon_huds = TRAIT_MEDICAL_HUD_SENSOR_ONLY（医疗·仅传感器） + TRAIT_SECURITY_HUD_ID_ONLY（安保·仅ID） + TRAIT_DIAGNOSTIC_HUD（诊断） + TRAIT_BOT_PATH_HUD（机器人路径）` |
+| 视野 | `sight = SEE_TURFS \| SEE_MOBS \| SEE_OBJS`（断电恢复流程中清除）；`hud_type = /datum/hud/ai` |
+| 体型 | `mob_size = MOB_SIZE_LARGE`、`density = TRUE`、`move_resist = MOVE_FORCE_OVERPOWERING`（锚定时不可推动） |
+| 内在特质 | `TRAIT_AI_ACCESS`（AI 访问权限）、`TRAIT_PULL_BLOCKED`（不可被拖拽）、`TRAIT_HANDS_BLOCKED`（无手）、`TRAIT_CAN_GET_AI_TRACKING_MESSAGE`、`TRAIT_LOUD_BINARY`（`ai.dm` L101） |
+
+#### 技能芯片
+
+无（`ai.dm` 未定义 `skillchips`；AI 为硅基机体，不携带人形芯片）。
+
+#### 行为系统
+
+**代码**: `ai/` 目录对照（`freelook/eye.dm`、`multicam.dm`、`robot_control.dm`、`life.dm`、`ai_say.dm`、`emote.dm`、`vox_sounds.dm`、`ai_actions/remote_power.dm`）
+
+- **摄像机眼 (freelook/eye.dm)**：主眼 `eyeobj` + `all_eyes` 多眼列表；默认网络 `CAMERANET_NETWORK_SS13`；`sprint = 10`（加速移动，每 10 格提速）；热键 **1-9**（`Ctrl+数字` 保存当前视野为书签，数字跳转）、**` 或 0** 返回上一位置（`cam_prev`）；摄像头灯光 `camera_light_on`（照亮所经区域摄像机）。
+- **追踪**：`track <名字>` 指令（`ai_camera_track`，隐藏 verb）+ `ai_tracking_tool` 追踪工具，跟随目标并同步滑行速度；可一键追踪赛博格（状态标签链接）。
+- **多窗口 (multicam.dm)**：`max_multicams = 6` 个画中画 (pic_in_pic) 监控窗。
+- **全息投影**：`ai_hologram_change`（更换全息图：分类图标 / 站员形象 / **自己的角色形象**——`render_new_preview_appearance`）；`holopad` 全息垫：移动全息影像、接听 holopad 请求（`jump_to_holopad`）。
+- **显示屏控制**：`pick_status_display` 设置**全站 AI 状态显示屏**表情（`apply_emote_display` 遍历所有 `/obj/machinery/status_display/ai`）；`pick_icon` 设置 AI 核心显示屏外观。
+- **警报控制 (alert_control)**：六类警报 `ALARM_ATMOS（大气）/ FIRE（火警）/ POWER（电力）/ CAMERA（摄像机）/ BURGLAR（闯入）/ MOTION（动作）`，`camera_view = TRUE` 可看报警点画面。
+- **机器人控制 (robot_control.dm)**：`RemoteRobotControl` UI——`callbot` 召唤机器人到指定地点（`setting_waypoint` 点选路径）、`interface` 远程接管（仅 `BOT_MODE_REMOTE_ENABLED` 的 bot，如地板清洁机/货舱机器人）。
+- **赛博格面板**：`connected_robots` 列表，每台显示 名称/结构完整性/电量（当前/最大）/型号/所在区域/状态（`Nominal` 正常 / `AI SHELL` 外壳 / `OFFLINE` 离线 / `DEPOWERED` 断电）。
+- **呼叫穿梭机**：`ai_call_shuttle`（紧急撤离，需 `control_disabled` 检查 + 输入原因）。
+- **VOX 语音**：`AI_VOX` 编译开关下可播音箱广播（`vox_sounds.dm`），`last_announcement` 记录失败重试。
+- **外壳部署**：`deploy_to_shell`（部署到可用 AI 外壳 `GLOB.available_ai_shells`）/ `deploy_last_shell` / 收回。
+- **其他命令**（AI Commands 分类）：`toggle_anchor` 切换地板螺栓（失能时耗 50 电量）、`ai_network_change` 跳转摄像机网络、`control_integrated_radio` 开关集成无线电、`set_automatic_say_channel` 设置自动发言频道。
+
+#### 交互与防御
+
+**代码**: `ai_defense.dm` / `_core.dm` L222-263（transfer_ai）
+
+- **法则上传**：`/obj/item/ai_module`（法则卡）直接 `MOD.install(laws, user)`（需 `disconnect_shell` 先断开外壳）。
+- **撬棍**：开核心面板（AI 活着需其同意 / 机器人学 ACCESS_ROBOTICS 权限 / emag 强开；死亡时 40 秒、存活 5 秒）。
+- **剪线钳**：拆解 AI → 变回核心结构（`ai_mob_to_structure` → MMI 掉出；AI 死亡 5 秒、活着 40 秒；**malf AI 拆解者触电 120 伤害**）。
+- **扳手**：拧地板螺栓（活着且清醒时由 AI 自己控制，无法外人拆）。
+- **emag**：短路面板锁（`emagged = TRUE`，之后撬棍开盖无需权限/同意）。
+- **卡片化 (aicard)**：`can_be_carded = TRUE` 默认可被 AI 卡收纳；转移回核心时 `AI.battery = circuit.battery` 继承电量。
+- **EMP**：30% 概率随机事故——切回核心视角 / 误触发"AI 核心能量激增"紧急呼叫穿梭机（`ai_defense.dm` L21-31）。
+- **爆炸**：DEVASTATE 直接碎成渣、HEAVY 60 钝 + 60 火伤、LIGHT 30 钝伤。
+- **blob**：60 钝伤；**闪光弹免疫**（无眼）；`ignite_mob` 无效（不着火）。
+- **锚定**：初始 `is_anchored = TRUE` + `TRAIT_NO_TELEPORT`（`AI_ANCHOR_TRAIT`），不可传送不可推动。
+
+#### 特质
+
+无 `mind_traits` / `liver_traits`（AI 为纯硅基机体，无人形器官；全部特质为 `INNATE_TRAIT` 内在特质，见上表）。
+
+#### 邮件礼物 (mail_goodies)
+
+无（`ai.dm` 未定义 `mail_goodies`——硅基不享受邮件系统）。
+
+#### Nova 扩展
+
+**代码**: `code/modules/jobs/job_types/ai.dm`（Nova EDIT 标注处）
+
+- **after_spawn 全站赛博格强制同步**（NOVA EDIT ADDITION）：出生即接管所有未连接的站内赛博格（跳过 emagged / 幽灵咖啡厅 / Interlink / 冰层遗迹），强制 `lawsync()` + `lawupdate = TRUE`，TG 原版同名逻辑已被 Nova 移除。
+- `announce_job`：出生时 `minor_announce` 广播 AI 位置（`AREACOORD`）。
+- `get_radio_information`：提示用 `:b` 与赛博格及其他 AI 通话。
+- 岗位数量保持 1（原版即 1）；`get_lobby_icon = hudai`。
+- `config_check` 受 `CONFIG_GET(flag/allow_ai)` 控制（服务器可关 AI）。
+
+#### 一句话总结
+
+**AI = 全站摄像机网络之眼 + 法则核心 + 赛博格指挥官（强制 LawSync）+ 断电即瞎的玻璃心皇帝**
+
+人形自走防火墙：看得见全站每一个角落，却离不开核心那 500 点血和 200 点应急电——赛博格是你伸出去的手，法则卡是你的紧箍咒。
+
+---
+
+### 二、赛博格 Cyborg
+
+**代码**: `code/modules/jobs/job_types/cyborg.dm` + `code/modules/mob/living/silicon/robot/`（robot.dm / robot_defines.dm / robot_model.dm / laws.dm / robot_defense.dm / robot_movement.dm / inventory.dm / robot_say.dm / login.dm / logout.dm / life.dm / examine.dm / emote.dm / death.dm）+ Nova：`modular_nova/modules/borgs/`（cargo 型号 + altborgs 皮肤）
+
+#### 基础信息表
+
+| 项目 | 内容 |
+|---|---|
+| 岗位数量 | 3 总 / 3 出生 (`total_positions = 3` / `spawn_positions = 3`，**NOVA EDIT：原版 TG 为 0**) |
+| 上级 | your laws and the AI（法则与 AI）— `supervisors = "your laws and the AI"` |
+| 部门 | 硅基部 (`/datum/job_department/silicon`) |
+| 工资等级 | 无（硅基不发薪） |
+| 经验要求 | 120 分钟；经验类型 = 船员经验 (EXP_TYPE_CREW)，无部门要求；发放船员经验 |
+| 玩家年龄 | 21 天 (`minimal_player_age = 21`) |
+| 其他 | `auto_deadmin_role_flags = DEADMIN_POSITION_SILICON`；`spawn_type = /mob/living/silicon/robot`；`random_spawns_possible = FALSE`；`job_flags = JOB_NEW_PLAYER_JOINABLE | JOB_EQUIP_RANK | JOB_CANNOT_OPEN_SLOTS`；`config_tag = "CYBORG"` |
+
+#### 技能芯片
+
+无（`cyborg.dm` 未定义 `skillchips`——机体工具由 Model 模块系统承载，见下）。
+
+#### 机体部件（初始装备）
+
+赛博格无 outfit（`/datum/outfit/job/cyborg` 不存在），直接 spawn 机体；部件表（`robot_defines.dm` / `robot.dm`）：
+
+| 部件 | 内容 |
+|---|---|
+| 电池 | `/obj/item/stock_parts/power_store/cell/high`（高容量电池，`cell` 变量）——在充电站 (recharge station) 充能 |
+| 大脑 | MMI + 人脑（`mmi.brain`，`ORGAN_FROZEN` 冷冻保存）；`braintype = "Cyborg"`；默认名格式 `[型号]Cyborg-[编号]`（`get_standard_name()`，编号随机 1-999） |
+| 手臂 | **三只工具手**（`default_hand_amount = 3`，`held_items = list(null, null, null)` 存放模块） |
+| 无线电 | `/obj/item/radio/borg`（`:b` 二进制频道与 AI 通话） |
+| 平板 | `modular_computer/pda/silicon/cyborg`（`modularInterface` 模块化界面；NTOS 主题；emag/辛迪加 → 辛迪加红色主题） |
+| 摄像机 | `builtInCamera`（c_tag = 机体名，出现在摄像机控制台）+ `robot_camera` 拍照机；`WIRE_CAMERA` 线剪断即禁用 |
+| 头灯 | `lamp`：亮度 3（可调 1-5）、默认白光可改色；`lamp_doom` 时强制红色（doomsday 事件）；亮度档位对应耗电 (`BORG_LAMP_POWER_CONSUMPTION`) |
+| 碳粉 | `toner = 40` / `tonermax = 40`（打印用墨，充电时自动回满） |
+| 生命 | `maxHealth = 100` / `health = 100` |
+| 内在特质 | `TRAIT_CAN_STRIP`（可扒人装备）、`TRAIT_FORCED_STANDING`（强制站立）、`TRAIT_KNOW_ENGI_WIRES`（懂工程线缆）、`TRAIT_IGNORE_SURGERY_MODIFIERS`（手术修正无效）；EMP 线缆保护 (`EMP_PROTECT_WIRES`) |
+| 可推倒 | `tippable` 组件：3 秒推倒 / 2 秒扶起 / 60 秒自行起身（Nova 追加 beep2 表情）；可被骑乘 (`ridable`) |
+| HUD | `hud_possible = ANTAG_HUD + DIAG_STAT_HUD + DIAG_HUD + DIAG_BATT_HUD（电池诊断）+ DIAG_TRACK_HUD`；`hud_type = /datum/hud/robot` |
+| ID权限 | 无 ID 卡；`req_one_access = list(ACCESS_ROBOTICS)`（机器人学权限开面板） |
+| 身体可操作性 | `can_buckle = TRUE`（可搭载乘客，`buckle_lying = FALSE`）；`mouse_drop_zone = TRUE` |
+
+#### Module 选择（型号系统）
+
+**代码**: `robot.dm` L153-196（pick_model）、`robot_model.dm`（各型号）
+
+- **出生即选择**：`pick_model()` 弹出径向菜单（`GLOB.cyborg_base_models_icon_list`，Nova 用 `modular_nova/master_files/icons/mob/robots.dmi` 图标）；`WIRE_RESET_MODEL` 线剪断或锁定 (lockcharge) 时禁止切换。
+- **可选型号**（`GLOB.cyborg_model_list`，Nova 静态化缓存）：**Engineering 工程 / Medical 医疗 / Cargo 货舱（Nova 新增）/ Miner 矿工 / Janitor 清洁 / Service 服务**；**Peacekeeper 和平卫士**（`CONFIG disable_peaceborg` 可关）、**Security 安保**（`CONFIG disable_secborg` 可关）按配置开关。
+- **变换流程** `transform_to()`：`locked_transform = TRUE` 时锁定 + 锚定 → 播放 `[型号]_transform` 动画 + 4 声工具音效（钻头/钳子/撬棍/焊枪/棘轮随机）→ 解锁；变换期间 `TRAIT_NO_TRANSFORM` 不可再次切换；可先选**皮肤**（`borg_skins` 径向重涂，`be_transformed_to`）。
+- **模型属性**：`basic_modules`（基础工具）、`emag_modules`（emag 后追加）、`model_traits`（型号特质）、`radio_channels`（专属频道）、`cyborg_base_icon`（外观）、`canDispose`（可否进管道）、`allow_riding`（可否被骑）。
+- **耗材补充**：充电站内 `respawn_consumable` 免费补充耗材（每次耗电池 0.5%）；`restock_consumable` 从充电站材料仓补料（修复等级 0-3 → 除数 8→5，越高越快）。
+
+**各型号工具清单**（`robot_model.dm`，Nova 改动已标注）：
+
+- **工程 Engineering**（`radio_channels = 工程频道`；`model_traits = TRAIT_NEGATES_GRAVITY` 反重力）：赛博格闪光弹 flash/cyborg、RCD borg 建筑器、管道铺设器 pipe_dispenser、灭火器、大罐焊枪 weldingtool/largetank/cyborg、工程万能工具 cyborg_omnitool/engineering、multitool/cyborg（Nova 保留）、动力撬棍 crowbar/cyborg/power（Nova 加）、动力螺丝刀 screwdriver/cyborg/power（Nova 加）、t_scanner 扫描仪、分析仪 analyzer、大气全息告示器 holosign_creator/atmos（Nova 加）、信号器 assembly/signaler/cyborg、工程蓝图 blueprints/cyborg、电适应伪电路 electroadaptive_pseudocircuit、铁板/玻璃板、板材操纵器 borg/apparatus/sheet_manipulator、杆子 stack/rods/cyborg、换灯器 lightreplacer（Nova 加）、RTD borg 拆除器、零件替换器 storage/part_replacer（Nova 加）、工程夹具 borg/apparatus/engineering（Nova 加）、线缆线圈、气锁涂装器 airlock_painter/decal/cyborg；**emag**：电击棒 borg/stun；额外动作：**meson 夜视** (borg_meson)。
+- **医疗 Medical**（`model_traits = TRAIT_PUSHIMMUNE` 推不动；医疗频道）：flash、健康分析仪 healthanalyzer、医疗 hypospray (borghypo/medical)、烧杯夹具 borg/apparatus/beaker、滴管、注射器、医疗万能工具 ×2、血液过滤器 blood_filter、迷你灭火器、硅基急救床 emergency_bed/silicon、医疗拥抱 cyborghug/medical、纱布 gauze、骨胶 bone_gel、器官储存夹具 borg/apparatus/organ_storage、棒棒糖 lollipop、化学包 storage/bag/chemistry；**emag**：医疗 hypospray hacked；皮肤：Machinified Doctor / Qualified Doctor。
+- **货舱 Cargo（Nova 独家，`modular_nova/modules/borgs/code/robot_model.dm` L346）**（货运频道；`canDispose = TRUE`）：盖章 stamp/granted、拒章 stamp/denied、笔 pen/cyborg、剪贴板 clipboard/cyborg、开箱刀 boxcutter、包装纸 stack/package_wrap/cyborg、圣诞包装纸 wrapping_paper/xmas/cyborg、flash、液压钳 borg/hydraulic_clamp、邮件液压钳 borg/hydraulic_clamp/mail、标签机 hand_labeler/cyborg、目的地标签器 dest_tagger、工程万能工具、大罐焊枪、灭火器、万能扫描仪 universal_scanner；**emag**：变色龙章 stamp/chameleon、纸飞机弩 borg/paperplane_crossbow；皮肤 15+ 种（Technician / Miss M / Zoomba / Birdborg / Borgi / Drake / Hound / Darkhound / Vale / SmolRaptor / Meka / K4T ×2 / NiKA / NiKO / Dullahan ×2）；专属升级：货舱传送器 (cargo_teleporter)、纸操纵器 (cargo_papermanipulator)。
+- **矿工 Miner**（科研 + 货运双频道）：flash、矿石包 storage/bag/ore/cyborg、钻头镐 pickaxe/drill、铲子、撬棍、迷你焊枪、迷你灭火器、板材收纳袋 sheetsnatcher/borg、动能加速器 gun/energy/recharge/kinetic_accelerator/cyborg、GPS/cyborg、信标堆 marker_beacon、高级采矿扫描器 t_scanner/adv_mining_scanner/cyborg、护盾模块 shield_module；**emag**：电击棒；meson 夜视动作；皮肤：Asteroid / Spider / Lavaland Miner。
+- **清洁 Janitor**（服务频道）：flash、清洁箱 cleaner_box、螺丝刀、撬棍、铁地砖 stack/tile/iron/base/cyborg、肥皂 soap/nanotrasen/cyborg、垃圾桶袋 storage/bag/trash、苍蝇拍 flyswatter、迷你灭火器、拖把、水桶 cup/bucket、除漆剂 paint_remover、换灯器 lightreplacer、全息告示器 holosign_creator、干燥喷雾 spray/cyborg_drying、钢丝刷 wirebrush；**emag**：润滑油喷雾 spray/cyborg_lube；额外动作：**auto-wash 自动清洗**（4 秒启动、移动减速、每步耗水 2）。
+- **服务 Service**（服务频道）：flash、专用调酒器 ×4（酒精/汽水/果汁/杂项，**Nova 拆分**，原版为通用 borgshaker）、烧杯夹具 ×2（Nova 加第二个）、大烧杯、滴管、注射器（Nova 加）、RSF 食物合成器、托盘 ×2（Nova 加第二个）、烹饪器 cooking/cyborg/power（Nova 加）、笔、喷漆罐 crayon/spraycan/borg、迷你灭火器、标签机、剃刀、吉他、钢琴合成器 piano_synth、打火机、棒棒糖、管道清洁器线圈 pipe_cleaner_coil/cyborg、凿子 chisel、抹布、钱袋 storage/bag/money；**emag**：调酒器 hacked；皮肤：Bro / Butler / Kent / Tophat / Waitress / Gardener。
+- **和平卫士 Peacekeeper**（`model_traits = TRAIT_PUSHIMMUNE`）：flash、曲奇合成器 rsf/cookiesynth、警报喇叭 harmalarm、和平 hypospray (borghypo/peace)、全息告示器 holosign_creator/cyborg、和平拥抱 cyborghug/peacekeeper、灭火器、弹道阻尼器 borg/projectile_dampen；**emag**：hypospray hacked；变换台词强调和平执法（Nova 改原文案）。
+- **安保 Security**（安保频道；`model_traits = TRAIT_PUSHIMMUNE`）：flash、塑料扎带 restraints/handcuffs/cable/zipties、电击棒 melee/baton/security/loaded、失能枪 gun/energy/disabler/cyborg、安保吼叫器 mask/gas/sechailer/cyborg、迷你灭火器；**emag**：激光枪 gun/energy/laser/cyborg；respawn 时 advtaser 自动充能。
+
+#### 电池 / 供电
+
+**代码**: `robot.dm` L1013-1024（charge）、L238-260（ionpulse）
+
+- **充电站**：`COMSIG_PROCESS_BORGCHARGER_OCCUPANT` → `charge()`——同时执行 `respawn_consumable`（补耗材）、`restock_consumable`（补材料）、修复伤害 (`repairs`) 和电池充电 (`charge_cell`)。
+- **低电量模式** `low_power_mode`：电量耗尽后无法与物品交互（`can_interact_with` 直接 FALSE）。
+- **离子推进** `ionpulse`（`robot_defines.dm`）：喷气背包式机动，每格耗 `0.01 * STANDARD_CELL_CHARGE`，带离子尾迹特效（默认仅辛迪加机体开启）。
+- 状态标签实时显示电量（`display_energy(charge)/display_energy(maxcharge)`）。
+
+#### 传感器
+
+- 内置摄像机 + 诊断 HUD 组（结构/状态/电池/追踪）；工程/矿工型号带 meson 夜视动作、辛迪加 saboteur 带热成像夜视 (borg_thermal)。
+- 警报 UI 同 AI：`ALARM_ATMOS / FIRE / POWER / CAMERA / BURGLAR / MOTION` 六类（`robot.dm` L83-93），死亡时冻结警报变更。
+
+#### 特质
+
+无 `mind_traits` / `liver_traits`（硅基）。**法则同步**为机体核心机制（`laws.dm`）：
+
+- `lawupdate = TRUE` 默认：与 `connected_ai` 的法则实时同步——`lawsync()` 全量复制 AI 的 ion（离子法则）/ hacked（黑客法则）/ zeroth（第零法则，AI 有 `zeroth_borg` 时用赛博格特供版）/ inherent（固有法则）/ supplied（补充法则）五个槽位。
+- 每次 `show_laws()` 查看法则时，AI 会强制提醒所有同步赛博格（`try_sync_laws()`：同步 + 显示 "Your AI has reminded you of your laws"）。
+- 与 malf AI 断开连接时自动清除其 zeroth 法则（`set_connected_ai`，`robot.dm` L1035-1036）。
+
+#### 邮件礼物 (mail_goodies)
+
+无（`cyborg.dm` 未定义——硅基不享受邮件系统）。
+
+#### Nova 扩展
+
+**代码**: `cyborg.dm`（Nova EDIT）+ `modular_nova/modules/borgs/` + `robot_defines.dm`（altborgs）
+
+- **岗位数量 0 → 3**（NOVA EDIT 注释 "Original value (0)"）。
+- **货舱型号 Cargo**（Nova 独家）及专属升级（货舱传送器/纸操纵器/金属升级，`robot_upgrade.dm`）。
+- **altborgs 皮肤系统**：`model_features`（TRAIT_R_WIDE 宽体 / TRAIT_R_TALL 高体 / TRAIT_R_SMALL / TRAIT_R_UNIQUEWRECK / TRAIT_R_UNIQUETIP / TRAIT_R_UNIQUEPANEL），变换动画与四足/高个机体支持；`robot_defines.dm` 改图标允许自定义变换动画。
+- **after_spawn 优先连 AI**：若有 malf AI（`/datum/antagonist/malf_ai`）优先连接之，否则随机常规 AI；连接成功即 `lawsync + lawupdate = TRUE`（Nova ADDITION）。
+- `GLOB.cyborg_model_list` 静态化（Nova 优化，减少重复生成）。
+- `get_lobby_icon = hudcyborg`；`get_radio_information` 提示 `:b` 二进制频道。
+- 辛迪加变体（`robot_defines.dm` L185-243，核战专属，非玩家可选岗位）：assault 突击（LMG/能量打印枪/榴弹左轮/emag/指北针）、medical 医疗（restorative nanites 治疗纳米剂/除颤器/能量锯）、saboteur 破坏者（变色龙投影伪装/管道传送标签器）、kiltborg 苏格兰高地人（阔剑+核指北针，50 血三刀死）。
+
+#### 一句话总结
+
+**赛博格 = 三只工具手 + 8 种可选型号（含 Nova 货舱） + AI 法则实时同步 + 电池续航焦虑的硅基劳模**
+
+全站最灵活的"瑞士军刀"：工程补天、医疗救命、服务调酒、安保执法——但每一格移动、每一个动作都烧电池，充电站就是你的家。
+
+---
+
+### 三、助手 Assistant
+
+**代码**: `code/modules/jobs/job_types/assistant/assistant.dm` + `colorful_assistants.dm` + `gimmick_assistants.dm` + Nova 覆写 `modular_nova/master_files/code/modules/jobs/job_types/assistant/assistant.dm`
+
+#### 基础信息表
+
+| 项目 | 内容 |
+|---|---|
+| 岗位数量 | 5 总 / 5 出生 (`total_positions = 5` / `spawn_positions = 5`) |
+| 上级 | absolutely everyone（"所有人"）— `supervisors = "absolutely everyone"` |
+| 部门 | 助手部门 (`/datum/job_department/assistant`，`department_for_prefs`；无部门账目归属) |
+| 工资等级 | PAYCHECK_LOWER（**最低工资档**）；`paycheck_department = ACCOUNT_CIV`（民事账目）——注释 "Get a job. Job reassignment changes your paycheck now."（去要份工作，转职会换工资） |
+| 经验要求 | 无（无 exp_requirements / minimal_player_age）；发放船员经验 (EXP_TYPE_CREW) |
+| 玩家年龄 | 无 |
+| 其他 | `liver_traits = list(TRAIT_MAINTENANCE_METABOLISM)`；`family_heirlooms = /obj/item/storage/toolbox/mechanical/old/heirloom（旧机械工具箱）+ /obj/item/clothing/gloves/cut/heirloom（破洞手套）`；`rpg_title = "Lout"`（痞子）；`job_flags = STATION_JOB_FLAGS`（标准船员全套）；`config_tag = "ASSISTANT"` |
+
+#### 技能芯片
+
+无职业技能芯片（`assistant.dm` 未定义 `skillchips`；但 gimmick 变体 **园丁 Gardener** 自带 `skillchip/bonsai` 盆景芯片，见下）。
+
+#### 初始物品/装备
+
+**代码**: `/datum/outfit/job/assistant`
+
+| 部位 | 物品 |
+|---|---|
+| ID | `/datum/id_trim/job/assistant` — 助手 ID（基本船员权限） |
+| 腰带 | 助手PDA (modular_computer/pda/assistant) |
+| 制服 | **彩色连体服系统**（`give_jumpsuit`）：按出生序号轮换 `GLOB.colored_assistant` 颜色集（`jumpsuit_number % len`）；`jumpsuit_style == PREF_SUIT` 时穿连体服，否则裙装；Nova 默认 uniform = `/obj/item/clothing/under/color/random` |
+| 头部 | 节日帽（`give_holiday_hat`：当日节日有 `holiday_hat` 且有 `HOLIDAY_HAT_CHANCE` 概率则戴上） |
+
+**彩色变体**（`colorful_assistants.dm`，`get_configured_colored_assistant_type()` 按服务器 `grey_assistants` 配置选择）：
+
+| 变体 | 颜色（连体服/裙装） |
+|---|---|
+| grey（灰） | 灰 (color/grey) |
+| random（随机） | 随机色 (color/random) |
+| christmas（圣诞） | 绿 / 红 |
+| mcdonalds（麦当劳） | 黄 / 红 |
+| halloween（万圣节） | 橙 / 黑 |
+| ikea（宜家） | 黄 / 蓝 |
+| mud（泥巴） | 棕 / 浅棕 |
+| warm（暖色） | 红 / 粉 / 橙 / 黄 |
+| cold（冷色） | 蓝 / 深蓝 / 深绿 / 绿 / 浅紫 / 青 |
+| solid（纯色） | 随机单色（New 时抽一次，整个回合固定） |
+
+**Gimmick 变体**（`gimmick_assistants.dm`，站台特征 `STATION_TRAIT_ASSISTANT_GIMMICKS` 触发时按 `outfit_weight` 权重随机（`get_outfit` → `pick_weight`），共 20 种，全量）：
+
+| 变体 | 权重 | 装备 |
+|---|---|---|
+| Bee 蜜蜂 | 2 | 蜜蜂兜帽服 + 黄制服 + **蜜蜂优惠券** (coupon/bee：养蜂全套补给包 7 折) |
+| Chicken 小鸡 | 2 | 鸡套装 + 鸡头 + 受精蛋盒 (egg_box/fertile) |
+| Cardborg 纸板机器人 | 2 | 纸板机器人服/头 + 黑制服 + 大罐焊枪 + 线缆 5 段 + **植入机器人舌头** (tongue/robot) |
+| Skater 滑板少年 | 6 | 红 tag 头盔/夹克 + 滑板 (melee/skateboard) + 橙制服 |
+| Rollerskater 轮滑少女 | 6 | 蓝 tag 头盔/夹克 + 轮滑鞋 (wheelys/rollerskates) + 深蓝制服 |
+| Fisher 渔夫 | 3 | 羽绒背心 + **钓鱼工具箱** (storage/toolbox/fishing) + 蓝制服 |
+| Patient 病人 | 3 | 外科围裙 + 白制服 + multiver 药瓶 + mutadone 药瓶 |
+| Mopper 拖地工 | 5 | 警示马甲 + 拖把 + **出生点生成拖把桶**并拖行 (mop_bucket) |
+| Broomer 扫帚工 | 5 | 警示马甲 + 推帚 (pushbroom) + 垃圾袋 + 浅紫制服 |
+| Hall Monitor 走廊纠察 | 2 | 警察收集帽 + 哨子 + 相机 + 红制服 |
+| Monkey 猴子 | 1 | 猴装 + 猴面具 + 猴立方 ×2 |
+| Fleshy 肉人 | 1 | 浮肿人套装 + 泡沫刀 (foamblade) |
+| Lightbringer 光之使者 | 3 | 黄制服 + 撞球头套 + 黑手套 + 提灯 (flashlight/lantern) + 换灯器 (lightreplacer) |
+| Handyman 勤杂工 | 6 | 警示马甲 + **满配工具腰带** (belt/utility/full) + 安全帽 + 黄制服 + PDA |
+| Magician 魔术师 | 2 | 高顶帽 + 浅紫制服 + "nothing" 魔杖 (gun/magic/wand/nothing) |
+| Firefighter 消防员 | 3 | 红安全帽 + 警示马甲 + 红制服 + 烫伤药膏 + 迷你灭火器 |
+| Gardener 园丁 | 3 | 绿制服 + **bonsai 盆景技能芯片** + 塑料刀 + 随机盆栽 (kirbyplants/random) |
+| Artist 艺术家 | 3 | 彩虹制服 + 蜡笔盒 (storage/crayons) |
+| Bear 熊 | 6 | 熊皮头 + 熊套装 + 黑运动鞋 + 黑制服 |
+
+#### 特质
+
+**心灵特质 (mind_traits)**: 无。
+
+**肝特质 (liver_traits)**:
+```
+liver_traits = list(TRAIT_MAINTENANCE_METABOLISM)
+```
+**TRAIT_MAINTENANCE_METABOLISM — 维护通道代谢**（"下水道体质"）逐个效果：
+
+| 效果 | 位置 |
+|---|---|
+| ① 肝脏检查显示"维护通道代谢"提示 | `surgery/organs/internal/liver/_liver.dm` L108 |
+| ② **治安官军刀克制 (bane)**：HoS 军刀 (`/obj/item/melee/sabre`) 对持此肝特质者触发克制效果——额外伤害与专属台词（"assistants" bane，`weaponry/melee/sabre.dm` L45-53）——**HoS 砍助手更疼** | `sabre.dm` L47 |
+| ③ **Grey Bull 能量饮料**：代谢时获得 `maintenance_high`（维护高）心情事件 + 代谢率 ×0.8（更持久） | `drink_reagents.dm` L553-558 |
+| ④ **pumpup 兴奋剂**：同上（心情 + 代谢 ×0.8） | `drug_reagents.dm` L367-372 |
+| ⑤ **maint 下水道药物**：`maintenance_high` 心情 + 幻觉（专属幻象：被警察追捕 seccies 幻象 preset，与喜剧代谢 COMEDY 并列判定）| `drug_reagents.dm` L410-420、L976 |
+
+**直观理解**: 助手天生"地沟油体质"——喝功能饮料更上头、磕药更嗨、还能看到警察幻象；代价是 HoS 的军刀专砍你这种肝。
+
+#### 邮件礼物 (mail_goodies)
+
+| 物品 | 权重 | 说明 |
+|---|---|---|
+| donkpockets 随机食品 (spawner/food_or_drink/donkpockets) | 10 | 常见 |
+| 防毒面具 (clothing/mask/gas) | 10 | 常见 |
+| 黄色手套 (gloves/color/fyellow) | 7 | 较常见 |
+| 音乐信标 (choice_beacon/music) | 5 | 稀有 — 白嫖一首歌 |
+| 喷漆罐玩具 (toy/sprayoncan) | 3 | 稀有 |
+| 大撬棍 (crowbar/large) | 1 | 极稀有 — "去撬点什么吧" |
+
+#### Nova 扩展
+
+**代码**: `modular_nova/master_files/code/modules/jobs/job_types/assistant/assistant.dm`
+
+- `allow_bureaucratic_error = FALSE`（出生档案无官僚错误）。
+- Nova 覆写 `uniform = /obj/item/clothing/under/color/random`（默认随机色制服）。
+- `give_jumpsuit` 尊重 loadout：玩家自定义了制服时**不覆盖**（`modified_outfit_slots & ITEM_SLOT_ICLOTHING` 检查，preview 同理）。
+
+#### 一句话总结
+
+**助手 = 最低工资 + 彩色工服轮换（10 色系）+ 20 种随机搞怪变体 + 维护代谢肝（HoS 军刀特攻）**
+
+全站最自由的"人形自走梗"：可能出生在养蜂场、滑板场或消防队，但本质都是——去找 HoP 要份工作吧。
+
+---
+
+## 第五篇补遗 · NOVA 特有职业（理发师）
+
+### 十一、理发师 Barber（补遗）
+
+**代码**: `modular_nova/modules/salon/code/barber.dm`（职业）+ `barber_chair.dm` / `barbervend.dm` / `scissors.dm` / `straight_razor.dm` / `fur_dyer.dm` / `hair_tie.dm` / `hand_dryer.dm` / `pipette.dm` / `sprays.dm` / `misc_items.dm` / `clothing.dm` + `modular_nova/modules/hairbrush/code/skillchip.dm`（芯片）
+
+#### 基础信息表
+
+| 项目 | 内容 |
+|---|---|
+| 岗位数量 | 2 总 / 2 出生 (`total_positions = 2` / `spawn_positions = 2`) |
+| 上级 | 人事部长 HoP (`SUPERVISOR_HOP`) |
+| 部门 | 服务部 (`/datum/job_department/service`) |
+| 工资等级 | PAYCHECK_CREW（船员薪）；`paycheck_department = ACCOUNT_SRV`（服务账目） |
+| 经验要求 | 无（无 exp_requirements / minimal_player_age）；发放船员经验 (EXP_TYPE_CREW) |
+| 其他 | `bounty_types = CIV_JOB_BASIC`（平民基础赏金）；`plasmaman_outfit = /datum/outfit/plasmaman`（等离子体变体）；`family_heirlooms = /obj/item/hairbrush/comb（梳子）+ /obj/item/razor（电动剃刀）`；`config_tag = "BARBER"`；`job_flags = JOB_ANNOUNCE_ARRIVAL（到岗播报）\| JOB_CREW_MANIFEST \| JOB_EQUIP_RANK \| JOB_CREW_MEMBER \| JOB_NEW_PLAYER_JOINABLE \| JOB_REOPEN_ON_ROUNDSTART_LOSS \| JOB_ASSIGN_QUIRKS \| JOB_CAN_BE_INTERN（可当实习生）` |
+
+#### 技能芯片
+
+**H41R 3XP3R7 —— 理发专家（Hair Expert）**（出生自带，`barber.dm` L36 `skillchips = list(/obj/item/skillchip/hair_expert)`；附录 10 号芯片已有详解）：
+
+```
+/obj/item/skillchip/hair_expert
+  name = "H41R 3XP3R7 skillchip"
+  auto_traits = list(TRAIT_HAIR_EXPERT)
+  skill_name = "Hair expert"
+```
+**TRAIT_HAIR_EXPERT 效果**（`modular_nova/modules/salon/code/scissors.dm` L55,80）：
+- **剪发提速**：发型更换 60 秒 → **45 秒**（`haircut_duration_expert`）；胡须 20 秒 → **15 秒**（`facial_haircut_duration_expert`）。
+- **梳头心情加成**：用梳子梳头获得优质心情事件（与 `TRAIT_SELF_AWARE` 同档，`hairbrush.dm` L77,84）。
+- 理发售货机有售（`barbervend.dm` L28，premium 档 2 枚，指挥级价格）。
+
+#### 初始物品/装备
+
+**代码**: `/datum/outfit/job/barber`（`barber.dm` L26-36）
+
+| 部位 | 物品 |
+|---|---|
+| ID | `/datum/id_trim/job/barber`（`modular_nova/master_files/code/datums/id_trim/jobs.dm` L166）—— `minimal_access = ACCESS_BARBER（理发店）+ ACCESS_MAINT_TUNNELS（维护通道）+ ACCESS_SERVICE（服务）+ ACCESS_THEATRE（剧院）+ ACCESS_MINERAL_STOREROOM（矿物库房）`；`template_access = 船长/改ID/HoP`；服务部青柠色 ID (`COLOR_SERVICE_LIME`) |
+| 眼镜 | 墨镜 (clothing/glasses/sunglasses) |
+| 腰带 | PDA (modular_computer/pda) |
+| 耳机 | 服务耳机 (radio/headset/headset_srv) |
+| 制服 | 理发师制服 (under/rank/civilian/barber)——"白裤 + 低胸热粉衬衫" |
+| 鞋子 | 系带皮鞋 (shoes/laceup) |
+
+**更衣柜**（`secure_closet/barber`，`req_access = ACCESS_BARBER`，`PopulateContents()` 全量）：
+外科口罩、蓝色刷手服、外科围裙、马甲 (waistcoat)、紫色律师西装 + 紫色外套、电动剃刀 (razor)、直剃刀 (straight_razor)、梳子 (hairbrush/comb)、理发剪刀 (scissors)、电动染毛器 (fur_dyer)、染发喷雾 (dyespray)、口红盒 (box/lipsticks)、量子染发喷雾 (spray/quantum_hair_dye)、理发师生长剂 (spray/barbers_aid)、清洁喷雾 (spray/cleaner)、抹布、医疗包 (storage/medkit)。
+
+#### 理发椅交互与沙龙设施
+
+- **理发椅** `/obj/structure/chair/comfy/barber_chair`（`barber_chair.dm`）：舒适椅，"You sit in this, and your hair shall be cut."（坐上去，头发就会被剪）——理发店的招牌座位。
+- **售货机 Fab-O-Vend**（`barbervend.dm`，`req_access = ACCESS_BARBER`）：**常规**：量子染发喷雾 ×3、baldium 脱发喷雾 ×3、理发师生长剂 ×3、发带 (head/hair_tie) ×3、染发喷雾 (dyespray) ×5、梳子 ×3、梳子(comb) ×3、电动染毛器 ×1；**premium**：理发剪刀 ×3、超级理发师生长剂 ×3、口红盒 ×3、量子口红 ×1、电动剃刀 ×1、香水盒 ×1、**hair_expert 芯片 ×2**；`default_price = PAYCHECK_CREW`、`extra_price = PAYCHECK_COMMAND`、`payment_department = ACCOUNT_SRV`。
+- **理发店招牌** `/obj/structure/sign/barber`（`misc_items.dm` L176）：红蓝白三色条纹旋转灯柱，13 方向地图辅助（不可拆除）。
+
+**美发道具全录**（`modular_nova/modules/salon/code/`）：
+
+| 道具 | 机制 |
+|---|---|
+| 理发剪刀 scissors | 换发型 60 秒 / 胡须 20 秒（专家 45/15）；tgui 发型列表选择；剪完地上掉"头发屑" (`decal/cleanable/hair`)；目标已秃/已剃提示 |
+| 电动剃刀 razor | 5 秒 (`shaving_time`) 剃发 → "Bald"、剃须 → "Shaved"；导电材质 |
+| 直剃刀 straight_razor | 10 秒刮胡；**force = 12**、锋利 (SHARP_EDGED)、伤口加成 10（暴露 15）、`TOOL_KNIFE`——同时是把真刀 |
+| 电动染毛器 fur_dyer | 需电池 (cell 组件)；双模式：Specific Marking 特定纹章染色（按部位选纹章改色）/ General Color 通用色（3 种突变色 One/Two/Three）；20 秒 |
+| 量子染发喷雾 quantum_hair_dye | 30u hair_dye 试剂，**随机改发色** |
+| baldium 喷雾 | 30u baldium 试剂，**致秃**（过量使用顾客会不满） |
+| 理发师生长剂 barbers_aid | 50u，**快速生发**（头发+胡须） |
+| 超级理发师生长剂 super_barbers_aid | 30u 浓缩版，**超级快速生发** |
+| 发带 hair_tie | 头部装饰（head 槽，`hair_tie.dm`） |
+| 口红盒 + 量子口红 | 4 色口红（默认/紫/玉/黑）+ 量子口红（色盘自选）；量子口红 2 秒涂抹 |
+| 香水盒 | 10 种香水（古龙/木/玫瑰/茉莉/薄荷/香草/梨/草莓/樱桃/琥珀） |
+| 烘干机 hand_dryer | 理发店烘干设施 |
+| 滴管 pipette | 精确取液 |
+| 梳子 hairbrush/comb | 家族遗物之一，梳头（配 hair_expert 有高级心情） |
+
+#### 特质
+
+无 `mind_traits` / `liver_traits`（`barber.dm` 未定义）。
+
+#### 邮件礼物 (mail_goodies)
+
+无（`barber.dm` 未定义 `mail_goodies`）。
+
+#### Nova 扩展
+
+- **整个职业即 Nova 特有**（TG 原版无理发师；`modular_nova/modules/salon/` 全套沙龙模块：理发椅/售货机/道具/招牌/理发店地标 `landmark/start/barber`）。
+- 配套芯片 hair_expert（`modular_nova/modules/hairbrush/`）与发梳系统联动。
+- 天关模块 (modular_tianguan sop_book)：服务部职业按部门发放服务 SOP 手册。
+
+#### 一句话总结
+
+**理发师 = 2 人服务部发型师 + H41R 芯片剪发提速 25% + 理发椅/售货机/染毛器一条龙 + 直剃刀捅人 12 伤**
+
+全站唯一能合法把同事剃成秃子、染成彩虹、顺带卖香水的"美发沙皇"——记住，你的直剃刀既是工具也是凶器。
+
+---
 
 ---
 
