@@ -2,7 +2,7 @@
 
 > **空间站 13（SS13）· TianGuan13 分支** 的全系统中文玩家攻略文档合集
 > 仓库地址：https://github.com/mohu19/TianGuan13-Encyclopedia
-> ## 作者：墨狐(MH516)
+## 作者：墨狐(MH516)
 ---
 
 ## ⚠️ 重要声明（请先阅读）
