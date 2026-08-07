@@ -431,6 +431,78 @@
 
 ---
 
+
+## 6.8 外星手术（Abductor Surgery）★ 新增
+
+> **来源**: `code/modules/antagonists/abductor/abductor.dm`（外星人阵营）+ `code/modules/surgery/operations/operation_generic.dm`（外星步骤变体）+ `operation_organ_manip.dm`（外星器官操作）
+> **核心**：外星手术是**绑架者（Abductor）阵营专属**的完整手术体系——外星科学家在母舰手术台上执行，普通船员无法使用。
+
+### 6.8.1 解锁机制（谁能做）
+
+| 条件 | 详情 |
+|---|---|
+| **阵营** | 绑架者（Abductor）反派——特工/科学家/独行 3 角色 |
+| **训练特质** | 外星科学家获得 `TRAIT_ABDUCTOR_SCIENTIST_TRAINING`（`abductor.dm` on_gain 授予） |
+| **手术台** | 母舰上的外星手术台（teleport 至外星母舰 landmark） |
+| **普通玩家** | 无法使用外星手术——除非通过科技树（见 6.8.3） |
+
+### 6.8.2 外星科学家手术清单（19 项，源码全录）
+
+**代码**: `abductor.dm:139-155`（`ayy_operations` 列表）
+
+| # | 手术 | 类型 | 说明 |
+|---|---|---|---|
+| 1 | tend_wounds/combo/upgraded/**master** | 治疗连招 | 处理伤口组合升级版（大师级） |
+| 2 | viral_bonding | 病毒结合 | 病毒载体化（免疫但传播） |
+| 3 | add_plastic | 涂塑料 | 高级整形 |
+| 4 | **bionecrosis** | 生物坏死 | **罗梅罗肿瘤植入**（丧尸制造） |
+| 5 | clamp_bleeders/**abductor** | 夹闭血管（外星版） | 外星工具步骤 |
+| 6 | close_skin/**abductor** | 闭合皮肤（外星版） | 外星工具步骤 |
+| 7 | incise_organs/**abductor** | 切开器官（外星版） | 外星工具步骤 |
+| 8 | incise_skin/**abductor** | 切开皮肤（外星版） | 外星工具步骤 |
+| 9 | organ_manipulation/external/**abductor** | 特征操作（外星版） | 外部特征增删 |
+| 10 | organ_manipulation/internal/**abductor** | 器官操作（外星版） | 器官取放 |
+| 11 | retract_skin/**abductor** | 拉开皮肤（外星版） | 外星工具步骤 |
+| 12 | unclamp_bleeders/**abductor** | 松开血管（外星版） | 外星工具步骤 |
+| 13 | fix_wings | 修复翅膀 | 翅膀+触角修复 |
+| 14+ | bioware 全套（typesof 全类） | 生物武器 | 静脉编织/肌肉静脉/神经拼接/神经接地/韧带重塑/韧带强化/皮质折叠/皮质印记 |
+| 15+ | brainwash 全套（typesof 全类） | 洗脑 | 指令植入成为首要目标 |
+| 16+ | lobotomy 全套（typesof 全类） | 脑叶切除 | 治愈脑伤+解除洗脑 |
+| 17+ | pacify 全套（typesof 全类） | 安抚 | 永久和平主义脑创伤 |
+
+> **清单结构**：源码 `ayy_operations` 共 **13 项直接 + 4 个 typesof 类**（bioware/brainwash/lobotomy/pacify 全子类型），展开后约 19-20 个手术类型全解锁。
+
+> **外星版基础步骤**（abductor 变体）：与普通步骤同功能，但标记为外星专属——只能由外星科学家使用，继承父类时间（如 incise_skin 1.6s / retract_skin 2.4s）。
+
+### 6.8.3 科技树联动（Alien Surgery 节点）
+
+> 外星手术的"平民版"通过**科技树隐藏节点**解锁——详见《罗梅洛丧尸与感染系统百科》2.2a 专章。
+
+```
+Applied Bluespace → Bluespace Travel → Alien Technology
+                                          └→ Alien Surgery（5 级点数 + 隐藏节点）
+                                              └→ 解锁：bionecrosis + brainwash + bioware
+                                                   + 外星手术工具全套（15 种扫描物品）
+```
+
+**与外星阵营的区别**：
+| 维度 | 外星科学家（Abductor） | 科技树解锁（Alien Surgery 节点） |
+|---|---|---|
+| 方式 | 天生训练特质 | 科研网络研究 |
+| 工具 | 外星母舰工具 | 外星工具（复制品） |
+| 位置 | 母舰 | 站内手术台 |
+| 对象 | 绑架的受害者 | 任意患者 |
+
+### 6.8.4 外星工具（母舰专属）
+
+| 工具 | 用途 | 特点 |
+|---|---|---|
+| **外星万用工具 Alien Omnitool** | 全手术行为 | **0.25 倍率**（游戏最快），径向切换手术/工程行为 |
+| 外星手术刀/锯/钻/止血钳/牵开器/烧灼器 | 对应手术步骤 | 绑定 abductor 变体步骤 |
+| 外星圆锯/撬棍/电击棒/多功能工具等 | 支援 | 解锁扫描用（15 种物品） |
+
+---
+
 ## 第七卷 · 器官基础：ORGAN_* 标志位与失效机制
 
 ### 1.1 定义位置
