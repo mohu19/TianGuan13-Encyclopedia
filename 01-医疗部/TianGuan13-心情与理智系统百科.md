@@ -114,8 +114,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 
 ### 6.1 通用正面事件（116 个）
 
-<details>
-<summary><b>#1</b> <code>/datum/mood_event/hug</code> · <b>1（孤僻-1/冷酷0）</b></summary>
+<details open>
+<summary><b>#1</b> 拥抱真好。 <small>(hug)</small> · 心情 <b>1（孤僻-1/冷酷0）</b></summary>
 
 - **心情值**: 1（孤僻-1/冷酷0）
 - **超时**: 2 分钟
@@ -124,8 +124,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `carbon_defense.dm:403`（被拥抱）；`toys.dm:1788`（玩具 HELP 交互）
 </details>
 
-<details>
-<summary><b>#2</b> <code>/datum/mood_event/bear_hug</code> · <b>1（孤僻/冷酷-2）</b></summary>
+<details open>
+<summary><b>#2</b> 我被紧紧勒住，但还挺… <small>(bear_hug)</small> · 心情 <b>1（孤僻/冷酷-2）</b></summary>
 
 - **心情值**: 1（孤僻/冷酷-2）
 - **超时**: 2 分钟
@@ -134,8 +134,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `carbon_defense.dm:398`（熊抱）
 </details>
 
-<details>
-<summary><b>#3</b> <code>/datum/mood_event/betterhug</code> · <b>3（孤僻1/冷酷0）</b></summary>
+<details open>
+<summary><b>#3</b> 有人对我非常好。 <small>(betterhug)</small> · 心情 <b>3（孤僻1/冷酷0）</b></summary>
 
 - **心情值**: 3（孤僻1/冷酷0）
 - **超时**: 4 分钟
@@ -144,8 +144,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `carbon_defense.dm:426`（好友拥抱）
 </details>
 
-<details>
-<summary><b>#4</b> <code>/datum/mood_event/besthug</code> · <b>5（孤僻2/冷酷0）</b></summary>
+<details open>
+<summary><b>#4</b> 有人陪伴真是太棒了，… <small>(besthug)</small> · 心情 <b>5（孤僻2/冷酷0）</b></summary>
 
 - **心情值**: 5（孤僻2/冷酷0）
 - **超时**: 4 分钟
@@ -154,8 +154,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `carbon_defense.dm:424`（挚友拥抱）
 </details>
 
-<details>
-<summary><b>#5</b> <code>/datum/mood_event/warmhug</code> · <b>1（孤僻/冷酷0）</b></summary>
+<details open>
+<summary><b>#5</b> 温暖舒适的拥抱最棒了… <small>(warmhug)</small> · 心情 <b>1（孤僻/冷酷0）</b></summary>
 
 - **心情值**: 1（孤僻/冷酷0）
 - **超时**: 2 分钟
@@ -164,8 +164,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `carbon_defense.dm:402,405`（温暖拥抱，双方）
 </details>
 
-<details>
-<summary><b>#6</b> <code>/datum/mood_event/tailpulled</code> · <b>1（孤僻/冷酷-2）</b></summary>
+<details open>
+<summary><b>#6</b> 我喜欢尾巴被拉的感觉… <small>(tailpulled)</small> · 心情 <b>1（孤僻/冷酷-2）</b></summary>
 
 - **心情值**: 1（孤僻/冷酷-2）
 - **超时**: 2 分钟
@@ -174,8 +174,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `carbon_defense.dm:266`（被拉尾巴）
 </details>
 
-<details>
-<summary><b>#7</b> <code>/datum/mood_event/arcade</code> · <b>3（勤勉/尽职-1）</b></summary>
+<details open>
+<summary><b>#7</b> 我打赢了街机游戏！【 <small>(arcade)</small> · 心情 <b>3（勤勉/尽职-1）</b></summary>
 
 - **心情值**: 3（勤勉/尽职-1）
 - **超时**: 8 分钟
@@ -184,8 +184,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_arcade.dm:87`（街机获胜）
 </details>
 
-<details>
-<summary><b>#8</b> <code>/datum/mood_event/blessing</code> · <b>1</b></summary>
+<details open>
+<summary><b>#8</b> 我受到了祝福。【 <small>(blessing)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 8 分钟
@@ -194,8 +194,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `bibles.dm:97,236`；`instrument_rites.dm:127`；`religion_sects.dm:143,181,206,217,312,414,467`（宗教祝福/仪式）
 </details>
 
-<details>
-<summary><b>#9</b> <code>/datum/mood_event/maintenance_adaptation</code> · <b>8</b></summary>
+<details open>
+<summary><b>#9</b> 神祇 <small>(maintenance_adaptation)</small> · 心情 <b>8</b></summary>
 
 - **心情值**: 8
 - **超时**: 0
@@ -204,8 +204,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `rites.dm:258`（宗教仪式：维护适应）
 </details>
 
-<details>
-<summary><b>#10</b> <code>/datum/mood_event/book_nerd</code> · <b>1（博学2/未受教育-1）</b></summary>
+<details open>
+<summary><b>#10</b> 我最近读了一本书。 <small>(book_nerd)</small> · 心情 <b>1（博学2/未受教育-1）</b></summary>
 
 - **心情值**: 1（博学2/未受教育-1）
 - **超时**: 5 分钟
@@ -214,8 +214,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `book.dm:123`（读书）
 </details>
 
-<details>
-<summary><b>#11</b> <code>/datum/mood_event/exercise</code> · <b>依体质浮动（懒惰×-0.5、非运动×0.5）</b></summary>
+<details open>
+<summary><b>#11</b> 锻炼会释放内啡肽！ <small>(exercise)</small> · 心情 <b>依体质浮动（懒惰×-0.5、非运动×0.5）</b></summary>
 
 - **心情值**: 依体质浮动（懒惰×-0.5、非运动×0.5）
 - **超时**: 0
@@ -224,8 +224,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `buffs.dm:256,261`（锻炼增益，按运动技能等级）
 </details>
 
-<details>
-<summary><b>#12</b> <code>/datum/mood_event/pet_animal</code> · <b>动态（厌恶动物-1；犬/猫迷或爱动物者+3；默认+1）</b></summary>
+<details open>
+<summary><b>#12</b> 动物太可爱了！我忍不… <small>(pet_animal)</small> · 心情 <b>动态（厌恶动物-1；犬/猫迷或爱动物者+3；默认+1）</b></summary>
 
 - **心情值**: 动态（厌恶动物-1；犬/猫迷或爱动物者+3；默认+1）
 - **超时**: 5 分钟
@@ -234,8 +234,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `corgi.dm:225`（抚摸柯基犬）
 </details>
 
-<details>
-<summary><b>#13</b> <code>/datum/mood_event/honk</code> · <b>2</b></summary>
+<details open>
+<summary><b>#13</b> 我被 <small>(honk)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 4 分钟
@@ -244,8 +244,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `clown_items.dm:227`（被小丑喇叭哔）
 </details>
 
-<details>
-<summary><b>#14</b> <code>/datum/mood_event/saved_life</code> · <b>6（冷酷0/厌世-1）</b></summary>
+<details open>
+<summary><b>#14</b> 救人性命的感觉真好。 <small>(saved_life)</small> · 心情 <b>6（冷酷0/厌世-1）</b></summary>
 
 - **心情值**: 6（冷酷0/厌世-1）
 - **超时**: 8 分钟
@@ -254,8 +254,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `defib.dm:653`（除颤救人）；`human.dm:606`（CPR 救人）
 </details>
 
-<details>
-<summary><b>#15</b> <code>/datum/mood_event/oblivious</code> · <b>3</b></summary>
+<details open>
+<summary><b>#15</b> 多么美好的一天。 <small>(oblivious)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 0
@@ -264,8 +264,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mild.dm:62`（脑损伤"笨拙"创伤）
 </details>
 
-<details>
-<summary><b>#16</b> <code>/datum/mood_event/jolly</code> · <b>6</b></summary>
+<details open>
+<summary><b>#16</b> 我无缘无故地感到快乐… <small>(jolly)</small> · 心情 <b>6</b></summary>
 
 - **心情值**: 6
 - **超时**: 2 分钟
@@ -274,8 +274,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `jolly.dm:15`（快乐怪癖）
 </details>
 
-<details>
-<summary><b>#17</b> <code>/datum/mood_event/focused</code> · <b>8</b></summary>
+<details open>
+<summary><b>#17</b> 我有一个目标，无论如… <small>(focused)</small> · 心情 <b>8</b></summary>
 
 - **心情值**: 8
 - **超时**: 0
@@ -284,8 +284,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 反派 `antag_moodlet`：`brother.dm:11`、`ert.dm:12`、`operative.dm:8`、`space_ninja.dm:10`、`spy.dm:8`、`datum_traitor.dm:11`、`wizard.dm:11`
 </details>
 
-<details>
-<summary><b>#18</b> <code>/datum/mood_event/badass_antag</code> · <b>8</b></summary>
+<details open>
+<summary><b>#18</b> 我是个该死的狠角色，… <small>(badass_antag)</small> · 心情 <b>8</b></summary>
 
 - **心情值**: 8
 - **超时**: 0
@@ -294,8 +294,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `toys.dm:278`（反派捡起辛迪加气球）
 </details>
 
-<details>
-<summary><b>#19</b> <code>/datum/mood_event/ling</code> · <b>12</b></summary>
+<details open>
+<summary><b>#19</b> 我们有一个目标，无论… <small>(ling)</small> · 心情 <b>12</b></summary>
 
 - **心情值**: 12
 - **超时**: 0
@@ -304,8 +304,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `changeling.dm:12`（变形人 antag_moodlet）
 </details>
 
-<details>
-<summary><b>#20</b> <code>/datum/mood_event/creeping</code> · <b>18</b></summary>
+<details open>
+<summary><b>#20</b> 那些声音终于松开了对… <small>(creeping)</small> · 心情 <b>18</b></summary>
 
 - **心情值**: 18
 - **超时**: 3 秒
@@ -314,8 +314,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `creepy_trauma.dm:81`（跟踪狂创伤，靠近执念对象）
 </details>
 
-<details>
-<summary><b>#21</b> <code>/datum/mood_event/creeping/dead</code> · <b>8</b></summary>
+<details open>
+<summary><b>#21</b> （执念对象死亡后的变… <small>(creeping)</small> · 心情 <b>8</b></summary>
 
 - **心情值**: 8
 - **超时**: 0
@@ -324,8 +324,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `creepy_trauma.dm:77`（执念对象死亡）
 </details>
 
-<details>
-<summary><b>#22</b> <code>/datum/mood_event/revolution</code> · <b>3</b></summary>
+<details open>
+<summary><b>#22</b> 革命万岁！ <small>(revolution)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 0
@@ -334,8 +334,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `revolution.dm:7`（革命者 antag_moodlet）
 </details>
 
-<details>
-<summary><b>#23</b> <code>/datum/mood_event/cult</code> · <b>12</b></summary>
+<details open>
+<summary><b>#23</b> 我看到了真相，赞美至… <small>(cult)</small> · 心情 <b>12</b></summary>
 
 - **心情值**: 12
 - **超时**: 0
@@ -344,8 +344,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `cultist.dm:6`（ cult 教徒 antag_moodlet）
 </details>
 
-<details>
-<summary><b>#24</b> <code>/datum/mood_event/heretics</code> · <b>12</b></summary>
+<details open>
+<summary><b>#24</b> 我升得越高，看得越远… <small>(heretics)</small> · 心情 <b>12</b></summary>
 
 - **心情值**: 12
 - **超时**: 0
@@ -354,8 +354,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `heretic_antag.dm:23`；`heretic_monsters.dm:7`（异端/异端怪物 antag_moodlet）
 </details>
 
-<details>
-<summary><b>#25</b> <code>/datum/mood_event/rift_fishing</code> · <b>6</b></summary>
+<details open>
+<summary><b>#25</b> 我钓得越多，升得越高… <small>(rift_fishing)</small> · 心情 <b>6</b></summary>
 
 - **心情值**: 6
 - **超时**: 5 分钟
@@ -364,8 +364,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `rifts.dm:152`（裂缝钓鱼）
 </details>
 
-<details>
-<summary><b>#26</b> <code>/datum/mood_event/blood_worm</code> · <b>999</b></summary>
+<details open>
+<summary><b>#26</b> 杀、吞、繁、胜。（血… <small>(blood_worm)</small> · 心情 <b>999</b></summary>
 
 - **心情值**: 999
 - **超时**: 0
@@ -374,8 +374,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `blood_worm_antag.dm:8`（血虫宿主 antag_moodlet）
 </details>
 
-<details>
-<summary><b>#27</b> <code>/datum/mood_event/family_heirloom</code> · <b>1</b></summary>
+<details open>
+<summary><b>#27</b> 我的家传宝物在我身边… <small>(family_heirloom)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -384,8 +384,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `family_heirloom.dm:65`（家传宝物怪癖）
 </details>
 
-<details>
-<summary><b>#28</b> <code>/datum/mood_event/clown_enjoyer_pin</code> · <b>1</b></summary>
+<details open>
+<summary><b>#28</b> 我喜欢展示我的小丑徽… <small>(clown_enjoyer_pin)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -394,8 +394,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `badges.dm:47`（佩戴小丑爱好者徽章）
 </details>
 
-<details>
-<summary><b>#29</b> <code>/datum/mood_event/mime_fan_pin</code> · <b>1</b></summary>
+<details open>
+<summary><b>#29</b> 我喜欢展示我的哑剧徽… <small>(mime_fan_pin)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -404,8 +404,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `badges.dm:75`（佩戴哑剧爱好者徽章）
 </details>
 
-<details>
-<summary><b>#30</b> <code>/datum/mood_event/goodmusic</code> · <b>3</b></summary>
+<details open>
+<summary><b>#30</b> 这音乐有某种抚慰人心… <small>(goodmusic)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 60 秒
@@ -414,8 +414,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `buffs.dm:377`（听好音乐增益）
 </details>
 
-<details>
-<summary><b>#31</b> <code>/datum/mood_event/chemical_euphoria</code> · <b>4</b></summary>
+<details open>
+<summary><b>#31</b> 嘿嘿嘿 <small>(chemical_euphoria)</small> · 心情 <b>4</b></summary>
 
 - **心情值**: 4
 - **超时**: 0
@@ -424,8 +424,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `life.dm:425`；`_lungs.dm:699`（吸入麻醉气体等欣快）
 </details>
 
-<details>
-<summary><b>#32</b> <code>/datum/mood_event/chemical_laughter</code> · <b>4</b></summary>
+<details open>
+<summary><b>#32</b> 笑真的是最好的药！是… <small>(chemical_laughter)</small> · 心情 <b>4</b></summary>
 
 - **心情值**: 4
 - **超时**: 3 分钟
@@ -434,8 +434,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drink_reagents.dm:162`（笑气饮料）
 </details>
 
-<details>
-<summary><b>#33</b> <code>/datum/mood_event/chemical_superlaughter</code> · <b>12</b></summary>
+<details open>
+<summary><b>#33</b> 喘不上气 <small>(chemical_superlaughter)</small> · 心情 <b>12</b></summary>
 
 - **心情值**: 12
 - **超时**: 3 分钟
@@ -444,8 +444,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drink_reagents.dm:178`（大笑气/高浓度）
 </details>
 
-<details>
-<summary><b>#34</b> <code>/datum/mood_event/religiously_comforted</code> · <b>3</b></summary>
+<details open>
+<summary><b>#34</b> 圣职者的存在让我感到… <small>(religiously_comforted)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 5 分钟
@@ -454,8 +454,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `examine.dm:228`（被圣职者检查/安抚）
 </details>
 
-<details>
-<summary><b>#35</b> <code>/datum/mood_event/clownshoes</code> · <b>3</b></summary>
+<details open>
+<summary><b>#35</b> 这双鞋是小丑的传承，… <small>(clownshoes)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 0
@@ -464,8 +464,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `clown.dm:28`；`mod_service.dm:85`（穿小丑鞋）
 </details>
 
-<details>
-<summary><b>#36</b> <code>/datum/mood_event/sacrifice_good</code> · <b>5</b></summary>
+<details open>
+<summary><b>#36</b> 众神对这份祭品很满意… <small>(sacrifice_good)</small> · 心情 <b>5</b></summary>
 
 - **心情值**: 5
 - **超时**: 3 分钟
@@ -474,8 +474,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `ashwalker.dm:43`；`ash_walker_den.dm:91`（献祭成功）
 </details>
 
-<details>
-<summary><b>#37</b> <code>/datum/mood_event/artok</code> · <b>2</b></summary>
+<details open>
+<summary><b>#37</b> 看到周围有人在创作艺… <small>(artok)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 5 分钟
@@ -484,8 +484,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `art.dm:30`（欣赏一般艺术品）
 </details>
 
-<details>
-<summary><b>#38</b> <code>/datum/mood_event/artgood</code> · <b>4</b></summary>
+<details open>
+<summary><b>#38</b> 多么发人深省的艺术品… <small>(artgood)</small> · 心情 <b>4</b></summary>
 
 - **心情值**: 4
 - **超时**: 5 分钟
@@ -494,8 +494,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `art.dm:27`（欣赏佳作）
 </details>
 
-<details>
-<summary><b>#39</b> <code>/datum/mood_event/artgreat</code> · <b>6</b></summary>
+<details open>
+<summary><b>#39</b> 那件作品伟大到让我相… <small>(artgreat)</small> · 心情 <b>6</b></summary>
 
 - **心情值**: 6
 - **超时**: 5 分钟
@@ -504,8 +504,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `art.dm:24,60,84`（欣赏杰作）
 </details>
 
-<details>
-<summary><b>#40</b> <code>/datum/mood_event/bottle_flip</code> · <b>2</b></summary>
+<details open>
+<summary><b>#40</b> 瓶子那样落地真令人满… <small>(bottle_flip)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 3 分钟
@@ -514,8 +514,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drinks.dm:304`（水瓶立稳挑战成功）
 </details>
 
-<details>
-<summary><b>#41</b> <code>/datum/mood_event/hope_lavaland</code> · <b>6（悲观0）</b></summary>
+<details open>
+<summary><b>#41</b> 多么奇特的徽章，它让… <small>(hope_lavaland)</small> · 心情 <b>6（悲观0）</b></summary>
 
 - **心情值**: 6（悲观0）
 - **超时**: 0
@@ -524,8 +524,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `pandora.dm:190`（潘多拉精英怪掉落的希望徽章）
 </details>
 
-<details>
-<summary><b>#42</b> <code>/datum/mood_event/confident_mane</code> · <b>2</b></summary>
+<details open>
+<summary><b>#42</b> 拥有一头浓密头发让我… <small>(confident_mane)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 0
@@ -534,8 +534,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `bald.dm:83`（秃头怪癖戴假发时）
 </details>
 
-<details>
-<summary><b>#43</b> <code>/datum/mood_event/holy_consumption</code> · <b>1</b></summary>
+<details open>
+<summary><b>#43</b> 真的，那是神之食物！… <small>(holy_consumption)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 3 分钟
@@ -544,8 +544,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `melon.dm:157`（食用神圣甜瓜）
 </details>
 
-<details>
-<summary><b>#44</b> <code>/datum/mood_event/high_five</code> · <b>2</b></summary>
+<details open>
+<summary><b>#44</b> 我喜欢击掌！ <small>(high_five)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 45 秒
@@ -554,8 +554,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `high_fiver.dm:82,83`（击掌成功，双方）
 </details>
 
-<details>
-<summary><b>#45</b> <code>/datum/mood_event/helped_up</code> · <b>动态（冷酷/厌世-2；共情+2）</b></summary>
+<details open>
+<summary><b>#45</b> 扶起他们感觉真好！（… <small>(helped_up)</small> · 心情 <b>动态（冷酷/厌世-2；共情+2）</b></summary>
 
 - **心情值**: 动态（冷酷/厌世-2；共情+2）
 - **超时**: 45 秒
@@ -564,8 +564,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `hand_items.dm:421,422`（扶人/被扶起，仅共情/冷酷/厌世人格触发）
 </details>
 
-<details>
-<summary><b>#46</b> <code>/datum/mood_event/high_ten</code> · <b>3</b></summary>
+<details open>
+<summary><b>#46</b> 太棒了！高十击掌！【 <small>(high_ten)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 45 秒
@@ -574,8 +574,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `high_fiver.dm:71,72`（高十击掌，双方）
 </details>
 
-<details>
-<summary><b>#47</b> <code>/datum/mood_event/down_low</code> · <b>4</b></summary>
+<details open>
+<summary><b>#47</b> 哈！那个傻瓜，根本没… <small>(down_low)</small> · 心情 <b>4</b></summary>
 
 - **心情值**: 4
 - **超时**: 90 秒
@@ -584,8 +584,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `alert.dm:550`（击掌骗局成功）
 </details>
 
-<details>
-<summary><b>#48</b> <code>/datum/mood_event/aquarium_positive</code> · <b>3</b></summary>
+<details open>
+<summary><b>#48</b> 看水族箱里的鱼令人平… <small>(aquarium_positive)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 90 秒
@@ -594,8 +594,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `aquarium.dm:719`（观赏水族箱）
 </details>
 
-<details>
-<summary><b>#49</b> <code>/datum/mood_event/gondola</code> · <b>6</b></summary>
+<details open>
+<summary><b>#49</b> 我感到平静，没有冲动… <small>(gondola)</small> · 心情 <b>6</b></summary>
 
 - **心情值**: 6
 - **超时**: 0
@@ -604,8 +604,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `debuffs.dm:630`（贡多拉平静状态）
 </details>
 
-<details>
-<summary><b>#50</b> <code>/datum/mood_event/kiss</code> · <b>1.5</b></summary>
+<details open>
+<summary><b>#50</b> 有人朝我飞吻，我一定… <small>(kiss)</small> · 心情 <b>1.5</b></summary>
 
 - **心情值**: 1.5
 - **超时**: 2 分钟
@@ -614,8 +614,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `hand_items.dm:612,650`（飞吻/亲吻）
 </details>
 
-<details>
-<summary><b>#51</b> <code>/datum/mood_event/honorbound</code> · <b>4</b></summary>
+<details open>
+<summary><b>#51</b> 遵循我的荣誉守则令人… <small>(honorbound)</small> · 心情 <b>4</b></summary>
 
 - **心情值**: 4
 - **超时**: 0
@@ -624,8 +624,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `honorbound_trauma.dm:22`（荣誉守则创伤）
 </details>
 
-<details>
-<summary><b>#52</b> <code>/datum/mood_event/et_pieces</code> · <b>50</b></summary>
+<details open>
+<summary><b>#52</b> 我爱花生酱 <small>(et_pieces)</small> · 心情 <b>50</b></summary>
 
 - **心情值**: 50
 - **超时**: 10 分钟
@@ -634,8 +634,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `food_reagents.dm:1251`（食用 ET 糖果）
 </details>
 
-<details>
-<summary><b>#53</b> <code>/datum/mood_event/memories_of_home</code> · <b>3</b></summary>
+<details open>
+<summary><b>#53</b> 这个味道莫名让人怀念 <small>(memories_of_home)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 5 分钟
@@ -644,8 +644,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `alcohol_reagents.dm:2578`（特殊酒"家乡的味道"）
 </details>
 
-<details>
-<summary><b>#54</b> <code>/datum/mood_event/observed_soda_spill</code> · <b>2</b></summary>
+<details open>
+<summary><b>#54</b> 啊哈哈！看人被汽水喷… <small>(observed_soda_spill)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 30 秒
@@ -654,8 +654,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `soda.dm:147`（旁观汽水喷人）
 </details>
 
-<details>
-<summary><b>#55</b> <code>/datum/mood_event/gaming</code> · <b>2（勤勉/尽职-1）</b></summary>
+<details open>
+<summary><b>#55</b> 我在享受一场愉快的游… <small>(gaming)</small> · 心情 <b>2（勤勉/尽职-1）</b></summary>
 
 - **心情值**: 2（勤勉/尽职-1）
 - **超时**: 30 秒
@@ -664,8 +664,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `living.dm:2889`（玩游戏）
 </details>
 
-<details>
-<summary><b>#56</b> <code>/datum/mood_event/gamer_won</code> · <b>6</b></summary>
+<details open>
+<summary><b>#56</b> 我爱赢游戏！【 <small>(gamer_won)</small> · 心情 <b>6</b></summary>
 
 - **心情值**: 6
 - **超时**: 5 分钟
@@ -674,8 +674,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `gamer.dm:47`（游戏宅怪癖获胜）
 </details>
 
-<details>
-<summary><b>#57</b> <code>/datum/mood_event/love_reagent</code> · <b>5（悲观0；超时随药效时长）</b></summary>
+<details open>
+<summary><b>#57</b> 这食物让我想起美好的… <small>(love_reagent)</small> · 心情 <b>5（悲观0；超时随药效时长）</b></summary>
 
 - **心情值**: 5（悲观0；超时随药效时长）
 - **超时**: 动态
@@ -684,8 +684,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `other_reagents.dm:3371,3378`（爱情药水试剂）
 </details>
 
-<details>
-<summary><b>#58</b> <code>/datum/mood_event/won_52_card_pickup</code> · <b>3</b></summary>
+<details open>
+<summary><b>#58</b> 哈！那个输家要捡好久… <small>(won_52_card_pickup)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 3 分钟
@@ -694,8 +694,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `deck.dm:217`（52 张拾牌游戏获胜）
 </details>
 
-<details>
-<summary><b>#59</b> <code>/datum/mood_event/playing_cards</code> · <b>2×玩家人数（上限约 6 人）</b></summary>
+<details open>
+<summary><b>#59</b> 我喜欢和别人一起打牌… <small>(playing_cards)</small> · 心情 <b>2×玩家人数（上限约 6 人）</b></summary>
 
 - **心情值**: 2×玩家人数（上限约 6 人）
 - **超时**: 3 分钟
@@ -704,8 +704,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `deck.dm:138`（打牌）
 </details>
 
-<details>
-<summary><b>#60</b> <code>/datum/mood_event/garland</code> · <b>1</b></summary>
+<details open>
+<summary><b>#60</b> 这些花很抚慰人心。 <small>(garland)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -714,8 +714,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `garlands.dm:10`（戴花环）
 </details>
 
-<details>
-<summary><b>#61</b> <code>/datum/mood_event/russian_roulette_win</code> · <b>2（赌徒 2，否则 1.8 的装弹数幂，四舍五入）</b></summary>
+<details open>
+<summary><b>#61</b> 我拿命赌了一把并且赢… <small>(russian_roulette_win)</small> · 心情 <b>2（赌徒 2，否则 1.8 的装弹数幂，四舍五入）</b></summary>
 
 - **心情值**: 2（赌徒 2，否则 1.8 的装弹数幂，四舍五入）
 - **超时**: 5 分钟
@@ -724,8 +724,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `revolver.dm:350`（俄罗斯轮盘赌幸存）
 </details>
 
-<details>
-<summary><b>#62</b> <code>/datum/mood_event/fishing</code> · <b>4</b></summary>
+<details open>
+<summary><b>#62</b> 钓鱼很放松。 <small>(fishing)</small> · 心情 <b>4</b></summary>
 
 - **心情值**: 4
 - **超时**: 3 分钟
@@ -734,8 +734,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `fishing_minigame.dm:240`（钓鱼小游戏）
 </details>
 
-<details>
-<summary><b>#63</b> <code>/datum/mood_event/fish_released</code> · <b>1</b></summary>
+<details open>
+<summary><b>#63</b> 去吧，鱼儿，游向自由… <small>(fish_released)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 2 分钟
@@ -744,8 +744,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_fish_source.dm:585,587`（放生鱼）
 </details>
 
-<details>
-<summary><b>#64</b> <code>/datum/mood_event/fish_petting</code> · <b>2</b></summary>
+<details open>
+<summary><b>#64</b> 摸鱼的感觉真好。【 <small>(fish_petting)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 2 分钟
@@ -754,8 +754,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_fish.dm:1611`（抚摸鱼）
 </details>
 
-<details>
-<summary><b>#65</b> <code>/datum/mood_event/kobun</code> · <b>14</b></summary>
+<details open>
+<summary><b>#65</b> 你们都被宇宙所爱。我… <small>(kobun)</small> · 心情 <b>14</b></summary>
 
 - **心情值**: 14
 - **超时**: 10 秒
@@ -764,8 +764,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `dog_subtypes.dm:130`（与 kobun 犬类接触）
 </details>
 
-<details>
-<summary><b>#66</b> <code>/datum/mood_event/sabrage_success</code> · <b>2</b></summary>
+<details open>
+<summary><b>#66</b> 我成功完成了马刀开香… <small>(sabrage_success)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 4 分钟
@@ -774,8 +774,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `glassbottle.dm:754`（马刀开香槟成功）
 </details>
 
-<details>
-<summary><b>#67</b> <code>/datum/mood_event/sabrage_witness</code> · <b>1</b></summary>
+<details open>
+<summary><b>#67</b> 我目睹有人用相当狂野… <small>(sabrage_witness)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 2 分钟
@@ -784,8 +784,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `glassbottle.dm:756`（目击马刀开香槟）
 </details>
 
-<details>
-<summary><b>#68</b> <code>/datum/mood_event/it_was_on_the_mouse</code> · <b>1</b></summary>
+<details open>
+<summary><b>#68</b> 嘿嘿。 <small>(it_was_on_the_mouse)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 2 分钟
@@ -794,8 +794,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `rat_organs.dm:144`（老鼠器官植入者）
 </details>
 
-<details>
-<summary><b>#69</b> <code>/datum/mood_event/birthday</code> · <b>2</b></summary>
+<details open>
+<summary><b>#69</b> 今天是我的生日！屏幕… <small>(birthday)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 0
@@ -804,8 +804,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `neutral_traits.dm:228`（生日）
 </details>
 
-<details>
-<summary><b>#70</b> <code>/datum/mood_event/basketball_score</code> · <b>2</b></summary>
+<details open>
+<summary><b>#70</b> 唰！空心入网。【 <small>(basketball_score)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 5 分钟
@@ -814,8 +814,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `hoop.dm:169`（篮球投篮得分）
 </details>
 
-<details>
-<summary><b>#71</b> <code>/datum/mood_event/basketball_dunk</code> · <b>2</b></summary>
+<details open>
+<summary><b>#71</b> 灌篮！轰，沙卡拉卡！… <small>(basketball_dunk)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 5 分钟
@@ -824,8 +824,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `hoop.dm:110`（扣篮）
 </details>
 
-<details>
-<summary><b>#72</b> <code>/datum/mood_event/moon_smile</code> · <b>10</b></summary>
+<details open>
+<summary><b>#72</b> 月亮向我展示真相，它… <small>(moon_smile)</small> · 心情 <b>10</b></summary>
 
 - **心情值**: 10
 - **超时**: 2 分钟
@@ -834,8 +834,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mind_gate.dm:56`（异端魔法 Mind Gate）
 </details>
 
-<details>
-<summary><b>#73</b> <code>/datum/mood_event/madness_elation</code> · <b>200</b></summary>
+<details open>
+<summary><b>#73</b> 疯狂才是最伟大的祝福 <small>(madness_elation)</small> · 心情 <b>200</b></summary>
 
 - **心情值**: 200
 - **超时**: 0
@@ -844,8 +844,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `cheese.dm:47`（巫师终局仪式奶酪结局施法者）
 </details>
 
-<details>
-<summary><b>#74</b> <code>/datum/mood_event/prophat</code> · <b>2</b></summary>
+<details open>
+<summary><b>#74</b> 这顶帽子让我充满奇思… <small>(prophat)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 0
@@ -854,8 +854,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `soft_caps.dm:199`（佩戴螺旋桨帽）
 </details>
 
-<details>
-<summary><b>#75</b> <code>/datum/mood_event/slots</code> · <b>1（赌徒×2；勤勉/尽职-1）</b></summary>
+<details open>
+<summary><b>#75</b> 去赌博吧！【 <small>(slots)</small> · 心情 <b>1（赌徒×2；勤勉/尽职-1）</b></summary>
 
 - **心情值**: 1（赌徒×2；勤勉/尽职-1）
 - **超时**: 1 分钟
@@ -864,8 +864,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `roulette_machine.dm:228`；`slotmachine.dm:339`（玩老虎机/轮盘）
 </details>
 
-<details>
-<summary><b>#76</b> <code>/datum/mood_event/slots/win</code> · <b>2</b></summary>
+<details open>
+<summary><b>#76</b> 啊耶，我赢了！【 <small>(slots)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 5 分钟
@@ -874,8 +874,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `slotmachine.dm:452`（老虎机获胜）
 </details>
 
-<details>
-<summary><b>#77</b> <code>/datum/mood_event/slots/win/big</code> · <b>3</b></summary>
+<details open>
+<summary><b>#77</b> （大胜，继承父级描述… <small>(slots)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 10 分钟
@@ -884,8 +884,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `slotmachine.dm:446`；`roulette_machine.dm:273`（大额获胜）
 </details>
 
-<details>
-<summary><b>#78</b> <code>/datum/mood_event/slots/win/jackpot</code> · <b>4</b></summary>
+<details open>
+<summary><b>#78</b> 头奖！啊耶！【 <small>(slots)</small> · 心情 <b>4</b></summary>
 
 - **心情值**: 4
 - **超时**: 0
@@ -894,8 +894,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `slotmachine.dm:428`；`roulette_machine.dm:273`（中头奖）
 </details>
 
-<details>
-<summary><b>#79</b> <code>/datum/mood_event/slots/all_gone</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#79</b> 不不不不！全没了！！… <small>(slots)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 20 分钟
@@ -904,8 +904,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `account.dm:137`（账户余额被取空）
 </details>
 
-<details>
-<summary><b>#80</b> <code>/datum/mood_event/empathetic_happy</code> · <b>2</b></summary>
+<details open>
+<summary><b>#80</b> 看到快乐的人让我也快… <small>(empathetic_happy)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 2 分钟
@@ -914,8 +914,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm:197`（情绪反应：附近有人获得正面心情时，共情人格）
 </details>
 
-<details>
-<summary><b>#81</b> <code>/datum/mood_event/misanthropic_happy</code> · <b>2</b></summary>
+<details open>
+<summary><b>#81</b> 看到难过的人让我高兴… <small>(misanthropic_happy)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 2 分钟
@@ -924,8 +924,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm:203`（情绪反应：附近有人获得负面心情时，厌世人格）
 </details>
 
-<details>
-<summary><b>#82</b> <code>/datum/mood_event/paranoid/alone</code> · <b>1</b></summary>
+<details open>
+<summary><b>#82</b> 安静祥和，没有人在附… <small>(paranoid)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -934,8 +934,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `reaction_to_groups.dm:41`（偏执人格独处时）
 </details>
 
-<details>
-<summary><b>#83</b> <code>/datum/mood_event/paranoid/small_group</code> · <b>2</b></summary>
+<details open>
+<summary><b>#83</b> 在这个小团体里我感觉… <small>(paranoid)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 0
@@ -944,8 +944,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `reaction_to_groups.dm:45`（偏执人格在小群体中）
 </details>
 
-<details>
-<summary><b>#84</b> <code>/datum/mood_event/nt_loyalist</code> · <b>2</b></summary>
+<details open>
+<summary><b>#84</b> 作为 <small>(nt_loyalist)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 0
@@ -954,8 +954,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `reaction_to_nt.dm:31`（忠诚派 NT 人格 mood_event_type）
 </details>
 
-<details>
-<summary><b>#85</b> <code>/datum/mood_event/loyalist_revs_lost</code> · <b>4</b></summary>
+<details open>
+<summary><b>#85</b> 革命被击败了！ <small>(loyalist_revs_lost)</small> · 心情 <b>4</b></summary>
 
 - **心情值**: 4
 - **超时**: 10 分钟
@@ -964,8 +964,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `revolution_handler.dm:107`（革命失败时旁观者中的忠诚派）
 </details>
 
-<details>
-<summary><b>#86</b> <code>/datum/mood_event/disillusioned_revs_win</code> · <b>4</b></summary>
+<details open>
+<summary><b>#86</b> 革命成功了！革命万岁… <small>(disillusioned_revs_win)</small> · 心情 <b>4</b></summary>
 
 - **心情值**: 4
 - **超时**: 10 分钟
@@ -974,8 +974,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `revolution_handler.dm:78`（革命胜利时旁观者中的幻灭派）
 </details>
 
-<details>
-<summary><b>#87</b> <code>/datum/mood_event/enjoying_department_area</code> · <b>1</b></summary>
+<details open>
+<summary><b>#87</b> 我爱我的工作。 <small>(enjoying_department_area)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -984,8 +984,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `reaction_to_job.dm:10`（部门人格：身处本部门工作区域）
 </details>
 
-<details>
-<summary><b>#88</b> <code>/datum/mood_event/slacking_off_lazy</code> · <b>1</b></summary>
+<details open>
+<summary><b>#88</b> 老板赚一块，我赚一毛… <small>(slacking_off_lazy)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -994,8 +994,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `reaction_to_recreation.dm:44`（懒惰人格 mood_event_type，休闲区）
 </details>
 
-<details>
-<summary><b>#89</b> <code>/datum/mood_event/working_diligent</code> · <b>1</b></summary>
+<details open>
+<summary><b>#89</b> 努力工作本身就是回报… <small>(working_diligent)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -1004,8 +1004,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `reaction_to_recreation.dm:60,72`（勤勉人格在工作区）
 </details>
 
-<details>
-<summary><b>#90</b> <code>/datum/mood_event/creative_patronage</code> · <b>2</b></summary>
+<details open>
+<summary><b>#90</b> 支持艺术家！ <small>(creative_patronage)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 5 分钟
@@ -1014,8 +1014,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `paintings.dm:310`（赞助艺术家）
 </details>
 
-<details>
-<summary><b>#91</b> <code>/datum/mood_event/creative_framing</code> · <b>2</b></summary>
+<details open>
+<summary><b>#91</b> 挂起艺术品让房间更有… <small>(creative_framing)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 5 分钟
@@ -1024,8 +1024,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `paintings.dm:651`（装裱挂画）
 </details>
 
-<details>
-<summary><b>#92</b> <code>/datum/mood_event/creative_sculpting</code> · <b>2</b></summary>
+<details open>
+<summary><b>#92</b> 雕刻是很棒的创作出口… <small>(creative_sculpting)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 5 分钟
@@ -1034,8 +1034,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `statues.dm:412`（雕刻雕像）
 </details>
 
-<details>
-<summary><b>#93</b> <code>/datum/mood_event/whimsical_slip</code> · <b>3</b></summary>
+<details open>
+<summary><b>#93</b> 哈哈！那家伙摔倒了！… <small>(whimsical_slip)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 2 分钟
@@ -1044,8 +1044,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mob_movement.dm:387`（目睹他人滑倒，顽皮人格）
 </details>
 
-<details>
-<summary><b>#94</b> <code>/datum/mood_event/bibulous_hangover</code> · <b>2</b></summary>
+<details open>
+<summary><b>#94</b> 多棒的夜晚！我等不及… <small>(bibulous_hangover)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 10 分钟
@@ -1054,8 +1054,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `landmarks.dm:595`（好酒之徒出生点宿醉）
 </details>
 
-<details>
-<summary><b>#95</b> <code>/datum/mood_event/gizmo_positive</code> · <b>3</b></summary>
+<details open>
+<summary><b>#95</b> 我听到一个声音在我耳… <small>(gizmo_positive)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 30 秒
@@ -1064,8 +1064,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `gizmood.dm:30`（gizmo 正向情绪脉冲装置）
 </details>
 
-<details>
-<summary><b>#96</b> <code>/datum/mood_event/horridroom</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#96</b> 这房间糟透了！ <small>(horridroom)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 0
@@ -1074,8 +1074,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm:548,562`（区域美感极差）
 </details>
 
-<details>
-<summary><b>#97</b> <code>/datum/mood_event/badroom</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#97</b> 这房间看起来真的很糟… <small>(badroom)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 0
@@ -1084,8 +1084,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm:545,565`（区域美感差）
 </details>
 
-<details>
-<summary><b>#98</b> <code>/datum/mood_event/ehroom</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#98</b> 这房间看起来有点糟。 <small>(ehroom)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 0
@@ -1094,8 +1094,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm:542`（区域美感偏差）
 </details>
 
-<details>
-<summary><b>#99</b> <code>/datum/mood_event/decentroom</code> · <b>1</b></summary>
+<details open>
+<summary><b>#99</b> 这房间看起来还行。 <small>(decentroom)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -1104,8 +1104,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm:571`（区域美感尚可）
 </details>
 
-<details>
-<summary><b>#100</b> <code>/datum/mood_event/goodroom</code> · <b>3</b></summary>
+<details open>
+<summary><b>#100</b> 这房间真漂亮！ <small>(goodroom)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 0
@@ -1114,8 +1114,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm:554,573`（区域美感佳）
 </details>
 
-<details>
-<summary><b>#101</b> <code>/datum/mood_event/greatroom</code> · <b>5</b></summary>
+<details open>
+<summary><b>#101</b> 这房间美极了！ <small>(greatroom)</small> · 心情 <b>5</b></summary>
 
 - **心情值**: 5
 - **超时**: 0
@@ -1124,8 +1124,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm:552,575`（区域美感极佳）
 </details>
 
-<details>
-<summary><b>#102</b> <code>/datum/mood_event/area</code> · <b>0（由区域 mood_bonus 动态传入）</b></summary>
+<details open>
+<summary><b>#102</b> 描述留空，由所在 <small>(area)</small> · 心情 <b>0（由区域 mood_bonus 动态传入）</b></summary>
 
 - **心情值**: 0（由区域 mood_bonus 动态传入）
 - **超时**: 0
@@ -1134,8 +1134,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm:527`（进入带 mood_bonus 的区域时，以 new_area.mood_bonus/mood_message 填充）
 </details>
 
-<details>
-<summary><b>#103</b> <code>/datum/mood_event/axe_gone</code> · <b>-15</b></summary>
+<details open>
+<summary><b>#103</b> 斧头怎么了 <small>(axe_gone)</small> · 心情 <b>-15</b></summary>
 
 - **心情值**: -15
 - **超时**: 0
@@ -1144,8 +1144,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `special.dm:618,659`（斧头丢失）
 </details>
 
-<details>
-<summary><b>#104</b> <code>/datum/mood_event/axe_neutral</code> · <b>1</b></summary>
+<details open>
+<summary><b>#104</b> 我相信斧头没事。 <small>(axe_neutral)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 0
@@ -1154,8 +1154,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `special.dm:611,625,644,700,703`（斧头状态正常）
 </details>
 
-<details>
-<summary><b>#105</b> <code>/datum/mood_event/axe_cabinet</code> · <b>5</b></summary>
+<details open>
+<summary><b>#105</b> 斧头回到了它该在的地… <small>(axe_cabinet)</small> · 心情 <b>5</b></summary>
 
 - **心情值**: 5
 - **超时**: 0
@@ -1164,8 +1164,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `special.dm:640,696`（斧头在柜中）
 </details>
 
-<details>
-<summary><b>#106</b> <code>/datum/mood_event/axe_missing</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#106</b> 斧头，有点不对劲 <small>(axe_missing)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 0
@@ -1174,8 +1174,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `special.dm:614,629`（斧头失踪）
 </details>
 
-<details>
-<summary><b>#107</b> <code>/datum/mood_event/axe_held</code> · <b>-10</b></summary>
+<details open>
+<summary><b>#107</b> 我不配拥有你，斧头。… <small>(axe_held)</small> · 心情 <b>-10</b></summary>
 
 - **心情值**: -10
 - **超时**: 0
@@ -1184,8 +1184,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `special.dm:670`（手持斧头）
 </details>
 
-<details>
-<summary><b>#108</b> <code>/datum/mood_event/eldritch_painting</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#108</b> 自从砍下那幅画，我就… <small>(eldritch_painting)</small> · 心情 <b>-6</b></summary>
 
 - **心情值**: -6
 - **超时**: 3 分钟
@@ -1194,8 +1194,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `eldritch_painting.dm:59`（撕毁异端画作）
 </details>
 
-<details>
-<summary><b>#109</b> <code>/datum/mood_event/eldritch_painting/weeping</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#109</b> 他在这里！ <small>(eldritch_painting)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 11 秒
@@ -1204,8 +1204,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `debuffs.dm:320`（异端"哭泣"诅咒状态）
 </details>
 
-<details>
-<summary><b>#110</b> <code>/datum/mood_event/eldritch_painting/weeping_heretic</code> · <b>5</b></summary>
+<details open>
+<summary><b>#110</b> 他的痛苦激励着我！ <small>(eldritch_painting)</small> · 心情 <b>5</b></summary>
 
 - **心情值**: 5
 - **超时**: 3 分钟
@@ -1214,8 +1214,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `eldritch_painting.dm:105`（异端检查哭泣画作）
 </details>
 
-<details>
-<summary><b>#111</b> <code>/datum/mood_event/eldritch_painting/weeping_withdrawal</code> · <b>1</b></summary>
+<details open>
+<summary><b>#111</b> 我头脑清醒。他不在这… <small>(eldritch_painting)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 3 分钟
@@ -1224,8 +1224,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `eldritch_painting.dm:100`（非异端检查哭泣画作）
 </details>
 
-<details>
-<summary><b>#112</b> <code>/datum/mood_event/eldritch_painting/desire_heretic</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#112</b> 虚空在尖叫。 <small>(eldritch_painting)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 3 分钟
@@ -1234,8 +1234,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `eldritch_painting.dm:153`（异端检查欲望画作）
 </details>
 
-<details>
-<summary><b>#113</b> <code>/datum/mood_event/eldritch_painting/desire_examine</code> · <b>3</b></summary>
+<details open>
+<summary><b>#113</b> 饥饿被喂饱了，暂时 <small>(eldritch_painting)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 3 分钟
@@ -1244,8 +1244,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `eldritch_painting.dm:130`（非异端检查欲望画作）
 </details>
 
-<details>
-<summary><b>#114</b> <code>/datum/mood_event/eldritch_painting/heretic_vines</code> · <b>3</b></summary>
+<details open>
+<summary><b>#114</b> 哦，多可爱的花！ <small>(eldritch_painting)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 3 分钟
@@ -1254,8 +1254,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `eldritch_painting.dm:197`（异端藤蔓画作）
 </details>
 
-<details>
-<summary><b>#115</b> <code>/datum/mood_event/eldritch_painting/rust_examine</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#115</b> 那幅画真把我吓坏了。 <small>(eldritch_painting)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 3 分钟
@@ -1264,8 +1264,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `eldritch_painting.dm:250`（非异端检查锈蚀画作）
 </details>
 
-<details>
-<summary><b>#116</b> <code>/datum/mood_event/eldritch_painting/rust_heretic_examine</code> · <b>6</b></summary>
+<details open>
+<summary><b>#116</b> 攀爬。腐朽。锈蚀。 <small>(eldritch_painting)</small> · 心情 <b>6</b></summary>
 
 - **心情值**: 6
 - **超时**: 3 分钟
@@ -1276,8 +1276,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 
 ### 6.2 通用负面事件（135 个）
 
-<details>
-<summary><b>#1</b> <code>`handcuffed`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#117</b> 我猜我的恶作剧终于自… <small>(handcuffed)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 永久
@@ -1286,8 +1286,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/carbon/carbon.dm
 </details>
 
-<details>
-<summary><b>#2</b> <code>`broken_vow`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#118</b> 我给自己的名字蒙羞，… <small>(broken_vow)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 3 MINUTES
@@ -1296,8 +1296,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/spells/spell_types/self/mime_vow.dm
 </details>
 
-<details>
-<summary><b>#3</b> <code>`on_fire`<br><small>FEAR</small></code> · <b>-12</b></summary>
+<details open>
+<summary><b>#119</b> 我着火了！！！ <small>(on_fire<br><small>FEAR<)</small> · 心情 <b>-12</b></summary>
 
 - **心情值**: -12
 - **超时**: 永久
@@ -1306,8 +1306,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/status_effects/debuffs/fire_stacks.dm
 </details>
 
-<details>
-<summary><b>#4</b> <code>`suffocation`<br><small>FEAR</small></code> · <b>-12</b></summary>
+<details open>
+<summary><b>#120</b> 无法 <small>(suffocation<br><small>FEAR<)</small> · 心情 <b>-12</b></summary>
 
 - **心情值**: -12
 - **超时**: 永久
@@ -1316,8 +1316,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/carbon/life.dm
 </details>
 
-<details>
-<summary><b>#5</b> <code>`burnt_thumb`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#121</b> 我不该玩打火机的 <small>(burnt_thumb)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 2 MINUTES
@@ -1326,8 +1326,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/items/lighter.dm
 </details>
 
-<details>
-<summary><b>#6</b> <code>`cold`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#122</b> 这里太冷了。 <small>(cold)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 永久
@@ -1336,8 +1336,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/carbon/human/_species.dm
 </details>
 
-<details>
-<summary><b>#7</b> <code>`hot`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#123</b> 这里开始热起来了。 <small>(hot)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 永久
@@ -1346,8 +1346,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/carbon/human/_species.dm
 </details>
 
-<details>
-<summary><b>#8</b> <code>`creampie`<br><small>WHIMSY</small></code> · <b>-2</b></summary>
+<details open>
+<summary><b>#124</b> 我被糊了一脸奶油。尝… <small>(creampie<br><small>WHIMSY<)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 3 MINUTES
@@ -1356,8 +1356,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/components/face_decal.dm, datums/components/splat.dm
 </details>
 
-<details>
-<summary><b>#9</b> <code>`inked`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#125</b> 我被泼了鱿鱼墨汁。尝… <small>(inked)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 3 MINUTES
@@ -1366,8 +1366,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/fishing/fish/fish_traits.dm, modules/fishing/fish/types/saltwater.dm, modules/food_and_drinks/food/misc.dm, modules/food_and_drinks/food/packaged.dm, modules/projectiles/projectile/special/spit.dm
 </details>
 
-<details>
-<summary><b>#10</b> <code>`slipped`<br><small>WHIMSY</small></code> · <b>-2</b></summary>
+<details open>
+<summary><b>#126</b> 我滑倒了。下次该小心… <small>(slipped<br><small>WHIMSY<)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 3 MINUTES
@@ -1376,8 +1376,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/mob_movement.dm
 </details>
 
-<details>
-<summary><b>#11</b> <code>`eye_stab`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#127</b> 我以前也像你一样是个… <small>(eye_stab)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 3 MINUTES
@@ -1386,8 +1386,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/elements/eyestab.dm
 </details>
 
-<details>
-<summary><b>#12</b> <code>`delam`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#128</b> 那些该死的工程师什么… <small>(delam)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 4 MINUTES
@@ -1396,8 +1396,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/power/supermatter/supermatter_delamination/delamination_effects.dm
 </details>
 
-<details>
-<summary><b>#13</b> <code>`cascade`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#129</b> 我从没想过会亲眼看到… <small>(cascade)</small> · 心情 <b>-8</b></summary>
 
 - **心情值**: -8
 - **超时**: 5 MINUTES
@@ -1406,8 +1406,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/power/supermatter/supermatter_delamination/delamination_effects.dm
 </details>
 
-<details>
-<summary><b>#14</b> <code>`depression`</code> · <b>-12</b></summary>
+<details open>
+<summary><b>#130</b> 我无缘无故地感到难过… <small>(depression)</small> · 心情 <b>-12</b></summary>
 
 - **心情值**: -12
 - **超时**: 2 MINUTES
@@ -1416,8 +1416,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/quirks/negative_quirks/depression.dm
 </details>
 
-<details>
-<summary><b>#15</b> <code>`shameful_suicide`</code> · <b>-15</b></summary>
+<details open>
+<summary><b>#131</b> 我连自我了断都做不到… <small>(shameful_suicide)</small> · 心情 <b>-15</b></summary>
 
 - **心情值**: -15
 - **超时**: 60 SECONDS
@@ -1426,8 +1426,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/client/verbs/suicide.dm
 </details>
 
-<details>
-<summary><b>#16</b> <code>`dismembered`</code> · <b>-10</b></summary>
+<details open>
+<summary><b>#132</b> 啊！！我的肢体！我正… <small>(dismembered)</small> · 心情 <b>-10</b></summary>
 
 - **心情值**: -10
 - **超时**: 8 MINUTES
@@ -1436,8 +1436,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/bodyparts/dismemberment.dm
 </details>
 
-<details>
-<summary><b>#17</b> <code>`reattachment`<br><small>PAIN</small></code> · <b>-3</b></summary>
+<details open>
+<summary><b>#133</b> 哎哟！我的肢体感觉像… <small>(reattachment<br><small>PAIN<)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 2 MINUTES
@@ -1446,8 +1446,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/bodyparts/dismemberment.dm
 </details>
 
-<details>
-<summary><b>#18</b> <code>`tased`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#134</b> 「泰瑟枪」里没有「 <small>(tased)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 2 MINUTES
@@ -1456,8 +1456,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/projectiles/guns/magic/wands/wand_zap.dm, modules/projectiles/projectile/energy/stun.dm
 </details>
 
-<details>
-<summary><b>#19</b> <code>`embedded`</code> · <b>-7</b></summary>
+<details open>
+<summary><b>#135</b> 把它拔出来！ <small>(embedded)</small> · 心情 <b>-7</b></summary>
 
 - **心情值**: -7
 - **超时**: 永久
@@ -1466,8 +1466,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/embedding.dm
 </details>
 
-<details>
-<summary><b>#20</b> <code>`table`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#136</b> 有人把我扔到桌子上！ <small>(table)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 2 MINUTES
@@ -1476,8 +1476,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/elements/table_smash.dm, modules/clothing/suits/reactive_armour.dm
 </details>
 
-<details>
-<summary><b>#21</b> <code>`table_limbsmash`<br><small>PAIN</small></code> · <b>-3</b></summary>
+<details open>
+<summary><b>#137</b> 那该死的桌子，真疼 <small>(table_limbsmash<br><small>PAIN<)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 3 MINUTES
@@ -1486,8 +1486,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/elements/table_smash.dm
 </details>
 
-<details>
-<summary><b>#22</b> <code>`brain_damage`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#138</b> （脑损伤随机台词） <small>(brain_damage)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 永久
@@ -1496,8 +1496,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/brain/brain_item.dm
 </details>
 
-<details>
-<summary><b>#23</b> <code>`hulk`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#139</b> 浩克砸！ <small>(hulk)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 永久
@@ -1506,8 +1506,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/mutations/hulk.dm
 </details>
 
-<details>
-<summary><b>#24</b> <code>`epilepsy`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#140</b> 我早该注意癫痫警告的… <small>(epilepsy)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 5 MINUTES
@@ -1516,8 +1516,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/mutations/body.dm
 </details>
 
-<details>
-<summary><b>#25</b> <code>`photophobia`<br><small>FEAR</small></code> · <b>-3</b></summary>
+<details open>
+<summary><b>#141</b> 灯光太刺眼了 <small>(photophobia<br><small>FEAR<)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 永久
@@ -1526,8 +1526,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/quirks/negative_quirks/photophobia.dm
 </details>
 
-<details>
-<summary><b>#26</b> <code>`nyctophobia`<br><small>FEAR</small></code> · <b>-3</b></summary>
+<details open>
+<summary><b>#142</b> 这里真够黑的 <small>(nyctophobia<br><small>FEAR<)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 永久
@@ -1536,8 +1536,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/components/fearful/sources/_sources.dm
 </details>
 
-<details>
-<summary><b>#27</b> <code>`claustrophobia`<br><small>FEAR</small></code> · <b>-7</b></summary>
+<details open>
+<summary><b>#143</b> 为什么我觉得被困住了… <small>(claustrophobia<br><small>FEAR<)</small> · 心情 <b>-7</b></summary>
 
 - **心情值**: -7
 - **超时**: 1 MINUTES
@@ -1546,8 +1546,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/components/fearful/sources/_sources.dm
 </details>
 
-<details>
-<summary><b>#28</b> <code>`bright_light`</code> · <b>-12</b></summary>
+<details open>
+<summary><b>#144</b> 我讨厌亮光 <small>(bright_light)</small> · 心情 <b>-12</b></summary>
 
 - **心情值**: -12
 - **超时**: 永久
@@ -1556,8 +1556,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/reagents/withdrawal/generic_addictions.dm
 </details>
 
-<details>
-<summary><b>#29</b> <code>`family_heirloom_missing`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#145</b> 我的传家宝不见了 <small>(family_heirloom_missing)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 永久
@@ -1566,8 +1566,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/quirks/negative_quirks/family_heirloom.dm
 </details>
 
-<details>
-<summary><b>#30</b> <code>`healsbadman`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#146</b> 我感觉自己像被细线拼… <small>(healsbadman)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 2 MINUTES
@@ -1576,8 +1576,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mining/equipment/monster_organs/regenerative_core.dm, modules/mob/living/basic/lavaland/legion/legion_tumour.dm
 </details>
 
-<details>
-<summary><b>#31</b> <code>`healsbadman/long_term`</code> · <b>继承父类(healsbadman)</b></summary>
+<details open>
+<summary><b>#147</b> （继承父类描述，长时… <small>(healsbadman)</small> · 心情 <b>继承父类(healsbadman)</b></summary>
 
 - **心情值**: 继承父类(healsbadman)
 - **超时**: 10 MINUTES
@@ -1586,8 +1586,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/basic/lavaland/legion/legion.dm
 </details>
 
-<details>
-<summary><b>#32</b> <code>`jittery`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#148</b> 我紧张不安、坐立难安… <small>(jittery)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 永久
@@ -1596,8 +1596,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/status_effects/debuffs/jitteriness.dm
 </details>
 
-<details>
-<summary><b>#33</b> <code>`choke`<br><small>FEAR</small></code> · <b>-10</b></summary>
+<details open>
+<summary><b>#149</b> 我喘不上气！！！ <small>(choke<br><small>FEAR<)</small> · 心情 <b>-10</b></summary>
 
 - **心情值**: -10
 - **超时**: 永久
@@ -1606,8 +1606,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/status_effects/debuffs/choke.dm
 </details>
 
-<details>
-<summary><b>#34</b> <code>`vomit`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#150</b> 我刚吐了。真恶心。 <small>(vomit)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 2 MINUTES
@@ -1616,8 +1616,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/carbon/carbon.dm
 </details>
 
-<details>
-<summary><b>#35</b> <code>`vomitself`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#151</b> 我吐了自己一身。太恶… <small>(vomitself)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 3 MINUTES
@@ -1626,8 +1626,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/carbon/carbon.dm
 </details>
 
-<details>
-<summary><b>#36</b> <code>`painful_medicine`<br><small>PAIN</small></code> · <b>-5</b></summary>
+<details open>
+<summary><b>#152</b> 药可能对我有好处，但… <small>(painful_medicine<br><small>PAIN<)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 60 SECONDS
@@ -1636,8 +1636,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/reagents/chemistry/reagents/cat2_medicine_reagents.dm
 </details>
 
-<details>
-<summary><b>#37</b> <code>`startled`<br><small>FEAR</small></code> · <b>-1</b></summary>
+<details open>
+<summary><b>#153</b> 听到那个词让我想到了… <small>(startled<br><small>FEAR<)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 1 MINUTES
@@ -1646,8 +1646,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/components/fearful/sources/phobia.dm
 </details>
 
-<details>
-<summary><b>#38</b> <code>`phobia`<br><small>FEAR</small></code> · <b>-4</b></summary>
+<details open>
+<summary><b>#154</b> 我看到了非常可怕的东… <small>(phobia<br><small>FEAR<)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 4 MINUTES
@@ -1656,8 +1656,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/brain_damage/phobia.dm, datums/components/fearful/sources/phobia.dm
 </details>
 
-<details>
-<summary><b>#39</b> <code>`spooked`<br><small>FEAR</small></code> · <b>-4</b></summary>
+<details open>
+<summary><b>#155</b> 那些骨头的咔哒声 <small>(spooked<br><small>FEAR<)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 4 MINUTES
@@ -1666,8 +1666,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/brain_damage/phobia.dm, datums/elements/spooky.dm
 </details>
 
-<details>
-<summary><b>#40</b> <code>`notcreeping`<br><small>隐藏</small></code> · <b>-6</b></summary>
+<details open>
+<summary><b>#156</b> 那些声音不高兴了，它… <small>(notcreeping<br><small>隐藏<)</small> · 心情 <b>-6</b></summary>
 
 - **心情值**: -6
 - **超时**: 3 SECONDS
@@ -1676,8 +1676,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/brain_damage/creepy_trauma.dm
 </details>
 
-<details>
-<summary><b>#41</b> <code>`notcreepingsevere`</code> · <b>-30</b></summary>
+<details open>
+<summary><b>#157</b> 它们需要执念！！ <small>(notcreepingsevere)</small> · 心情 <b>-30</b></summary>
 
 - **心情值**: -30
 - **超时**: 3 SECONDS
@@ -1686,8 +1686,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/brain_damage/creepy_trauma.dm
 </details>
 
-<details>
-<summary><b>#42</b> <code>`tower_of_babel`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#158</b> 我的交流能力变成了一… <small>(tower_of_babel)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 15 SECONDS
@@ -1696,8 +1696,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/status_effects/debuffs/tower_of_babel.dm, modules/projectiles/projectile/magic.dm
 </details>
 
-<details>
-<summary><b>#43</b> <code>`back_pain`<br><small>PAIN</small></code> · <b>-15</b></summary>
+<details open>
+<summary><b>#159</b> 背包从没在我背上放对… <small>(back_pain<br><small>PAIN<)</small> · 心情 <b>-15</b></summary>
 
 - **心情值**: -15
 - **超时**: 永久
@@ -1706,8 +1706,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/quirks/negative_quirks/bad_back.dm
 </details>
 
-<details>
-<summary><b>#44</b> <code>`sacrifice_bad`<br><small>SPIRITUAL</small></code> · <b>-5</b></summary>
+<details open>
+<summary><b>#160</b> 那些该死的野蛮人！ <small>(sacrifice_bad<br><small>SPIRITUAL<)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 2 MINUTES
@@ -1716,8 +1716,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mapfluff/ruins/objects_and_mobs/ash_walker_den.dm
 </details>
 
-<details>
-<summary><b>#45</b> <code>`artbad`<br><small>ART</small></code> · <b>-2</b></summary>
+<details open>
+<summary><b>#161</b> 我用屁股都能产出比那… <small>(artbad<br><small>ART<)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 2 MINUTES
@@ -1726,8 +1726,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/elements/art.dm
 </details>
 
-<details>
-<summary><b>#46</b> <code>`graverobbing`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#162</b> 我刚亵渎了某人的坟墓 <small>(graverobbing)</small> · 心情 <b>-8</b></summary>
 
 - **心情值**: -8
 - **超时**: 3 MINUTES
@@ -1736,8 +1736,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mapfluff/ruins/lavalandruin_code/elephantgraveyard.dm
 </details>
 
-<details>
-<summary><b>#47</b> <code>`deaths_door`</code> · <b>-20</b></summary>
+<details open>
+<summary><b>#163</b> 就是现在了 <small>(deaths_door)</small> · 心情 <b>-20</b></summary>
 
 - **心情值**: -20
 - **超时**: 永久
@@ -1746,8 +1746,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/structures/guillotine.dm
 </details>
 
-<details>
-<summary><b>#48</b> <code>`gunpoint`<br><small>FEAR</small></code> · <b>-10</b></summary>
+<details open>
+<summary><b>#164</b> 这家伙疯了！我最好小… <small>(gunpoint<br><small>FEAR<)</small> · 心情 <b>-10</b></summary>
 
 - **心情值**: -10
 - **超时**: 永久
@@ -1756,8 +1756,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/components/gunpoint.dm
 </details>
 
-<details>
-<summary><b>#49</b> <code>`tripped`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#165</b> 我简直不敢相信自己中… <small>(tripped)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 2 MINUTES
@@ -1766,8 +1766,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/clothing/shoes/_shoes.dm
 </details>
 
-<details>
-<summary><b>#50</b> <code>`untied`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#166</b> 我讨厌鞋带松开的感觉… <small>(untied)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 60 SECONDS
@@ -1776,8 +1776,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/clothing/shoes/_shoes.dm
 </details>
 
-<details>
-<summary><b>#51</b> <code>`gates_of_mansus`<br><small>FEAR</small></code> · <b>-25</b></summary>
+<details open>
+<summary><b>#167</b> 我瞥见了这个世界之外… <small>(gates_of_mansus<br><small>FEAR<)</small> · 心情 <b>-25</b></summary>
 
 - **心情值**: -25
 - **超时**: 4 MINUTES
@@ -1786,8 +1786,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/antagonists/heretic/influences.dm, modules/antagonists/heretic/items/corrupted_organs.dm, modules/antagonists/heretic/items/forbidden_book.dm, modules/antagonists/heretic/items/labyrinth_handbook.dm, modules/antagonists/heretic/magic/flesh_ascension.dm 等8处
 </details>
 
-<details>
-<summary><b>#52</b> <code>`high_five_full_hand`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#168</b> 天哪，我连击掌都不会 <small>(high_five_full_hand)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 45 SECONDS
@@ -1796,8 +1796,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/elements/high_fiver.dm
 </details>
 
-<details>
-<summary><b>#53</b> <code>`too_slow`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#169</b> 不！我怎么会 <small>(too_slow)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 2 MINUTES
@@ -1806,8 +1806,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: _onclick/hud/screen_objects/alert.dm
 </details>
 
-<details>
-<summary><b>#54</b> <code>`surgery`<br><small>FEAR</small></code> · <b>-8</b></summary>
+<details open>
+<summary><b>#170</b> 他们在把我开膛破肚！… <small>(surgery<br><small>FEAR<)</small> · 心情 <b>-8</b></summary>
 
 - **心情值**: -8
 - **超时**: 永久
@@ -1816,8 +1816,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/operations/_operation.dm
 </details>
 
-<details>
-<summary><b>#55</b> <code>`surgery/success`</code> · <b>继承父类(surgery)</b></summary>
+<details open>
+<summary><b>#171</b> 那场手术真的很疼 <small>(surgery)</small> · 心情 <b>继承父类(surgery)</b></summary>
 
 - **心情值**: 继承父类(surgery)
 - **超时**: 3 MINUTES
@@ -1826,8 +1826,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/operations/_operation.dm
 </details>
 
-<details>
-<summary><b>#56</b> <code>`surgery/failure`</code> · <b>继承父类(surgery)</b></summary>
+<details open>
+<summary><b>#172</b> 啊啊啊啊啊！他们把我… <small>(surgery)</small> · 心情 <b>继承父类(surgery)</b></summary>
 
 - **心情值**: 继承父类(surgery)
 - **超时**: 10 MINUTES
@@ -1836,8 +1836,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/operations/_operation.dm
 </details>
 
-<details>
-<summary><b>#57</b> <code>`bald`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#173</b> 我需要点东西遮住脑袋 <small>(bald)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 永久
@@ -1846,8 +1846,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/quirks/neutral_quirks/bald.dm
 </details>
 
-<details>
-<summary><b>#58</b> <code>`bald_reminder`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#174</b> 有人提醒我头发再也长… <small>(bald_reminder)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 4 MINUTES
@@ -1856,8 +1856,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/structures/mirror.dm
 </details>
 
-<details>
-<summary><b>#59</b> <code>`bad_touch`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#175</b> 我不喜欢别人碰我。 <small>(bad_touch)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 4 MINUTES
@@ -1866,8 +1866,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/personality/reaction_to_others.dm
 </details>
 
-<details>
-<summary><b>#60</b> <code>`very_bad_touch`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#176</b> 我非常不喜欢别人碰我… <small>(very_bad_touch)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 4 MINUTES
@@ -1876,8 +1876,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/personality/reaction_to_others.dm
 </details>
 
-<details>
-<summary><b>#61</b> <code>`noogie`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#177</b> 嗷！这就像太空高中时… <small>(noogie)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 60 SECONDS
@@ -1886,8 +1886,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/items/hand_items.dm
 </details>
 
-<details>
-<summary><b>#62</b> <code>`noogie_harsh`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#178</b> 嗷！！比普通钻头槌还… <small>(noogie_harsh)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 60 SECONDS
@@ -1896,8 +1896,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/items/hand_items.dm
 </details>
 
-<details>
-<summary><b>#63</b> <code>`aquarium_negative`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#179</b> 所有的鱼都死了 <small>(aquarium_negative)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 90 SECONDS
@@ -1906,8 +1906,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/components/aquarium.dm
 </details>
 
-<details>
-<summary><b>#64</b> <code>`tail_lost`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#180</b> 我的尾巴！！为什么？… <small>(tail_lost)</small> · 心情 <b>-8</b></summary>
 
 - **心情值**: -8
 - **超时**: 10 MINUTES
@@ -1916,8 +1916,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/organs/external/tails.dm
 </details>
 
-<details>
-<summary><b>#65</b> <code>`tail_balance_lost`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#181</b> 没有尾巴我感觉失去平… <small>(tail_balance_lost)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 永久
@@ -1926,8 +1926,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/organs/external/tails.dm
 </details>
 
-<details>
-<summary><b>#66</b> <code>`tail_regained_wrong`</code> · <b>-12</b></summary>
+<details open>
+<summary><b>#182</b> 这是什么恶心的玩笑？… <small>(tail_regained_wrong)</small> · 心情 <b>-12</b></summary>
 
 - **心情值**: -12
 - **超时**: 5 MINUTES
@@ -1936,8 +1936,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/organs/external/tails.dm
 </details>
 
-<details>
-<summary><b>#67</b> <code>`tail_regained_species`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#183</b> 这条尾巴不是我的，但… <small>(tail_regained_species)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 5 MINUTES
@@ -1946,8 +1946,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/organs/external/tails.dm
 </details>
 
-<details>
-<summary><b>#68</b> <code>`tail_regained_right`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#184</b> 我的尾巴回来了，但那… <small>(tail_regained_right)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 5 MINUTES
@@ -1956,8 +1956,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/organs/external/tails.dm
 </details>
 
-<details>
-<summary><b>#69</b> <code>`burnt_wings`</code> · <b>-10</b></summary>
+<details open>
+<summary><b>#185</b> 我珍贵的翅膀！！ <small>(burnt_wings)</small> · 心情 <b>-10</b></summary>
 
 - **心情值**: -10
 - **超时**: 10 MINUTES
@@ -1966,8 +1966,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/organs/external/wings/moth_wings.dm
 </details>
 
-<details>
-<summary><b>#70</b> <code>`holy_smite`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#186</b> 我被我的神明惩罚了！ <small>(holy_smite)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 5 MINUTES
@@ -1976,8 +1976,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/religion/honorbound/honorbound_trauma.dm
 </details>
 
-<details>
-<summary><b>#71</b> <code>`heresy`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#187</b> 这么多异端横行，我简… <small>(heresy)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 5 MINUTES
@@ -1986,8 +1986,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: (无引用 — dead code)
 </details>
 
-<details>
-<summary><b>#72</b> <code>`soda_spill`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#188</b> 酷！没关系，我本来就… <small>(soda_spill)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 1 MINUTES
@@ -1996,8 +1996,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/reagents/reagent_containers/cups/soda.dm
 </details>
 
-<details>
-<summary><b>#73</b> <code>`watersprayed`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#189</b> 我讨厌被水喷！ <small>(watersprayed)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 30 SECONDS
@@ -2006,8 +2006,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/reagents/chemistry/reagents/other_reagents.dm
 </details>
 
-<details>
-<summary><b>#74</b> <code>`gamer_withdrawal`<br><small>GAMING</small></code> · <b>-5</b></summary>
+<details open>
+<summary><b>#190</b> 真希望我现在正在打游… <small>(gamer_withdrawal<br><small>GAMING<)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 永久
@@ -2016,8 +2016,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/quirks/neutral_quirks/gamer.dm
 </details>
 
-<details>
-<summary><b>#75</b> <code>`gamer_lost`<br><small>GAMING</small></code> · <b>-6</b></summary>
+<details open>
+<summary><b>#191</b> 如果我电子游戏玩不好… <small>(gamer_lost<br><small>GAMING<)</small> · 心情 <b>-6</b></summary>
 
 - **心情值**: -6
 - **超时**: 10 MINUTES
@@ -2026,8 +2026,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/quirks/neutral_quirks/gamer.dm
 </details>
 
-<details>
-<summary><b>#76</b> <code>`lost_52_card_pickup`<br><small>WHIMSY+GAMING</small></code> · <b>-3</b></summary>
+<details open>
+<summary><b>#192</b> 太丢人了！我都不好意… <small>(lost_52_card_pickup<br><small>WHIMSY+GAMING<)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 3 MINUTES
@@ -2036,8 +2036,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/cards/deck/deck.dm
 </details>
 
-<details>
-<summary><b>#77</b> <code>`russian_roulette_lose_cheater`</code> · <b>-10</b></summary>
+<details open>
+<summary><b>#193</b> 我赌输了！还好我没瞄… <small>(russian_roulette_lose_cheater)</small> · 心情 <b>-10</b></summary>
 
 - **心情值**: -10
 - **超时**: 10 MINUTES
@@ -2046,8 +2046,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/projectiles/guns/ballistic/revolver.dm
 </details>
 
-<details>
-<summary><b>#78</b> <code>`russian_roulette_lose`</code> · <b>-20</b></summary>
+<details open>
+<summary><b>#194</b> 我拿命赌输了！我想这… <small>(russian_roulette_lose)</small> · 心情 <b>-20</b></summary>
 
 - **心情值**: -20
 - **超时**: 10 MINUTES
@@ -2056,8 +2056,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/projectiles/guns/ballistic/revolver.dm
 </details>
 
-<details>
-<summary><b>#79</b> <code>`bad_touch_bear_hug`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#195</b> 我刚刚被抱得太紧了。 <small>(bad_touch_bear_hug)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 2 MINUTES
@@ -2066,8 +2066,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/carbon/carbon_defense.dm
 </details>
 
-<details>
-<summary><b>#80</b> <code>`rippedtail`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#196</b> 我把他们的尾巴扯了下… <small>(rippedtail)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 30 SECONDS
@@ -2076,8 +2076,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/carbon/carbon_defense.dm
 </details>
 
-<details>
-<summary><b>#81</b> <code>`sabrage_fail`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#197</b> 该死！那招没按计划来… <small>(sabrage_fail)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 4 MINUTES
@@ -2086,8 +2086,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/reagents/reagent_containers/cups/glassbottle.dm
 </details>
 
-<details>
-<summary><b>#82</b> <code>`body_purist`</code> · <b>继承父类(mood_event)</b></summary>
+<details open>
+<summary><b>#198</b> 我感觉身上装着机械义… <small>(body_purist)</small> · 心情 <b>继承父类(mood_event)</b></summary>
 
 - **心情值**: 继承父类(mood_event)
 - **超时**: 永久
@@ -2096,8 +2096,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/quirks/negative_quirks/body_purist.dm
 </details>
 
-<details>
-<summary><b>#83</b> <code>`unsatisfied_nomad`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#199</b> 我在这里待太久了！我… <small>(unsatisfied_nomad)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 永久
@@ -2106,8 +2106,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/machinery/dna_infuser/organ_sets/carp_organs.dm
 </details>
 
-<details>
-<summary><b>#84</b> <code>`moon_insanity`<br><small>FEAR</small></code> · <b>-3</b></summary>
+<details open>
+<summary><b>#200</b> 月亮审判了我，认定我… <small>(moon_insanity<br><small>FEAR<)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 5 MINUTES
@@ -2116,8 +2116,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/antagonists/heretic/magic/moon_parade.dm, modules/antagonists/heretic/status_effects/mark_effects.dm
 </details>
 
-<details>
-<summary><b>#85</b> <code>`amulet_insanity`<br><small>FEAR</small></code> · <b>-6</b></summary>
+<details open>
+<summary><b>#201</b> 我看見了光，必須阻止… <small>(amulet_insanity<br><small>FEAR<)</small> · 心情 <b>-6</b></summary>
 
 - **心情值**: -6
 - **超时**: 5 MINUTES
@@ -2126,8 +2126,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/antagonists/heretic/items/heretic_necks.dm
 </details>
 
-<details>
-<summary><b>#86</b> <code>`mallet_humiliation`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#202</b> 被这么蠢的武器击中，… <small>(mallet_humiliation)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 10 SECONDS
@@ -2136,8 +2136,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/items/clown_items.dm
 </details>
 
-<details>
-<summary><b>#87</b> <code>`madness_despair`<br><small>特殊屏幕:mood_despair</small></code> · <b>-200</b></summary>
+<details open>
+<summary><b>#203</b> 不配，不配，不配！！… <small>(madness_despair<br><small>特殊屏幕:mood_despair<)</small> · 心情 <b>-200</b></summary>
 
 - **心情值**: -200
 - **超时**: 永久
@@ -2146,8 +2146,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/antagonists/wizard/grand_ritual/finales/cheese.dm
 </details>
 
-<details>
-<summary><b>#88</b> <code>`all_nighter`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#204</b> 我昨晚一宿没睡。我筋… <small>(all_nighter)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 永久
@@ -2156,8 +2156,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/quirks/negative_quirks/all_nighter.dm
 </details>
 
-<details>
-<summary><b>#89</b> <code>`desentized`<br><small>特殊屏幕:mood_desentized</small></code> · <b>-3</b></summary>
+<details open>
+<summary><b>#205</b> 没有什么能比得上我过… <small>(desentized<br><small>特殊屏幕:mood_desentized<)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 永久
@@ -2166,8 +2166,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/brain_damage/special.dm
 </details>
 
-<details>
-<summary><b>#90</b> <code>`pacifism_bypassed`</code> · <b>-20</b></summary>
+<details open>
+<summary><b>#206</b> 我不是故意要伤害他们… <small>(pacifism_bypassed)</small> · 心情 <b>-20</b></summary>
 
 - **心情值**: -20
 - **超时**: 10 MINUTES
@@ -2176,8 +2176,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/martial/junglearts.dm, datums/martial/psychotic_brawl.dm
 </details>
 
-<details>
-<summary><b>#91</b> <code>`bapped`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#207</b> 我的头，我现在觉得自… <small>(bapped)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 3 MINUTES
@@ -2186,8 +2186,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/items/stacks/wrap.dm
 </details>
 
-<details>
-<summary><b>#92</b> <code>`encountered_evil`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#208</b> 我不愿相信，但世上确… <small>(encountered_evil)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 1 MINUTES
@@ -2196,8 +2196,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/components/empathy.dm
 </details>
 
-<details>
-<summary><b>#93</b> <code>`smoke_in_face`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#209</b> 香烟的烟真恶心。 <small>(smoke_in_face)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 30 SECONDS
@@ -2206,8 +2206,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/items/cigarettes.dm
 </details>
 
-<details>
-<summary><b>#94</b> <code>`slots/loss`<br><small>GAMING</small></code> · <b>-2</b></summary>
+<details open>
+<summary><b>#210</b> 唉，真倒霉！ <small>(slots)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 5 MINUTES
@@ -2216,8 +2216,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/machinery/roulette_machine.dm, game/machinery/slotmachine.dm
 </details>
 
-<details>
-<summary><b>#95</b> <code>`lost_control_of_life`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#211</b> 我失去了对生活的掌控… <small>(lost_control_of_life)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 5 MINUTES
@@ -2226,8 +2226,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/food_and_drinks/recipes/food_mixtures.dm
 </details>
 
-<details>
-<summary><b>#96</b> <code>`empathetic_sad`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#212</b> 看到悲伤的人让我也难… <small>(empathetic_sad)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 3 MINUTES
@@ -2236,8 +2236,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/mood.dm (personality reaction)
 </details>
 
-<details>
-<summary><b>#97</b> <code>`misanthropic_sad`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#213</b> 看到开心的人让我不安… <small>(misanthropic_sad)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 3 MINUTES
@@ -2246,8 +2246,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/mood.dm (personality reaction)
 </details>
 
-<details>
-<summary><b>#98</b> <code>`paranoid/one_on_one`<br><small>FEAR</small></code> · <b>-3</b></summary>
+<details open>
+<summary><b>#214</b> 我和某人独处 <small>(paranoid)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 永久
@@ -2256,8 +2256,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/personality/reaction_to_groups.dm
 </details>
 
-<details>
-<summary><b>#99</b> <code>`paranoid/large_group`<br><small>FEAR</small></code> · <b>-3</b></summary>
+<details open>
+<summary><b>#215</b> 周围人太多了 <small>(paranoid)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 永久
@@ -2266,8 +2266,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/personality/reaction_to_groups.dm
 </details>
 
-<details>
-<summary><b>#100</b> <code>`nt_disillusioned`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#216</b> 我讨厌这家公司，以及… <small>(nt_disillusioned)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 永久
@@ -2276,8 +2276,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/personality/reaction_to_nt.dm
 </details>
 
-<details>
-<summary><b>#101</b> <code>`disillusioned_revs_lost`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#217</b> 革命失败了 <small>(disillusioned_revs_lost)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 10 MINUTES
@@ -2286,8 +2286,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/antagonists/revolution/revolution_handler.dm
 </details>
 
-<details>
-<summary><b>#102</b> <code>`loyalist_revs_win`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#218</b> 革命成功了 <small>(loyalist_revs_win)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 10 MINUTES
@@ -2296,8 +2296,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/antagonists/revolution/revolution_handler.dm
 </details>
 
-<details>
-<summary><b>#103</b> <code>`slacking_off_diligent`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#219</b> 我该回去工作了。 <small>(slacking_off_diligent)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 永久
@@ -2306,8 +2306,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/personality/reaction_to_recreation.dm
 </details>
 
-<details>
-<summary><b>#104</b> <code>`unimaginative_patronage`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#220</b> 那感觉就像白花钱。 <small>(unimaginative_patronage)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 5 MINUTES
@@ -2316,8 +2316,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/art/paintings.dm
 </details>
 
-<details>
-<summary><b>#105</b> <code>`unimaginative_framing`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#221</b> 我本该在那里挂点更有… <small>(unimaginative_framing)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 5 MINUTES
@@ -2326,8 +2326,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/art/paintings.dm
 </details>
 
-<details>
-<summary><b>#106</b> <code>`unimaginative_sculpting`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#222</b> 那感觉就像浪费材料。 <small>(unimaginative_sculpting)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 5 MINUTES
@@ -2336,8 +2336,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/art/statues.dm
 </details>
 
-<details>
-<summary><b>#107</b> <code>`splattered_with_blood`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#223</b> 呕，我全身沾满了血！ <small>(splattered_with_blood)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 4 MINUTES
@@ -2346,8 +2346,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/effects/decals/cleanable/blood.dm, modules/antagonists/changeling/powers/headcrab.dm, modules/mob/living/basic/vermin/cockroach/cockroach.dm
 </details>
 
-<details>
-<summary><b>#108</b> <code>`teetotal_hangover`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#224</b> 真是丢人的表现！这就… <small>(teetotal_hangover)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 10 MINUTES
@@ -2356,8 +2356,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/effects/landmarks.dm
 </details>
 
-<details>
-<summary><b>#109</b> <code>`normal_hangover`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#225</b> 唉，真是个难忘的夜晚… <small>(normal_hangover)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 10 MINUTES
@@ -2366,8 +2366,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/effects/landmarks.dm
 </details>
 
-<details>
-<summary><b>#110</b> <code>`jabbed_with_tester`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#226</b> 天哪，被那玩意儿扎一… <small>(jabbed_with_tester)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 5 MINUTES
@@ -2376,8 +2376,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/antagonists/blood_worm/blood_worm_tester.dm
 </details>
 
-<details>
-<summary><b>#111</b> <code>`gizmo_negative`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#227</b> 我听到一个低语的声音… <small>(gizmo_negative)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 30 SECONDS
@@ -2386,8 +2386,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/research/gizmo/gizmodes/gizmood.dm
 </details>
 
-<details>
-<summary><b>#112</b> <code>`conditional/see_death`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#228</b> 我刚刚看到 <small>(conditional)</small> · 心情 <b>-8</b></summary>
 
 - **心情值**: -8
 - **超时**: 5 MINUTES
@@ -2396,8 +2396,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mob/living/death.dm
 </details>
 
-<details>
-<summary><b>#113</b> <code>`conditional/see_death/naive`<br><small>优先级:NAIVE_PRIORITY</small></code> · <b>0</b></summary>
+<details open>
+<summary><b>#229</b> 好好睡一觉吧， <small>(conditional)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 5 MINUTES
@@ -2406,8 +2406,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: —
 </details>
 
-<details>
-<summary><b>#114</b> <code>`conditional/see_death/cult`<br><small>优先级:CULT_PRIORITY</small></code> · <b>+4 (= -8 × -0.5)</b></summary>
+<details open>
+<summary><b>#230</b> 几何之神又多了个灵魂… <small>(conditional)</small> · 心情 <b>+4 (= -8 × -0.5)</b></summary>
 
 - **心情值**: +4 (= -8 × -0.5)
 - **超时**: 5 MINUTES
@@ -2416,8 +2416,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: —
 </details>
 
-<details>
-<summary><b>#115</b> <code>`conditional/see_death/revolutionary`<br><small>优先级:REVOLUTIONARY_PRIORITY</small></code> · <b>+4 (= -8 × -0.5)</b></summary>
+<details open>
+<summary><b>#231</b> 」死了！革命万岁！（… <small>(conditional)</small> · 心情 <b>+4 (= -8 × -0.5)</b></summary>
 
 - **心情值**: +4 (= -8 × -0.5)
 - **超时**: 5 MINUTES
@@ -2426,8 +2426,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: —
 </details>
 
-<details>
-<summary><b>#116</b> <code>`conditional/see_death/gamer`<br><small>优先级:GAMER_PRIORITY</small></code> · <b>+4 (= -8 × -0.5)</b></summary>
+<details open>
+<summary><b>#232</b> 又有一个倒下了！（游… <small>(conditional)</small> · 心情 <b>+4 (= -8 × -0.5)</b></summary>
 
 - **心情值**: +4 (= -8 × -0.5)
 - **超时**: 5 MINUTES
@@ -2436,8 +2436,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: —
 </details>
 
-<details>
-<summary><b>#117</b> <code>`conditional/see_death/dontcare`<br><small>优先级:DONTCARE_PRIORITY</small></code> · <b>0</b></summary>
+<details open>
+<summary><b>#233</b> 哦， <small>(conditional)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 2.5 MINUTES (×0.5)
@@ -2446,8 +2446,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: —
 </details>
 
-<details>
-<summary><b>#118</b> <code>`conditional/see_death/ashwalker`<br><small>优先级:ASHWALKER_PRIORITY</small></code> · <b>0（gibbed 时 +4）</b></summary>
+<details open>
+<summary><b>#234</b> 哦， <small>(conditional)</small> · 心情 <b>0（gibbed 时 +4）</b></summary>
 
 - **心情值**: 0（gibbed 时 +4）
 - **超时**: 5 MINUTES
@@ -2456,8 +2456,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: —
 </details>
 
-<details>
-<summary><b>#119</b> <code>`conditional/see_death/pet`<br><small>优先级:PET_PRIORITY</small></code> · <b>-8（animal_friend ×1.5 / 非 compassionate ×0.25）</b></summary>
+<details open>
+<summary><b>#235</b> 刚刚死了！！（宠物死… <small>(conditional)</small> · 心情 <b>-8（animal_friend ×1.5 / 非 compassionate ×0.25）</b></summary>
 
 - **心情值**: -8（animal_friend ×1.5 / 非 compassionate ×0.25）
 - **超时**: 5 MINUTES
@@ -2466,8 +2466,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: —
 </details>
 
-<details>
-<summary><b>#120</b> <code>`conditional/see_death/xeno`<br><small>优先级:XENO_PRIORITY</small></code> · <b>正数（基础 -8 反转为 +，按异形类型 0.1~0.75 倍）</b></summary>
+<details open>
+<summary><b>#236</b> 看到异形死后，我体内… <small>(conditional)</small> · 心情 <b>正数（基础 -8 反转为 +，按异形类型 0.1~0.75 倍）</b></summary>
 
 - **心情值**: 正数（基础 -8 反转为 +，按异形类型 0.1~0.75 倍）
 - **超时**: 5 MINUTES × modifier
@@ -2476,8 +2476,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: —
 </details>
 
-<details>
-<summary><b>#121</b> <code>`conditional/see_death/desensitized`<br><small>优先级:DESENSITIZED_PRIORITY</small></code> · <b>-8 × desensitized 系数</b></summary>
+<details open>
+<summary><b>#237</b> 我看到 <small>(conditional)</small> · 心情 <b>-8 × desensitized 系数</b></summary>
 
 - **心情值**: -8 × desensitized 系数
 - **超时**: 2.5 MINUTES (×0.5)
@@ -2486,8 +2486,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: —
 </details>
 
-<details>
-<summary><b>#122</b> <code>`morbid_dismemberment`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#238</b> 没有什么比干净利落地… <small>(morbid_dismemberment)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 2 MINUTES
@@ -2496,8 +2496,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/jobs/job_types/chaplain/chaplain_vorpal_scythe.dm, modules/surgery/surgery_tools.dm
 </details>
 
-<details>
-<summary><b>#123</b> <code>`morbid_dissection_success`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#239</b> 我为我的工作感到自豪… <small>(morbid_dissection_success)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 2 MINUTES
@@ -2506,8 +2506,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/operations/operation_amputation.dm, modules/surgery/operations/operation_autopsy.dm
 </details>
 
-<details>
-<summary><b>#124</b> <code>`morbid_abominable_surgery_success`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#240</b> 毕加索用画笔都难以企… <small>(morbid_abominable_surgery_success)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 2 MINUTES
@@ -2516,8 +2516,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/operations/operation_organ_manip.dm, modules/surgery/operations/operation_plastic_surgery.dm
 </details>
 
-<details>
-<summary><b>#125</b> <code>`morbid_revival_success`</code> · <b>6</b></summary>
+<details open>
+<summary><b>#241</b> 它活了！啊哈哈哈哈！… <small>(morbid_revival_success)</small> · 心情 <b>6</b></summary>
 
 - **心情值**: 6
 - **超时**: 8 MINUTES
@@ -2526,8 +2526,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/operations/operation_revival.dm
 </details>
 
-<details>
-<summary><b>#126</b> <code>`morbid_graverobbing`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#242</b> 死人用不着财产。而我… <small>(morbid_graverobbing)</small> · 心情 <b>2</b></summary>
 
 - **心情值**: 2
 - **超时**: 2 MINUTES
@@ -2536,8 +2536,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/mapfluff/ruins/lavalandruin_code/elephantgraveyard.dm
 </details>
 
-<details>
-<summary><b>#127</b> <code>`morbid_hauntium`</code> · <b>3</b></summary>
+<details open>
+<summary><b>#243</b> 我与灵魂的联系更紧密… <small>(morbid_hauntium)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 6 MINUTES
@@ -2546,8 +2546,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/reagents/chemistry/reagents/other_reagents.dm
 </details>
 
-<details>
-<summary><b>#128</b> <code>`morbid_aquarium_good`</code> · <b>3</b></summary>
+<details open>
+<summary><b>#244</b> 嘿嘿，所有的鱼都在「… <small>(morbid_aquarium_good)</small> · 心情 <b>3</b></summary>
 
 - **心情值**: 3
 - **超时**: 90 SECONDS
@@ -2556,8 +2556,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/components/aquarium.dm
 </details>
 
-<details>
-<summary><b>#129</b> <code>`morbid_tend_wounds`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#245</b> 为什么我要把才华浪费… <small>(morbid_tend_wounds)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 2 MINUTES
@@ -2566,8 +2566,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: modules/surgery/operations/operation_healing.dm
 </details>
 
-<details>
-<summary><b>#130</b> <code>`morbid_saved_life`</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#246</b> 我本可以用他们的尸体… <small>(morbid_saved_life)</small> · 心情 <b>-6</b></summary>
 
 - **心情值**: -6
 - **超时**: 2 MINUTES
@@ -2576,8 +2576,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/objects/items/tools/medical/defib.dm, modules/mob/living/carbon/human/human.dm
 </details>
 
-<details>
-<summary><b>#131</b> <code>`morbid_aquarium_bad`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#247</b> 看水族箱里的鱼真无聊… <small>(morbid_aquarium_bad)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 90 SECONDS
@@ -2586,8 +2586,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: datums/components/aquarium.dm
 </details>
 
-<details>
-<summary><b>#132</b> <code>`it_was_on_the_mouse`<br><small>WHIMSY</small></code> · <b>1</b></summary>
+<details open>
+<summary><b>#248</b> 嘿嘿。「它就在鼠标上… <small>(it_was_on_the_mouse<br><small>WHIMSY<)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 2 MINUTES
@@ -2596,8 +2596,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/machinery/dna_infuser/organ_sets/rat_organs.dm
 </details>
 
-<details>
-<summary><b>#133</b> <code>`gondola_serenity`<br><small>特殊屏幕:mood_gondola</small></code> · <b>10</b></summary>
+<details open>
+<summary><b>#249</b> 此刻你心头可能有很多… <small>(gondola_serenity<br><small>特殊屏幕:mood_gondola<)</small> · 心情 <b>10</b></summary>
 
 - **心情值**: 10
 - **超时**: 永久
@@ -2606,8 +2606,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/machinery/dna_infuser/organ_sets/gondola_organs.dm
 </details>
 
-<details>
-<summary><b>#134</b> <code>`fish_waterless`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#250</b> 离开水真难受。我感觉… <small>(fish_waterless)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 永久
@@ -2616,8 +2616,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: game/machinery/dna_infuser/organ_sets/fish_organs.dm
 </details>
 
-<details>
-<summary><b>#135</b> <code>`fish_water`</code> · <b>1</b></summary>
+<details open>
+<summary><b>#251</b> 咕噜咕噜！ <small>(fish_water)</small> · 心情 <b>1</b></summary>
 
 - **心情值**: 1
 - **超时**: 永久
@@ -2628,8 +2628,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 
 ### 6.3 需求/食物/饮药事件（78 个）
 
-<details>
-<summary><b>#1</b> <code>`/datum/mood_event/fat`</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#252</b> fat <small>(fat)</small> · 心情 <b>-6</b></summary>
 
 - **描述**: `<B>I'm so fat...</B>`
 - **心情值**: -6
@@ -2638,8 +2638,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm` `update_nutrition_moodlets()`：有 `TRAIT_FAT` 且无 `TRAIT_VORACIOUS` 时（NovaSector 在 `modular_nova/master_files/code/datums/traits/neutral.dm:369` 有 `/datum/mood_event/fat/add_effects(...)` 覆写）
 </details>
 
-<details>
-<summary><b>#2</b> <code>`/datum/mood_event/too_wellfed`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#253</b> too_wellfed <small>(too_wellfed)</small> · 心情 <b>0</b></summary>
 
 - **描述**: `I think I've eaten too much.`
 - **心情值**: 0
@@ -2648,8 +2648,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm`：营养 ≥ `NUTRITION_LEVEL_FULL` 且无 `TRAIT_VORACIOUS`
 </details>
 
-<details>
-<summary><b>#3</b> <code>`/datum/mood_event/wellfed`</code> · <b>8</b></summary>
+<details open>
+<summary><b>#254</b> wellfed <small>(wellfed)</small> · 心情 <b>8</b></summary>
 
 - **描述**: `I'm stuffed!`
 - **心情值**: 8
@@ -2658,8 +2658,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm`：营养 `WELL_FED~FULL`；或 ≥FULL 且带 `TRAIT_VORACIOUS`
 </details>
 
-<details>
-<summary><b>#4</b> <code>`/datum/mood_event/fed`</code> · <b>5</b></summary>
+<details open>
+<summary><b>#255</b> fed <small>(fed)</small> · 心情 <b>5</b></summary>
 
 - **描述**: `I have recently had some food.`
 - **心情值**: 5
@@ -2668,8 +2668,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm`：营养 `FED~WELL_FED`
 </details>
 
-<details>
-<summary><b>#5</b> <code>`/datum/mood_event/hungry`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#256</b> hungry <small>(hungry)</small> · 心情 <b>-3</b></summary>
 
 - **描述**: `I'm getting a bit hungry.`
 - **心情值**: -3
@@ -2678,8 +2678,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm`：营养 `VERY_HUNGRY~HUNGRY`；另带 `TRAIT_GLUTTON` 时固定触发（"you'll never get enough"）
 </details>
 
-<details>
-<summary><b>#6</b> <code>`/datum/mood_event/hungry_very`</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#257</b> hungry_very <small>(hungry_very)</small> · 心情 <b>-6</b></summary>
 
 - **描述**: `I'm hungry!`
 - **心情值**: -6
@@ -2688,8 +2688,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm`：营养 `STARVING~VERY_HUNGRY`
 </details>
 
-<details>
-<summary><b>#7</b> <code>`/datum/mood_event/starving`</code> · <b>-10</b></summary>
+<details open>
+<summary><b>#258</b> starving <small>(starving)</small> · 心情 <b>-10</b></summary>
 
 - **描述**: `I'm starving!`
 - **心情值**: -10
@@ -2698,8 +2698,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `mood.dm`：营养 0~`NUTRITION_LEVEL_STARVING`
 </details>
 
-<details>
-<summary><b>#8</b> <code>`/datum/mood_event/supercharged`</code> · <b>-10</b></summary>
+<details open>
+<summary><b>#259</b> supercharged <small>(supercharged)</small> · 心情 <b>-10</b></summary>
 
 - **描述**: `I can't possibly keep all this power inside, I need to release some quick!`
 - **心情值**: -10
@@ -2708,8 +2708,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `stomach_ethereal.dm:106`（`add_mood_event("charge", ...)`）
 </details>
 
-<details>
-<summary><b>#9</b> <code>`/datum/mood_event/overcharged`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#260</b> overcharged <small>(overcharged)</small> · 心情 <b>-4</b></summary>
 
 - **描述**: `I feel dangerously overcharged, perhaps I should release some power.`
 - **心情值**: -4
@@ -2718,8 +2718,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `stomach_ethereal.dm:102`
 </details>
 
-<details>
-<summary><b>#10</b> <code>`/datum/mood_event/charged`</code> · <b>6</b></summary>
+<details open>
+<summary><b>#261</b> charged <small>(charged)</small> · 心情 <b>6</b></summary>
 
 - **描述**: `I feel the power in my veins!`
 - **心情值**: 6
@@ -2728,8 +2728,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `stomach_ethereal.dm:99`
 </details>
 
-<details>
-<summary><b>#11</b> <code>`/datum/mood_event/lowpower`</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#262</b> lowpower <small>(lowpower)</small> · 心情 <b>-6</b></summary>
 
 - **描述**: `My power is running low, I should go charge up somewhere.`
 - **心情值**: -6
@@ -2738,8 +2738,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `stomach_ethereal.dm:96`
 </details>
 
-<details>
-<summary><b>#12</b> <code>`/datum/mood_event/decharged`</code> · <b>-10</b></summary>
+<details open>
+<summary><b>#263</b> decharged <small>(decharged)</small> · 心情 <b>-10</b></summary>
 
 - **描述**: `I'm in desperate need of some electricity!`
 - **心情值**: -10
@@ -2748,8 +2748,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `stomach_ethereal.dm:86,91`（急缺电）
 </details>
 
-<details>
-<summary><b>#13</b> <code>`/datum/mood_event/gross`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#264</b> gross <small>(gross)</small> · 心情 <b>-4</b></summary>
 
 - **描述**: `I saw something gross.`
 - **心情值**: -4
@@ -2758,8 +2758,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_stomach.dm:389`（`add_mood_event("disgust", ...)`，呕吐/恶心）
 </details>
 
-<details>
-<summary><b>#14</b> <code>`/datum/mood_event/verygross`</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#265</b> verygross <small>(verygross)</small> · 心情 <b>-6</b></summary>
 
 - **描述**: `I think I'm going to puke...`
 - **心情值**: -6
@@ -2768,8 +2768,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_stomach.dm:392`
 </details>
 
-<details>
-<summary><b>#15</b> <code>`/datum/mood_event/disgusted`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#266</b> disgusted <small>(disgusted)</small> · 心情 <b>-8</b></summary>
 
 - **描述**: `Oh god, that's disgusting...`
 - **心情值**: -8
@@ -2778,8 +2778,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `shotgun.dm:69`（`"stink-pocket"` 臭弹）
 </details>
 
-<details>
-<summary><b>#16</b> <code>`/datum/mood_event/disgust/bad_smell`</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#267</b> disgust <small>(disgust)</small> · 心情 <b>-6</b></summary>
 
 - **描述**: `I can smell something horribly decayed inside this room.`
 - **心情值**: -6
@@ -2788,8 +2788,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `life.dm:373`（`"smell"`）、`_lungs.dm:477`（呼吸到腐臭味）
 </details>
 
-<details>
-<summary><b>#17</b> <code>`/datum/mood_event/disgust/nauseating_stench`</code> · <b>-12</b></summary>
+<details open>
+<summary><b>#268</b> disgust <small>(disgust)</small> · 心情 <b>-12</b></summary>
 
 - **描述**: `The stench of rotting carcasses is unbearable!`
 - **心情值**: -12
@@ -2798,8 +2798,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `life.dm:378,384`、`_lungs.dm:482,488`
 </details>
 
-<details>
-<summary><b>#18</b> <code>`/datum/mood_event/disgust/dirty_food`</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#269</b> disgust <small>(disgust)</small> · 心情 <b>-6</b></summary>
 
 - **描述**: `That was too dirty to eat...`
 - **心情值**: -6
@@ -2808,8 +2808,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `infective.dm:98`（吃脏食物，`"disgust"` 类）
 </details>
 
-<details>
-<summary><b>#19</b> <code>`/datum/mood_event/shower`</code> · <b>4</b></summary>
+<details open>
+<summary><b>#270</b> shower <small>(shower)</small> · 心情 <b>4</b></summary>
 
 - **描述**: `I have recently had a nice shower.`
 - **心情值**: 4
@@ -2818,8 +2818,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `shower.dm:281`（淋浴间喷淋 `"shower"` 类）
 </details>
 
-<details>
-<summary><b>#20</b> <code>`/datum/mood_event/hot_spring`</code> · <b>5</b></summary>
+<details open>
+<summary><b>#271</b> hot_spring <small>(hot_spring)</small> · 心情 <b>5</b></summary>
 
 - **描述**: `It's so relaxing to bathe in steamy water...`
 - **心情值**: 5
@@ -2828,8 +2828,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `water.dm:286`（泡温泉中）
 </details>
 
-<details>
-<summary><b>#21</b> <code>`/datum/mood_event/hot_spring_hater`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#272</b> hot_spring_hater <small>(hot_spring_hater)</small> · 心情 <b>-2</b></summary>
 
 - **描述**: `No, no, no, no, I don't want to take a bath!`
 - **心情值**: -2
@@ -2838,8 +2838,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `water.dm:288`
 </details>
 
-<details>
-<summary><b>#22</b> <code>`/datum/mood_event/hot_spring_left`</code> · <b>4</b></summary>
+<details open>
+<summary><b>#273</b> hot_spring_left <small>(hot_spring_left)</small> · 心情 <b>4</b></summary>
 
 - **描述**: `That was an enjoyable bath.`
 - **心情值**: 4
@@ -2848,8 +2848,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `water.dm:309`
 </details>
 
-<details>
-<summary><b>#23</b> <code>`/datum/mood_event/hot_spring_hater_left`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#274</b> hot_spring_hater_left <small>(hot_spring_hater_left)</small> · 心情 <b>-3</b></summary>
 
 - **描述**: `I hate baths! And I hate how cold it's once you step out of it!`
 - **心情值**: -3
@@ -2858,8 +2858,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `water.dm:311`
 </details>
 
-<details>
-<summary><b>#24</b> <code>`/datum/mood_event/fresh_laundry`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#275</b> fresh_laundry <small>(fresh_laundry)</small> · 心情 <b>2</b></summary>
 
 - **描述**: `There's nothing like the feeling of a freshly laundered jumpsuit.`
 - **心情值**: 2
@@ -2868,8 +2868,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_under.dm:233`（穿刚洗的制服）、`towels.dm:318`（`onwear_mood` 组件）
 </details>
 
-<details>
-<summary><b>#25</b> <code>`/datum/mood_event/surrounded_by_silicon`</code> · <b>8</b></summary>
+<details open>
+<summary><b>#276</b> surrounded_by_silicon <small>(surrounded_by_silicon)</small> · 心情 <b>8</b></summary>
 
 - **描述**: `I'm surrounded by perfect lifeforms!!`
 - **心情值**: 8
@@ -2878,8 +2878,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:199`（`MOOD_CATEGORY_TRANSHUMANIST_PEOPLE`）
 </details>
 
-<details>
-<summary><b>#26</b> <code>`/datum/mood_event/around_many_silicon`</code> · <b>4</b></summary>
+<details open>
+<summary><b>#277</b> around_many_silicon <small>(around_many_silicon)</small> · 心情 <b>4</b></summary>
 
 - **描述**: `So many silicon lifeforms near me!`
 - **心情值**: 4
@@ -2888,8 +2888,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:201`
 </details>
 
-<details>
-<summary><b>#27</b> <code>`/datum/mood_event/around_silicon`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#278</b> around_silicon <small>(around_silicon)</small> · 心情 <b>2</b></summary>
 
 - **描述**: `The silicon lifeforms near me are absolutely perfect.`
 - **心情值**: 2
@@ -2898,8 +2898,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:203`
 </details>
 
-<details>
-<summary><b>#28</b> <code>`/datum/mood_event/around_organic`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#279</b> around_organic <small>(around_organic)</small> · 心情 <b>-2</b></summary>
 
 - **描述**: `The organics near me remind me of the inferiority of flesh.`
 - **心情值**: -2
@@ -2908,8 +2908,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:207`
 </details>
 
-<details>
-<summary><b>#29</b> <code>`/datum/mood_event/around_many_organic`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#280</b> around_many_organic <small>(around_many_organic)</small> · 心情 <b>-4</b></summary>
 
 - **描述**: `So many disgusting organics!`
 - **心情值**: -4
@@ -2918,8 +2918,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:209`
 </details>
 
-<details>
-<summary><b>#30</b> <code>`/datum/mood_event/surrounded_by_organic`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#281</b> surrounded_by_organic <small>(surrounded_by_organic)</small> · 心情 <b>-8</b></summary>
 
 - **描述**: `I'm surrounded by disgusting organics!!`
 - **心情值**: -8
@@ -2928,8 +2928,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:211`
 </details>
 
-<details>
-<summary><b>#31</b> <code>`/datum/mood_event/completely_robotic`</code> · <b>8</b></summary>
+<details open>
+<summary><b>#282</b> completely_robotic <small>(completely_robotic)</small> · 心情 <b>8</b></summary>
 
 - **描述**: `I've abandoned my feeble flesh, my form is perfect!!`
 - **心情值**: 8
@@ -2938,8 +2938,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:112`（`MOOD_CATEGORY_TRANSHUMANIST_BODYPART`）
 </details>
 
-<details>
-<summary><b>#32</b> <code>`/datum/mood_event/very_robotic`</code> · <b>4</b></summary>
+<details open>
+<summary><b>#283</b> very_robotic <small>(very_robotic)</small> · 心情 <b>4</b></summary>
 
 - **描述**: `I'm more robot than organic!`
 - **心情值**: 4
@@ -2948,8 +2948,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:124`
 </details>
 
-<details>
-<summary><b>#33</b> <code>`/datum/mood_event/balanced_robotic`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#284</b> balanced_robotic <small>(balanced_robotic)</small> · 心情 <b>0</b></summary>
 
 - **描述**: `I'm part machine, part organic.`
 - **心情值**: 0
@@ -2958,8 +2958,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:126`
 </details>
 
-<details>
-<summary><b>#34</b> <code>`/datum/mood_event/very_organic`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#285</b> very_organic <small>(very_organic)</small> · 心情 <b>-4</b></summary>
 
 - **描述**: `I hate this feeble and weak flesh!`
 - **心情值**: -4
@@ -2968,8 +2968,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:128`
 </details>
 
-<details>
-<summary><b>#35</b> <code>`/datum/mood_event/completely_organic`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#286</b> completely_organic <small>(completely_organic)</small> · 心情 <b>-8</b></summary>
 
 - **描述**: `I'm completely organic, this is miserable!!`
 - **心情值**: -8
@@ -2978,8 +2978,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `transhumanist.dm:115`
 </details>
 
-<details>
-<summary><b>#1</b> <code>`/datum/mood_event/favorite_food`</code> · <b>5</b></summary>
+<details open>
+<summary><b>#287</b> favorite_food <small>(favorite_food)</small> · 心情 <b>5</b></summary>
 
 - **描述**: `I really enjoyed eating that.`
 - **心情值**: 5
@@ -2988,8 +2988,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_cup.dm:122`（喝到最爱饮品 `"fav_food"`）、`modular_nova/.../drink_reagents.dm:88`（最爱饮品试剂）
 </details>
 
-<details>
-<summary><b>#2</b> <code>`/datum/mood_event/gross_food`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#288</b> gross_food <small>(gross_food)</small> · 心情 <b>-2</b></summary>
 
 - **描述**: `I really didn't like that food.`
 - **心情值**: -2
@@ -2998,8 +2998,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `edible.dm:641`（难吃食物 `"gross_food"`）、`_cup.dm:118`
 </details>
 
-<details>
-<summary><b>#3</b> <code>`/datum/mood_event/disgusting_food`</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#289</b> disgusting_food <small>(disgusting_food)</small> · 心情 <b>-6</b></summary>
 
 - **描述**: `That food was disgusting!`
 - **心情值**: -6
@@ -3008,8 +3008,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `edible.dm:635`（有毒/恶心食物 `"toxic_food"`）、`_cup.dm:114`
 </details>
 
-<details>
-<summary><b>#4</b> <code>`/datum/mood_event/allergic_food`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#290</b> allergic_food <small>(allergic_food)</small> · 心情 <b>-2</b></summary>
 
 - **描述**: `My throat itches.`
 - **心情值**: -2
@@ -3018,8 +3018,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `taste.dm:159`（`"allergic_food"`，尝到过敏原）
 </details>
 
-<details>
-<summary><b>#5</b> <code>`/datum/mood_event/breakfast`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#291</b> breakfast <small>(breakfast)</small> · 心情 <b>2</b></summary>
 
 - **描述**: `Nothing like a hearty breakfast to start the shift.`
 - **心情值**: 2
@@ -3028,8 +3028,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `edible.dm:625`（早上吃第一餐）、`_cup.dm:106`
 </details>
 
-<details>
-<summary><b>#6</b> <code>`/datum/mood_event/food`</code> · <b>动态</b></summary>
+<details open>
+<summary><b>#292</b> （动态） <small>(food)</small> · 心情 <b>动态</b></summary>
 
 - **描述**: `That food was [GLOB.food_quality_description[quality]].`（动态）
 - **心情值**: 动态
@@ -3038,8 +3038,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `edible.dm:649`（吃东西按品质结算 `"quality_food"`）；`food_reagents.dm:56` 的 `amazingtaste` 另算（见饮品）
 </details>
 
-<details>
-<summary><b>#7</b> <code>`/datum/mood_event/pacifist_eating_fish_item`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#293</b> pacifist_eating_fish_item <small>(pacifist_eating_fish_item)</small> · 心情 <b>-1</b></summary>
 
 - **描述**: `I shouldn't be eating living creatures...`
 - **心情值**: -1
@@ -3048,8 +3048,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_fish.dm:438`（吃鱼 `"eating_fish"`）
 </details>
 
-<details>
-<summary><b>#1</b> <code>`/datum/mood_event/drunk`</code> · <b>动态 3~6</b></summary>
+<details open>
+<summary><b>#294</b> （基础档） <small>(drunk)</small> · 心情 <b>动态 3~6</b></summary>
 
 - **描述**: `Everything just feels better after a drink or two.`（基础档）
 - **心情值**: 动态 3~6
@@ -3058,8 +3058,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drunk.dm:106`（醉酒状态效果 `"drunk"`，带 drunk_value）；`modular_nova/.../human.dm:276`（`"drunk"`）
 </details>
 
-<details>
-<summary><b>#2</b> <code>`/datum/mood_event/drunk_after`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#295</b> drunk_after <small>(drunk_after)</small> · 心情 <b>2</b></summary>
 
 - **描述**: `The buzz might be gone, but I still feel good.`
 - **心情值**: 2
@@ -3068,8 +3068,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drunk.dm:124`（醉酒结束 `"[id]_after"`）
 </details>
 
-<details>
-<summary><b>#3</b> <code>`/datum/mood_event/wrong_brandy`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#296</b> wrong_brandy <small>(wrong_brandy)</small> · 心情 <b>-2</b></summary>
 
 - **描述**: `I hate that type of drink.`
 - **心情值**: -2
@@ -3078,8 +3078,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `addict.dm:235`（成瘾者 `"wrong_alcohol"`）
 </details>
 
-<details>
-<summary><b>#4</b> <code>`/datum/mood_event/quality_revolting`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#297</b> quality_revolting <small>(quality_revolting)</small> · 心情 <b>-8</b></summary>
 
 - **描述**: `That drink was the worst thing I've ever consumed.`
 - **心情值**: -8
@@ -3088,8 +3088,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `food_reagents.dm:45`（`"quality_drink"`）
 </details>
 
-<details>
-<summary><b>#5</b> <code>`/datum/mood_event/quality_nice`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#298</b> quality_nice <small>(quality_nice)</small> · 心情 <b>2</b></summary>
 
 - **描述**: `That drink wasn't bad at all.`
 - **心情值**: 2
@@ -3098,8 +3098,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `food_reagents.dm:47`
 </details>
 
-<details>
-<summary><b>#6</b> <code>`/datum/mood_event/quality_good`</code> · <b>4</b></summary>
+<details open>
+<summary><b>#299</b> quality_good <small>(quality_good)</small> · 心情 <b>4</b></summary>
 
 - **描述**: `That drink was pretty good.`
 - **心情值**: 4
@@ -3108,8 +3108,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `food_reagents.dm:49`
 </details>
 
-<details>
-<summary><b>#7</b> <code>`/datum/mood_event/quality_verygood`</code> · <b>6</b></summary>
+<details open>
+<summary><b>#300</b> quality_verygood <small>(quality_verygood)</small> · 心情 <b>6</b></summary>
 
 - **描述**: `That drink was great!`
 - **心情值**: 6
@@ -3118,8 +3118,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `food_reagents.dm:51`
 </details>
 
-<details>
-<summary><b>#8</b> <code>`/datum/mood_event/quality_fantastic`</code> · <b>8</b></summary>
+<details open>
+<summary><b>#301</b> quality_fantastic <small>(quality_fantastic)</small> · 心情 <b>8</b></summary>
 
 - **描述**: `That drink was amazing!`
 - **心情值**: 8
@@ -3128,8 +3128,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `food_reagents.dm:53`
 </details>
 
-<details>
-<summary><b>#9</b> <code>`/datum/mood_event/amazingtaste`</code> · <b>**50**</b></summary>
+<details open>
+<summary><b>#302</b> amazingtaste <small>(amazingtaste)</small> · 心情 <b>**50**</b></summary>
 
 - **描述**: `Amazing taste!`
 - **心情值**: **50**
@@ -3138,8 +3138,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `food_reagents.dm:56`（`"quality_food"` 类别，品质极佳时）
 </details>
 
-<details>
-<summary><b>#10</b> <code>`/datum/mood_event/wellcheers`</code> · <b>3</b></summary>
+<details open>
+<summary><b>#303</b> wellcheers <small>(wellcheers)</small> · 心情 <b>3</b></summary>
 
 - **描述**: `What a tasty can of Wellcheers! The salty grape flavor is a great pick-me-up.`
 - **心情值**: 3
@@ -3148,8 +3148,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drink_reagents.dm:704`（`"wellcheers"`）
 </details>
 
-<details>
-<summary><b>#11</b> <code>`/datum/mood_event/sweetcoffee`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#304</b> sweetcoffee <small>(sweetcoffee)</small> · 心情 <b>2</b></summary>
 
 - **描述**: `The bitter sweet taste of coffee was not too bad`
 - **心情值**: 2
@@ -3158,8 +3158,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `bevarages.dm:9`（堆叠效果 `"sweet_coffee"`）
 </details>
 
-<details>
-<summary><b>#12</b> <code>`/datum/mood_event/sweettea`</code> · <b>4</b></summary>
+<details open>
+<summary><b>#305</b> sweettea <small>(sweettea)</small> · 心情 <b>4</b></summary>
 
 - **描述**: `Let your worries dissolve like sugar in tea.`
 - **心情值**: 4
@@ -3168,8 +3168,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `bevarages.dm:19`（`"sweet_tea"`）
 </details>
 
-<details>
-<summary><b>#1</b> <code>`/datum/mood_event/high`</code> · <b>6</b></summary>
+<details open>
+<summary><b>#306</b> high <small>(high)</small> · 心情 <b>6</b></summary>
 
 - **描述**: `Woooow duudeeeeee... I'm tripping baaalls...`
 - **心情值**: 6
@@ -3178,8 +3178,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drugginess.dm:14`（drugginess 状态效果）；`drug_reagents.dm:534`（`"tripping"` 迷幻药）、`607`（`"vibing"`）
 </details>
 
-<details>
-<summary><b>#2</b> <code>`/datum/mood_event/stoned`</code> · <b>6</b></summary>
+<details open>
+<summary><b>#307</b> stoned <small>(stoned)</small> · 心情 <b>6</b></summary>
 
 - **描述**: `I'm sooooo stooooooooooooned...`
 - **心情值**: 6
@@ -3188,8 +3188,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drug_effects.dm:80`（`"stoned"`）；`modular_nova/.../thc.dm:30,61`（THC 试剂，`"stoned"` 带 name 参数；NovaSector 在该文件有覆写）
 </details>
 
-<details>
-<summary><b>#3</b> <code>`/datum/mood_event/maintenance_high`</code> · <b>动态</b></summary>
+<details open>
+<summary><b>#308</b> maintenance_high <small>(maintenance_high)</small> · 心情 <b>动态</b></summary>
 
 - **描述**: `I'm on top of the world, baby! Tide worldwide!`
 - **心情值**: 动态
@@ -3198,8 +3198,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drink_reagents.dm:557`（`"maintenance_fun"` 维修工饮料）、`drug_reagents.dm:371,418`（`"maintenance_fun"`）
 </details>
 
-<details>
-<summary><b>#4</b> <code>`/datum/mood_event/hang_over`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#309</b> hang_over <small>(hang_over)</small> · 心情 <b>-4</b></summary>
 
 - **描述**: `I have a killer hang over!`
 - **心情值**: -4
@@ -3208,8 +3208,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `split_personality.dm:299`（`"hang_over"`）
 </details>
 
-<details>
-<summary><b>#5</b> <code>`/datum/mood_event/smoked`</code> · <b>2</b></summary>
+<details open>
+<summary><b>#310</b> smoked <small>(smoked)</small> · 心情 <b>2</b></summary>
 
 - **描述**: `I have had a smoke recently.`
 - **心情值**: 2
@@ -3218,8 +3218,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drug_reagents.dm:105`（`"smoked"`）
 </details>
 
-<details>
-<summary><b>#6</b> <code>`/datum/mood_event/wrong_brand`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#311</b> wrong_brand <small>(wrong_brand)</small> · 心情 <b>-2</b></summary>
 
 - **描述**: `I hate that brand of cigarettes.`
 - **心情值**: -2
@@ -3228,8 +3228,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `addict.dm:167`（成瘾者 `"wrong_cigs"`）
 </details>
 
-<details>
-<summary><b>#7</b> <code>`/datum/mood_event/overdose`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#312</b> （动态） <small>(overdose)</small> · 心情 <b>-8</b></summary>
 
 - **描述**: `I think I took a bit too much of that [drug_name]!`（动态）
 - **心情值**: -8
@@ -3238,8 +3238,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drug_reagents.dm:34`、`reagents.dm:291`（`"[type]_overdose"` 通用过量）
 </details>
 
-<details>
-<summary><b>#8</b> <code>`/datum/mood_event/withdrawal_light`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#313</b> （动态） <small>(withdrawal_light)</small> · 心情 <b>-2</b></summary>
 
 - **描述**: `I could use some [drug_name]...`（动态）
 - **心情值**: -2
@@ -3248,8 +3248,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_addiction.dm:25`（成瘾系统通用轻戒断）
 </details>
 
-<details>
-<summary><b>#9</b> <code>`/datum/mood_event/withdrawal_medium`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#314</b> （动态） <small>(withdrawal_medium)</small> · 心情 <b>-5</b></summary>
 
 - **描述**: `I really need [drug_name].`（动态）
 - **心情值**: -5
@@ -3258,8 +3258,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_addiction.dm:27`（默认 `medium_withdrawal_moodlet`）
 </details>
 
-<details>
-<summary><b>#10</b> <code>`/datum/mood_event/withdrawal_severe`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#315</b> （动态） <small>(withdrawal_severe)</small> · 心情 <b>-8</b></summary>
 
 - **描述**: `Oh god, I need some of that [drug_name]!`（动态）
 - **心情值**: -8
@@ -3268,8 +3268,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `_addiction.dm:29`（默认 `severe_withdrawal_moodlet`）
 </details>
 
-<details>
-<summary><b>#11</b> <code>`/datum/mood_event/happiness_drug`</code> · <b>**50**</b></summary>
+<details open>
+<summary><b>#316</b> happiness_drug <small>(happiness_drug)</small> · 心情 <b>**50**</b></summary>
 
 - **描述**: `Can't feel a thing...`
 - **心情值**: **50**
@@ -3278,8 +3278,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drug_reagents.dm:325`（`"happiness_drug"`）
 </details>
 
-<details>
-<summary><b>#12</b> <code>`/datum/mood_event/happiness_drug_good_od`</code> · <b>**100**</b></summary>
+<details open>
+<summary><b>#317</b> happiness_drug_good_od <small>(happiness_drug_good_od)</small> · 心情 <b>**100**</b></summary>
 
 - **描述**: `YES! YES!! YES!!!`
 - **心情值**: **100**
@@ -3288,8 +3288,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drug_reagents.dm:346`（快乐药良性过量）
 </details>
 
-<details>
-<summary><b>#13</b> <code>`/datum/mood_event/happiness_drug_bad_od`</code> · <b>**-100**</b></summary>
+<details open>
+<summary><b>#318</b> happiness_drug_bad_od <small>(happiness_drug_bad_od)</small> · 心情 <b>**-100**</b></summary>
 
 - **描述**: `NO! NO!! NO!!!`
 - **心情值**: **-100**
@@ -3298,8 +3298,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drug_reagents.dm:352`（快乐药恶性过量）
 </details>
 
-<details>
-<summary><b>#14</b> <code>`/datum/mood_event/narcotic_medium`</code> · <b>4</b></summary>
+<details open>
+<summary><b>#319</b> narcotic_medium <small>(narcotic_medium)</small> · 心情 <b>4</b></summary>
 
 - **描述**: `I feel comfortably numb.`
 - **心情值**: 4
@@ -3308,8 +3308,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `alcohol_reagents.dm:2526`（`"numb"` 酒类麻醉）、`medicine_reagents.dm:771`（`"numb"`，带 name）
 </details>
 
-<details>
-<summary><b>#15</b> <code>`/datum/mood_event/narcotic_heavy`</code> · <b>9</b></summary>
+<details open>
+<summary><b>#320</b> narcotic_heavy <small>(narcotic_heavy)</small> · 心情 <b>9</b></summary>
 
 - **描述**: `I feel like I'm wrapped up in cotton!`
 - **心情值**: 9
@@ -3318,8 +3318,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drug_reagents.dm:139`（`"smacked out"`）、`impure_medicine_reagents.dm:961`、`toxin_reagents.dm:894`（带 name）、`modular_nova/.../opium.dm:115`
 </details>
 
-<details>
-<summary><b>#16</b> <code>`/datum/mood_event/antinarcotic_medium`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#321</b> antinarcotic_medium <small>(antinarcotic_medium)</small> · 心情 <b>-4</b></summary>
 
 - **描述**: `I wish I was numb again!`
 - **心情值**: -4
@@ -3328,8 +3328,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `medicine_reagents.dm:2001`（`"not numb"`）
 </details>
 
-<details>
-<summary><b>#17</b> <code>`/datum/mood_event/antinarcotic_heavy`</code> · <b>-9</b></summary>
+<details open>
+<summary><b>#322</b> antinarcotic_heavy <small>(antinarcotic_heavy)</small> · 心情 <b>-9</b></summary>
 
 - **描述**: `NO!! Make the cotton come back!`
 - **心情值**: -9
@@ -3338,8 +3338,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `medicine_reagents.dm:2005`（`"not smacked out"`）
 </details>
 
-<details>
-<summary><b>#18</b> <code>`/datum/mood_event/stimulant_medium`</code> · <b>4</b></summary>
+<details open>
+<summary><b>#323</b> stimulant_medium <small>(stimulant_medium)</small> · 心情 <b>4</b></summary>
 
 - **描述**: `I have so much energy! I feel like I could do anything!`
 - **心情值**: 4
@@ -3348,8 +3348,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drug_reagents.dm:204`（`"tweaking"`）、`878`（`"tweaking"` kronkaine）、`modular_nova/.../cortical_borer_chems.dm:9`（带 name）
 </details>
 
-<details>
-<summary><b>#19</b> <code>`/datum/mood_event/stimulant_heavy`</code> · <b>6</b></summary>
+<details open>
+<summary><b>#324</b> stimulant_heavy <small>(stimulant_heavy)</small> · 心情 <b>6</b></summary>
 
 - **描述**: `Eh ah AAAAH! HA HA HA HA HAA! Uuuh.`
 - **心情值**: 6
@@ -3358,8 +3358,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `drug_reagents.dm:263`（`"salted"`）、`modular_nova/.../cocaine.dm:49`（`"zoinked"` 带 name）、`demoneye.dm:105`（sundowner）
 </details>
 
-<details>
-<summary><b>#20</b> <code>`/datum/mood_event/eigentrip`</code> · <b>动态 0±10</b></summary>
+<details open>
+<summary><b>#325</b> eigentrip <small>(eigentrip)</small> · 心情 <b>动态 0±10</b></summary>
 
 - **描述**: `I swapped places with an alternate reality version of myself!`
 - **心情值**: 动态 0±10
@@ -3368,8 +3368,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `neutral.dm:570`（`"Eigentrip"` 本征维度跳跃）
 </details>
 
-<details>
-<summary><b>#21</b> <code>`/datum/mood_event/nicotine_withdrawal_moderate`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#326</b> nicotine_withdrawal_moderate <small>(nicotine_withdrawal_moderate)</small> · 心情 <b>-5</b></summary>
 
 - **描述**: `Haven't had a smoke in a while. Feeling a little on edge... `
 - **心情值**: -5
@@ -3378,8 +3378,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `generic_addictions.dm:295`（`medium_withdrawal_moodlet` 覆写）
 </details>
 
-<details>
-<summary><b>#22</b> <code>`/datum/mood_event/nicotine_withdrawal_severe`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#327</b> nicotine_withdrawal_severe <small>(nicotine_withdrawal_severe)</small> · 心情 <b>-8</b></summary>
 
 - **描述**: `Head pounding. Cold sweating. Feeling anxious. Need a smoke to calm down!`
 - **心情值**: -8
@@ -3388,8 +3388,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `generic_addictions.dm:296`（`severe_withdrawal_moodlet` 覆写）
 </details>
 
-<details>
-<summary><b>#23</b> <code>`/datum/mood_event/hauntium_spirits`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#328</b> hauntium_spirits <small>(hauntium_spirits)</small> · 心情 <b>-8</b></summary>
 
 - **描述**: `I feel my soul degrading!`
 - **心情值**: -8
@@ -3398,8 +3398,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: `other_reagents.dm:3418`（`"hauntium_spirits"`，带 name，注释 "8 minutes of mood debuff"）
 </details>
 
-<details>
-<summary><b>#24</b> <code>`/datum/mood_event/sadness_inverse`</code> · <b>**-150**</b></summary>
+<details open>
+<summary><b>#329</b> sadness_inverse <small>(sadness_inverse)</small> · 心情 <b>**-150**</b></summary>
 
 - **描述**: `I'M SO SAD...`
 - **心情值**: **-150**
@@ -3410,8 +3410,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 
 ### 6.4 外围触发源事件（93 个定义含变体）
 
-<details>
-<summary><b>#1</b> <code>`/datum/mood_event/anxiety_eyecontact`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#330</b> 有时眼神接触让我非常… <small>(anxiety_eyecontact)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 3 MINUTES
@@ -3420,8 +3420,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 社交焦虑气质（social_anxiety quirk）与人眼神接触时（social_anxiety.dm:114）
 </details>
 
-<details>
-<summary><b>#2</b> <code>`/datum/mood_event/spacer`</code> · <b>0（空基类）</b></summary>
+<details open>
+<summary><b>#331</b> 基类，无描述 <small>(spacer)</small> · 心情 <b>0（空基类）</b></summary>
 
 - **心情值**: 0（空基类）
 - **超时**: —
@@ -3430,8 +3430,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 中间节点
 </details>
 
-<details>
-<summary><b>#3</b> <code>`/datum/mood_event/spacer/in_space`</code> · <b>0（继承）</b></summary>
+<details open>
+<summary><b>#332</b> 太空漫长黑暗而空旷，… <small>(spacer)</small> · 心情 <b>0（继承）</b></summary>
 
 - **心情值**: 0（继承）
 - **超时**: —
@@ -3440,8 +3440,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 太空人气质（spacer quirk）身处太空时（quirks/positive_quirks/spacer.dm:215）
 </details>
 
-<details>
-<summary><b>#4</b> <code>`/datum/mood_event/spacer/on_planet`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#333</b> 我在行星上。这里的重… <small>(spacer)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: —
@@ -3450,8 +3450,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 太空人气质在行星上（spacer.dm:147、242）
 </details>
 
-<details>
-<summary><b>#5</b> <code>`/datum/mood_event/spacer/on_planet/too_long`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#334</b> 我在这个星球上待太久… <small>(spacer)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: —
@@ -3460,8 +3460,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 行星久留计时触发（spacer quirk on_planet_for_too_long，变量引用 spacer.dm:164）
 </details>
 
-<details>
-<summary><b>#6</b> <code>`/datum/mood_event/spacer/on_planet/nerfed`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#335</b> 我被派驻在行星上。我… <small>(spacer)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: —
@@ -3470,8 +3470,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 行星地图上的削弱版久留（同上，nerfed 分支）
 </details>
 
-<details>
-<summary><b>#7</b> <code>`/datum/mood_event/spacer/on_planet/low_grav`</code> · <b>+3（每 5 分钟 -1，最低 +1）</b></summary>
+<details open>
+<summary><b>#336</b> 这感觉就像回到了家！… <small>(spacer)</small> · 心情 <b>+3（每 5 分钟 -1，最低 +1）</b></summary>
 
 - **心情值**: +3（每 5 分钟 -1，最低 +1）
 - **超时**: —
@@ -3480,8 +3480,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 低重力环境（低重力区停留，spacer.dm:242）
 </details>
 
-<details>
-<summary><b>#8</b> <code>`/datum/mood_event/spacer/on_planet/low_grav/add_effects(...)`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#337</b> 分钟后回调 <small>(spacer)</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -3490,8 +3490,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写
 </details>
 
-<details>
-<summary><b>#9</b> <code>`/datum/mood_event/spacer/on_planet/low_grav/proc/lower_mood_bonus()`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#338</b> 则继续每 <small>(spacer)</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -3500,8 +3500,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写
 </details>
 
-<details>
-<summary><b>#10</b> <code>`/datum/mood_event/fat/add_effects(...)`（NOVA 覆写基础 fat）</code> · <b>0（若有 OFF_BALANCE_TACKLER 特质）</b></summary>
+<details open>
+<summary><b>#339</b> 「我很胖。」「 <small>(fat(...)（NOVA 覆写基础 fat）)</small> · 心情 <b>0（若有 OFF_BALANCE_TACKLER 特质）</b></summary>
 
 - **心情值**: 0（若有 OFF_BALANCE_TACKLER 特质）
 - **超时**: —
@@ -3510,8 +3510,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写 code/datums/mood_events/needs_events.dm 的 fat 事件（neutral_traits 特质联动）
 </details>
 
-<details>
-<summary><b>#11</b> <code>`/datum/mood_event/stoat`</code> · <b>0（空基类）</b></summary>
+<details open>
+<summary><b>#340</b> 基类，无描述 <small>(stoat)</small> · 心情 <b>0（空基类）</b></summary>
 
 - **心情值**: 0（空基类）
 - **超时**: —
@@ -3520,8 +3520,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 中间节点
 </details>
 
-<details>
-<summary><b>#12</b> <code>`/datum/mood_event/stoat/enemies_nearby`</code> · <b>0（中间节点）</b></summary>
+<details open>
+<summary><b>#341</b> （恐惧类） <small>(stoat)</small> · 心情 <b>0（中间节点）</b></summary>
 
 - **心情值**: 0（中间节点）
 - **超时**: —
@@ -3530,8 +3530,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 中间节点
 </details>
 
-<details>
-<summary><b>#13</b> <code>`/datum/mood_event/stoat/enemies_nearby/one`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#342</b> 我的本能告诉我附近有… <small>(stoat)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: —
@@ -3540,8 +3540,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 鼬心移植者（stoat organ set）5 格内 1 个敌人（stoat_organs.dm:101）
 </details>
 
-<details>
-<summary><b>#14</b> <code>`/datum/mood_event/stoat/enemies_nearby/multiple`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#343</b> 我的本能告诉我附近有… <small>(stoat)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: —
@@ -3550,8 +3550,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 2~4 个敌人（:103）
 </details>
 
-<details>
-<summary><b>#15</b> <code>`/datum/mood_event/stoat/enemies_nearby/crowd`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#344</b> 我的本能告诉我附近有… <small>(stoat)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: —
@@ -3560,8 +3560,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 4+ 个敌人（:105）
 </details>
 
-<details>
-<summary><b>#16</b> <code>`/datum/mood_event/stoat/alone`</code> · <b>+1</b></summary>
+<details open>
+<summary><b>#345</b> 附近没有人，我的本能… <small>(stoat)</small> · 心情 <b>+1</b></summary>
 
 - **心情值**: +1
 - **超时**: —
@@ -3570,8 +3570,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 定义了但当前 tick 逻辑未直接引用（0 友时走 friendlies_nearby/one）
 </details>
 
-<details>
-<summary><b>#17</b> <code>`/datum/mood_event/stoat/friendlies_nearby`</code> · <b>0（中间节点）</b></summary>
+<details open>
+<summary><b>#346</b> stoat <small>(stoat)</small> · 心情 <b>0（中间节点）</b></summary>
 
 - **心情值**: 0（中间节点）
 - **超时**: —
@@ -3580,8 +3580,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 中间节点
 </details>
 
-<details>
-<summary><b>#18</b> <code>`/datum/mood_event/stoat/friendlies_nearby/one`</code> · <b>0（继承）</b></summary>
+<details open>
+<summary><b>#347</b> 附近只有一个朋友，我… <small>(stoat)</small> · 心情 <b>0（继承）</b></summary>
 
 - **心情值**: 0（继承）
 - **超时**: —
@@ -3590,8 +3590,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 0~1 个友方（stoat_organs.dm:111，代码 0 人时用此）
 </details>
 
-<details>
-<summary><b>#19</b> <code>`/datum/mood_event/stoat/friendlies_nearby/multiple`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#348</b> 我的本能告诉我附近人… <small>(stoat)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: —
@@ -3600,8 +3600,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 2~4 个友方（:113）
 </details>
 
-<details>
-<summary><b>#20</b> <code>`/datum/mood_event/stoat/friendlies_nearby/crowd`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#349</b> 我的本能告诉我附近人… <small>(stoat)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: —
@@ -3610,8 +3610,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 4+ 个友方（:115）
 </details>
 
-<details>
-<summary><b>#21</b> <code>`/datum/mood_event/surgery_emp_active`</code> · <b>**-90**</b></summary>
+<details open>
+<summary><b>#350</b> 手术不完成病人就活不… <small>(surgery_emp_active)</small> · 心情 <b>**-90**</b></summary>
 
 - **心情值**: **-90**
 - **超时**: 1 MINUTES
@@ -3620,8 +3620,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 手术处理器芯片被 EMP 时（augments_internal.dm:443，强制疯狂状态）
 </details>
 
-<details>
-<summary><b>#22</b> <code>`/datum/mood_event/surgery_emp_expired`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#351</b> 我失控了 <small>(surgery_emp_expired)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 5 MINUTES
@@ -3630,8 +3630,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: EMP 效果结束后（:444，定时器补发）
 </details>
 
-<details>
-<summary><b>#23</b> <code>`/datum/mood_event/rapid_wound_healing`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#352</b> 伤口愈合了，但那疼痛… <small>(rapid_wound_healing)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 5 MINUTES
@@ -3640,8 +3640,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 快速愈合堆叠物（healing stack items）快速修复伤口后（healing_stack_items.dm:92）
 </details>
 
-<details>
-<summary><b>#24</b> <code>`/datum/mood_event/traitor_poster_antag`</code> · <b>+2</b></summary>
+<details open>
+<summary><b>#353</b> 我在做正确的事。「 <small>(traitor_poster_antag)</small> · 心情 <b>+2</b></summary>
 
 - **心情值**: +2
 - **超时**: 2 MINUTES
@@ -3650,8 +3650,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 叛徒看到自己贴的煽动海报（demoraliser 组件按视角分发，:57）
 </details>
 
-<details>
-<summary><b>#25</b> <code>`/datum/mood_event/traitor_poster_crew`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#354</b> 那张海报让我对自己的… <small>(traitor_poster_crew)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 2 MINUTES
@@ -3660,8 +3660,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 普通船员看到海报（:63）
 </details>
 
-<details>
-<summary><b>#26</b> <code>`/datum/mood_event/traitor_poster_auth`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#355</b> 那张海报最好别给船员… <small>(traitor_poster_auth)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 2 MINUTES
@@ -3670,8 +3670,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 安保/指挥层看到海报（:60）
 </details>
 
-<details>
-<summary><b>#27</b> <code>`/datum/mood_event/traitor_graffiti_antag`</code> · <b>+2</b></summary>
+<details open>
+<summary><b>#356</b> 辛迪加标志？多么大胆… <small>(traitor_graffiti_antag)</small> · 心情 <b>+2</b></summary>
 
 - **心情值**: +2
 - **超时**: 2 MINUTES
@@ -3680,8 +3680,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 叛徒看到自己画的辛迪加涂鸦
 </details>
 
-<details>
-<summary><b>#28</b> <code>`/datum/mood_event/traitor_graffiti_crew`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#357</b> 辛迪加标志？我在这里… <small>(traitor_graffiti_crew)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 2 MINUTES
@@ -3690,8 +3690,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 普通船员看到涂鸦
 </details>
 
-<details>
-<summary><b>#29</b> <code>`/datum/mood_event/traitor_graffiti_auth`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#358</b> 是哪个懒鬼画了那个辛… <small>(traitor_graffiti_auth)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 2 MINUTES
@@ -3700,8 +3700,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 安保/指挥层看到涂鸦
 </details>
 
-<details>
-<summary><b>#30</b> <code>`/datum/mood_event/traitor_module_antag`</code> · <b>+1</b></summary>
+<details open>
+<summary><b>#359</b> 我想我会故意制造些麻… <small>(traitor_module_antag)</small> · 心情 <b>+1</b></summary>
 
 - **心情值**: +1
 - **超时**: 2 MINUTES
@@ -3710,8 +3710,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 叛徒看到自己装的士气打击模块（如坏灯泡/发霉物）
 </details>
 
-<details>
-<summary><b>#31</b> <code>`/datum/mood_event/traitor_module_crew`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#360</b> 他们就在站上！我知道… <small>(traitor_module_crew)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 2 MINUTES
@@ -3720,8 +3720,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 普通船员看到模块
 </details>
 
-<details>
-<summary><b>#32</b> <code>`/datum/mood_event/traitor_module_auth`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#361</b> 这个站上没有人站在我… <small>(traitor_module_auth)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 2 MINUTES
@@ -3730,8 +3730,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 安保/指挥层看到模块
 </details>
 
-<details>
-<summary><b>#33</b> <code>`/datum/mood_event/shadow_realm`</code> · <b>**-15**</b></summary>
+<details open>
+<summary><b>#362</b> 我在哪里？！「 <small>(shadow_realm)</small> · 心情 <b>**-15**</b></summary>
 
 - **心情值**: **-15**
 - **超时**: 3 MINUTES
@@ -3740,8 +3740,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 被异教徒献祭拖入暗影界时（sacrifice_knowledge.dm:452）
 </details>
 
-<details>
-<summary><b>#34</b> <code>`/datum/mood_event/shadow_realm_live`</code> · <b>+4</b></summary>
+<details open>
+<summary><b>#363</b> 我活着 <small>(shadow_realm_live)</small> · 心情 <b>+4</b></summary>
 
 - **心情值**: +4
 - **超时**: 5 MINUTES
@@ -3750,8 +3750,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 从暗影界幸存归来（:594）
 </details>
 
-<details>
-<summary><b>#35</b> <code>`/datum/mood_event/shadow_realm_live_sad`</code> · <b>-6</b></summary>
+<details open>
+<summary><b>#364</b> 那些手！那些可怕、恐… <small>(shadow_realm_live_sad)</small> · 心情 <b>-6</b></summary>
 
 - **心情值**: -6
 - **超时**: 10 MINUTES
@@ -3760,8 +3760,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 幸存者（非异教徒）归来后（:598）
 </details>
 
-<details>
-<summary><b>#36</b> <code>`/datum/mood_event/shadow_realm_live_sad_heretic`</code> · <b>-8</b></summary>
+<details open>
+<summary><b>#365</b> 我被羞辱了！我的知识… <small>(shadow_realm_live_sad_heretic)</small> · 心情 <b>-8</b></summary>
 
 - **心情值**: -8
 - **超时**: 8 MINUTES
@@ -3770,8 +3770,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 异教徒被献祭羞辱后（:596）
 </details>
 
-<details>
-<summary><b>#37</b> <code>`/datum/mood_event/heretics/lunatic`</code> · <b>+10</b></summary>
+<details open>
+<summary><b>#366</b> 真相大白，谎言破灭。… <small>(heretics)</small> · 心情 <b>+10</b></summary>
 
 - **心情值**: +10
 - **超时**: —
@@ -3780,8 +3780,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 月之狂人（moon lunatic）异教徒反派人物的常驻 moodlet（antag_moodlet 变量，moon_lunatic.dm:9）
 </details>
 
-<details>
-<summary><b>#38</b> <code>`/datum/mood_event/soultrapped_heretic`</code> · <b>**-20**</b></summary>
+<details open>
+<summary><b>#367</b> 他们困住了我！我逃不… <small>(soultrapped_heretic)</small> · 心情 <b>**-20**</b></summary>
 
 - **心情值**: **-20**
 - **超时**: —
@@ -3790,8 +3790,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 灵魂禁锢异教徒（soultrapped heretic）反派常驻 moodlet（antag_moodlet，:8）
 </details>
 
-<details>
-<summary><b>#39</b> <code>`/datum/mood_event/mansus_dream_fatigue`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#368</b> 我必须恢复之后才能再… <small>(mansus_dream_fatigue)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 5 MINUTES
@@ -3800,8 +3800,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 异教徒 Mansus 梦境疲劳状态效果（dreams.dm:38）
 </details>
 
-<details>
-<summary><b>#40</b> <code>`/datum/mood_event/fallen_changeling`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#369</b> 我的力量！我的力量去… <small>(fallen_changeling)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: —
@@ -3810,8 +3810,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 堕落变体（fallen changeling）反派人物的常驻 moodlet（antag_moodlet，fallen_changeling.dm:7）
 </details>
 
-<details>
-<summary><b>#41</b> <code>`/datum/mood_event/royale_survivor`</code> · <b>+4</b></summary>
+<details open>
+<summary><b>#370</b> 我活着从乱斗大逃杀中… <small>(royale_survivor)</small> · 心情 <b>+4</b></summary>
 
 - **心情值**: +4
 - **超时**: —
@@ -3820,8 +3820,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 大逃杀（Rumble Royale）幸存者（survivalist.dm:86）
 </details>
 
-<details>
-<summary><b>#42</b> <code>`/datum/mood_event/clown_world`</code> · <b>+4</b></summary>
+<details open>
+<summary><b>#371</b> 动态覆写）「我超爱在… <small>(clown_world)</small> · 心情 <b>+4</b></summary>
 
 - **心情值**: +4
 - **超时**: —
@@ -3830,8 +3830,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 法师大仪式小丑终局（clown finale）中"热爱小丑"（TRAIT_CLOWN_ENJOYER）者（clown.dm:24）
 </details>
 
-<details>
-<summary><b>#43</b> <code>`/datum/mood_event/clown_world/add_effects(param)`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#372</b> ：按当前站名动态生成… <small>(clown_world(param))</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -3840,8 +3840,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写
 </details>
 
-<details>
-<summary><b>#44</b> <code>`/datum/mood_event/soul_core_torment`</code> · <b>**-20**</b></summary>
+<details open>
+<summary><b>#373</b> 它在燃烧！！燃烧！！… <small>(soul_core_torment)</small> · 心情 <b>**-20**</b></summary>
 
 - **心情值**: **-20**
 - **超时**: 10 SECONDS
@@ -3850,8 +3850,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 灵魂核心（soul core MOD）穿戴者灵能低于阈值时（get_backlash_type 返回，mod_core.dm:616/622，每 10 秒刷）
 </details>
 
-<details>
-<summary><b>#45</b> <code>`/datum/mood_event/soul_core_torment/heretic`</code> · <b>-20（继承）</b></summary>
+<details open>
+<summary><b>#374</b> 从我脑子里滚出去！从… <small>(soul_core_torment)</small> · 心情 <b>-20（继承）</b></summary>
 
 - **心情值**: -20（继承）
 - **超时**: 10 SECONDS
@@ -3860,8 +3860,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 穿戴者是异教徒时的专用文本（:619）
 </details>
 
-<details>
-<summary><b>#46</b> <code>`/datum/mood_event/soul_core_discomfort`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#375</b> 我不喜欢这些神力在我… <small>(soul_core_discomfort)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: 10 SECONDS
@@ -3870,8 +3870,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 灵能较低时（:624）
 </details>
 
-<details>
-<summary><b>#47</b> <code>`/datum/mood_event/soul_core_warning`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#376</b> 我能感觉到我的 <small>(soul_core_warning)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 10 SECONDS
@@ -3880,8 +3880,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 灵能轻度不足预警（mod_core.dm:590）
 </details>
 
-<details>
-<summary><b>#48</b> <code>`/datum/mood_event/banish_nightmare`</code> · <b>+4</b></summary>
+<details open>
+<summary><b>#377</b> 我驱逐了噩梦，守护了… <small>(banish_nightmare)</small> · 心情 <b>+4</b></summary>
 
 - **心情值**: +4
 - **超时**: 10 MINUTES
@@ -3890,8 +3890,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 宗教仪式"驱逐噩梦"成功（banish_nightmare.dm:70）
 </details>
 
-<details>
-<summary><b>#49</b> <code>`/datum/mood_event/dream_interrupted`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#378</b> 我从梦中被粗暴地弄醒… <small>(dream_interrupted)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 5 MINUTES
@@ -3900,8 +3900,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 梦境预兆被打断（dream_portent.dm:77）
 </details>
 
-<details>
-<summary><b>#50</b> <code>`/datum/mood_event/dream_failed`</code> · <b>-2</b></summary>
+<details open>
+<summary><b>#379</b> 我无法从梦中接收到清… <small>(dream_failed)</small> · 心情 <b>-2</b></summary>
 
 - **心情值**: -2
 - **超时**: 5 MINUTES
@@ -3910,8 +3910,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 梦境预兆解读失败（:66）
 </details>
 
-<details>
-<summary><b>#51</b> <code>`/datum/mood_event/poster_mood`</code> · <b>+2</b></summary>
+<details open>
+<summary><b>#380</b> 那张海报真的很激励我… <small>(poster_mood)</small> · 心情 <b>+2</b></summary>
 
 - **心情值**: +2
 - **超时**: —
@@ -3920,8 +3920,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 查看激励海报（poster_motivational.dm:104）
 </details>
 
-<details>
-<summary><b>#52</b> <code>`/datum/mood_event/depressing_party`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#381</b> 那真是个阴郁的派对 <small>(depressing_party)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 30 SECONDS
@@ -3930,8 +3930,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 被黑客（emag）的氛围机器人播放压抑派对（vibebot_abilities.dm:39 变量引用）
 </details>
 
-<details>
-<summary><b>#53</b> <code>`/datum/mood_event/festive_party`</code> · <b>+2</b></summary>
+<details open>
+<summary><b>#382</b> 那真是个超棒的派对！… <small>(festive_party)</small> · 心情 <b>+2</b></summary>
 
 - **心情值**: +2
 - **超时**: 30 SECONDS
@@ -3940,8 +3940,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 正常氛围机器人播放欢乐派对（同上）
 </details>
 
-<details>
-<summary><b>#54</b> <code>`/datum/mood_event/artifact_effect_good_major`</code> · <b>+10</b></summary>
+<details open>
+<summary><b>#383</b> 呜哦！发生什么事了？… <small>(artifact_effect_good_major)</small> · 心情 <b>+10</b></summary>
 
 - **心情值**: +10
 - **超时**: 10 MINUTES
@@ -3950,8 +3950,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 神器"感觉"效果-大幅增益（feelings.dm:142）
 </details>
 
-<details>
-<summary><b>#55</b> <code>`/datum/mood_event/artifact_effect_good_minor`</code> · <b>+5</b></summary>
+<details open>
+<summary><b>#384</b> 我感觉很奇怪，但又非… <small>(artifact_effect_good_minor)</small> · 心情 <b>+5</b></summary>
 
 - **心情值**: +5
 - **超时**: 5 MINUTES
@@ -3960,8 +3960,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 神器效果-小幅增益（:147）
 </details>
 
-<details>
-<summary><b>#56</b> <code>`/datum/mood_event/artifact_effect_bad_major`</code> · <b>-10</b></summary>
+<details open>
+<summary><b>#385</b> 感觉像一群鹅在啄我的… <small>(artifact_effect_bad_major)</small> · 心情 <b>-10</b></summary>
 
 - **心情值**: -10
 - **超时**: 10 MINUTES
@@ -3970,8 +3970,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 神器效果-大幅负面（:127）
 </details>
 
-<details>
-<summary><b>#57</b> <code>`/datum/mood_event/artifact_effect_bad_minor`</code> · <b>-5</b></summary>
+<details open>
+<summary><b>#386</b> 我感到奇怪而不安 <small>(artifact_effect_bad_minor)</small> · 心情 <b>-5</b></summary>
 
 - **心情值**: -5
 - **超时**: 5 MINUTES
@@ -3980,8 +3980,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 神器效果-小幅负面（:132）
 </details>
 
-<details>
-<summary><b>#58</b> <code>`/datum/mood_event/faded_hope_lavaland`</code> · <b>+4</b></summary>
+<details open>
+<summary><b>#387</b> 多么奇特的徽记。它让… <small>(faded_hope_lavaland)</small> · 心情 <b>+4</b></summary>
 
 - **心情值**: +4
 - **超时**: —
@@ -3990,8 +3990,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 远古考古物品"褪色的希望徽记"（xenoarch_item.dm:247）
 </details>
 
-<details>
-<summary><b>#59</b> <code>`/datum/mood_event/brushed`</code> · <b>+3</b></summary>
+<details open>
+<summary><b>#388</b> 覆写）「 <small>(brushed)</small> · 心情 <b>+3</b></summary>
 
 - **心情值**: +3
 - **超时**: 4 MINUTES
@@ -4000,8 +4000,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 被他人用梳子梳头/须/尾（hairbrush.dm:71、91）
 </details>
 
-<details>
-<summary><b>#60</b> <code>`/datum/mood_event/brushed/add_effects(mob/brusher, brush_target)`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#389</b> ：按梳毛者与部位生成… <small>(brushed(mob)</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -4010,8 +4010,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写
 </details>
 
-<details>
-<summary><b>#61</b> <code>`/datum/mood_event/brushed/expert`</code> · <b>+4</b></summary>
+<details open>
+<summary><b>#390</b> 「有人大师级地给我梳… <small>(brushed)</small> · 心情 <b>+4</b></summary>
 
 - **心情值**: +4
 - **超时**: 4 MINUTES
@@ -4020,8 +4020,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 梳毛者拥有"发型大师"特质（hairbrush.dm:87）
 </details>
 
-<details>
-<summary><b>#62</b> <code>`/datum/mood_event/brushed/expert/add_effects(mob/brusher, brush_target)`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#391</b> ：动态描述 <small>(brushed)</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -4030,8 +4030,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写
 </details>
 
-<details>
-<summary><b>#63</b> <code>`/datum/mood_event/brushed/self`</code> · <b>+2</b></summary>
+<details open>
+<summary><b>#392</b> 「我最近给自己梳了毛… <small>(brushed)</small> · 心情 <b>+2</b></summary>
 
 - **心情值**: +2
 - **超时**: 4 MINUTES
@@ -4040,8 +4040,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 自己梳自己（hairbrush.dm:82）
 </details>
 
-<details>
-<summary><b>#64</b> <code>`/datum/mood_event/brushed/self/add_effects(brush_target)`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#393</b> ：动态描述 <small>(brushed)</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -4050,8 +4050,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写
 </details>
 
-<details>
-<summary><b>#65</b> <code>`/datum/mood_event/brushed/self/expert`</code> · <b>+3</b></summary>
+<details open>
+<summary><b>#394</b> 「我完美地给自己梳了… <small>(brushed)</small> · 心情 <b>+3</b></summary>
 
 - **心情值**: +3
 - **超时**: 4 MINUTES
@@ -4060,8 +4060,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 自我意识/发型大师特质者自己梳（:79）
 </details>
 
-<details>
-<summary><b>#66</b> <code>`/datum/mood_event/brushed/self/expert/add_effects(brush_target)`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#395</b> ：动态描述 <small>(brushed)</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -4070,8 +4070,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写
 </details>
 
-<details>
-<summary><b>#67</b> <code>`/datum/mood_event/brushed/pet/add_effects(mob/brushed_pet)`</code> · <b>+2（继承 brushed/self）</b></summary>
+<details open>
+<summary><b>#396</b> ：「我梳了 <small>(brushed)</small> · 心情 <b>+2（继承 brushed/self）</b></summary>
 
 - **心情值**: +2（继承 brushed/self）
 - **超时**: —
@@ -4080,8 +4080,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 给宠物梳毛（:101）
 </details>
 
-<details>
-<summary><b>#68</b> <code>`/datum/mood_event/harshly_brushed`</code> · <b>-3</b></summary>
+<details open>
+<summary><b>#397</b> 嗷！梳得太用力了！「 <small>(harshly_brushed)</small> · 心情 <b>-3</b></summary>
 
 - **心情值**: -3
 - **超时**: —
@@ -4090,8 +4090,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: **已定义但当前代码未引用（dead code）**——战斗模式下粗暴梳毛仅触发 brushed 事件
 </details>
 
-<details>
-<summary><b>#69</b> <code>`/datum/mood_event/harsh_brushed/add_effects(brush_target)`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#398</b> ：「嗷！梳我的 <small>(harsh_brushed(brush_target))</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -4100,8 +4100,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 未引用的覆写
 </details>
 
-<details>
-<summary><b>#70</b> <code>`/datum/mood_event/hotspring`</code> · <b>+4</b></summary>
+<details open>
+<summary><b>#399</b> 我最近在舒服的温水里… <small>(hotspring)</small> · 心情 <b>+4</b></summary>
 
 - **心情值**: +4
 - **超时**: 20 MINUTES
@@ -4110,8 +4110,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 泳池/温泉浸泡（pool.dm:64）
 </details>
 
-<details>
-<summary><b>#71</b> <code>`/datum/mood_event/hotspring/nerfed`</code> · <b>+2</b></summary>
+<details open>
+<summary><b>#400</b> 水暖得令人愉快！「 <small>(hotspring)</small> · 心情 <b>+2</b></summary>
 
 - **心情值**: +2
 - **超时**: —
@@ -4120,8 +4120,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 原始猫娘地图的削弱版温泉（map_items.dm:42）
 </details>
 
-<details>
-<summary><b>#72</b> <code>`/datum/mood_event/tucked_in`</code> · <b>+3</b></summary>
+<details open>
+<summary><b>#401</b> 覆写）「把 <small>(tucked_in)</small> · 心情 <b>+3</b></summary>
 
 - **心情值**: +3
 - **超时**: 2 MINUTES
@@ -4130,8 +4130,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 低温舱：给他人掖好被子（cryopod.dm:605）
 </details>
 
-<details>
-<summary><b>#73</b> <code>`/datum/mood_event/tucked_in/add_effects(mob/tuckee)`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#402</b> ：按被掖者名字动态生… <small>(tucked_in(mob)</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -4140,8 +4140,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写
 </details>
 
-<details>
-<summary><b>#74</b> <code>`/datum/mood_event/warmhug/rubi`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#403</b> 温暖舒适的小蜜蜂拥抱… <small>(warmhug)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 2 MINUTES
@@ -4150,8 +4150,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 捐赠者玩偶"蜜蜂鲁比"（warmhug 子类，donator_plushies.dm:797）
 </details>
 
-<details>
-<summary><b>#75</b> <code>`/datum/mood_event/warmhug/parsec`</code> · <b>+3</b></summary>
+<details open>
+<summary><b>#404</b> 她舔了我的鼻子！啊呜… <small>(warmhug)</small> · 心情 <b>+3</b></summary>
 
 - **心情值**: +3
 - **超时**: 5 MINUTES
@@ -4160,8 +4160,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 工作人员奖励玩偶"帕塞克"（staff_reward_plushies.dm:109）
 </details>
 
-<details>
-<summary><b>#76</b> <code>`/datum/mood_event/plasteel_chef`</code> · <b>+3</b></summary>
+<details open>
+<summary><b>#405</b> 你对自己所取得的成就… <small>(plasteel_chef)</small> · 心情 <b>+3</b></summary>
 
 - **心情值**: +3
 - **超时**: —
@@ -4170,8 +4170,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 活动奖励"塑料钢大厨"头衔/物品（plasteel_chef.dm:35、51）
 </details>
 
-<details>
-<summary><b>#77</b> <code>`/datum/mood_event/xenohybrid_resin`</code> · <b>+2</b></summary>
+<details open>
+<summary><b>#406</b> 我喜欢待在树脂上。它… <small>(xenohybrid_resin)</small> · 心情 <b>+2</b></summary>
 
 - **心情值**: +2
 - **超时**: 15 SECONDS
@@ -4180,8 +4180,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 异种杂交体（xenohybrid）站在异形树脂上（alien/organs.dm:66 引用）
 </details>
 
-<details>
-<summary><b>#78</b> <code>`/datum/mood_event/hemophage_feed_human`</code> · <b>+2</b></summary>
+<details open>
+<summary><b>#407</b> 我以新鲜、充满活力的… <small>(hemophage_feed_human)</small> · 心情 <b>+2</b></summary>
 
 - **心情值**: +2
 - **超时**: 5 MINUTES
@@ -4190,8 +4190,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 血噬族吸食人类血液（corrupted_tongue.dm:163）
 </details>
 
-<details>
-<summary><b>#79</b> <code>`/datum/mood_event/disgust/hemophage_feed_monkey`</code> · <b>-4</b></summary>
+<details open>
+<summary><b>#408</b> 我不得不吸一只吱吱叫… <small>(disgust)</small> · 心情 <b>-4</b></summary>
 
 - **心情值**: -4
 - **超时**: 5 MINUTES
@@ -4200,8 +4200,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 吸食猴子血（:109，disgust 子类）
 </details>
 
-<details>
-<summary><b>#80</b> <code>`/datum/mood_event/disgust/hemophage_feed_humonkey`</code> · <b>-1</b></summary>
+<details open>
+<summary><b>#409</b> 不知怎的我内心深处知… <small>(disgust)</small> · 心情 <b>-1</b></summary>
 
 - **心情值**: -1
 - **超时**: 5 MINUTES
@@ -4210,8 +4210,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 吸食人猴（humonkey）血（:116）
 </details>
 
-<details>
-<summary><b>#81</b> <code>`/datum/mood_event/orgasm`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#410</b> 这愉快的疲惫感 <small>(orgasm)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 5 MINUTES
@@ -4220,8 +4220,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 高潮后（多巴胺试剂 dopamine.dm:27）
 </details>
 
-<details>
-<summary><b>#82</b> <code>`/datum/mood_event/climaxself`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#411</b> 我刚刚在自己内裤里高… <small>(climaxself)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 4 MINUTES
@@ -4230,8 +4230,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 自我高潮（climax.dm:187、203）
 </details>
 
-<details>
-<summary><b>#83</b> <code>`/datum/mood_event/overgasm`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#412</b> 我不想再欲火焚身了。… <small>(overgasm)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 10 MINUTES
@@ -4240,8 +4240,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 过度高潮/纵欲过度（dopamine.dm:38）
 </details>
 
-<details>
-<summary><b>#84</b> <code>`/datum/mood_event/ropebunny`</code> · <b>0（显式）</b></summary>
+<details open>
+<summary><b>#413</b> 我被绑住了！动不了！… <small>(ropebunny)</small> · 心情 <b>0（显式）</b></summary>
 
 - **心情值**: 0（显式）
 - **超时**: —
@@ -4250,8 +4250,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 绳缚兔状态效果（ropebunny.dm:10）
 </details>
 
-<details>
-<summary><b>#85</b> <code>`/datum/mood_event/subspace`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#414</b> 一切都好晕 <small>(subspace)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: —
@@ -4260,8 +4260,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 打屁股导致的"亚空间"状态（spank_related.dm:12）
 </details>
 
-<details>
-<summary><b>#86</b> <code>`/datum/mood_event/perv_spanked`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#415</b> 啊，是的！再来！惩罚… <small>(perv_spanked)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 5 MINUTES
@@ -4270,8 +4270,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 被皮鞭抽打/打屁股垫惩罚（leather_whip.dm:251、265；spanking_pad.dm:80）
 </details>
 
-<details>
-<summary><b>#87</b> <code>`/datum/mood_event/minor_overdose`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#416</b> 覆写）「我想我 <small>(minor_overdose)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 5 MINUTES
@@ -4280,8 +4280,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 情趣化学物轻微过量：樟脑（camphor.dm:86）、魅魔之酿（incubus_draft.dm:171）、魅魔奶（succubus_milk.dm:158）
 </details>
 
-<details>
-<summary><b>#88</b> <code>`/datum/mood_event/minor_overdose/add_effects(drug_name)`</code> · <b>—</b></summary>
+<details open>
+<summary><b>#417</b> ：按药物名动态生成描… <small>(minor_overdose(drug_name))</small> · 心情 <b>—</b></summary>
 
 - **心情值**: —
 - **超时**: —
@@ -4290,8 +4290,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 覆写
 </details>
 
-<details>
-<summary><b>#89</b> <code>`/datum/mood_event/tickled`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#418</b> 呜哦 <small>(tickled)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: 2 MINUTES
@@ -4300,8 +4300,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: 被羽毛挠痒（feather.dm:72）
 </details>
 
-<details>
-<summary><b>#90</b> <code>`/datum/mood_event/bimbo`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#419</b> 爱死了！「 <small>(bimbo)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: —
@@ -4310,8 +4310,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA"金发傻妞"（bimbo）气质常驻 moodlet（lewd_quirks.dm:161）
 </details>
 
-<details>
-<summary><b>#91</b> <code>`/datum/mood_event/sadistic`</code> · <b>0</b></summary>
+<details open>
+<summary><b>#420</b> 他人的痛苦让我更快乐… <small>(sadistic)</small> · 心情 <b>0</b></summary>
 
 - **心情值**: 0
 - **超时**: —
@@ -4320,8 +4320,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA"施虐狂"（sadistic）气质常驻 moodlet（:272）
 </details>
 
-<details>
-<summary><b>#92</b> <code>`/datum/mood_event/stimulant_heavy/sundowner`</code> · <b>继承 stimulant_heavy</b></summary>
+<details open>
+<summary><b>#421</b> 我他妈的无敌了！！！… <small>(stimulant_heavy)</small> · 心情 <b>继承 stimulant_heavy</b></summary>
 
 - **心情值**: 继承 stimulant_heavy
 - **超时**: —
@@ -4330,8 +4330,8 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **触发源**: NOVA 恶魔之眼（demoneye）药物强刺激（stimulant_heavy 子类，demoneye.dm:105）
 </details>
 
-<details>
-<summary><b>#93</b> <code>`/datum/mood_event/stoned`（NOVA 覆写）</code> · <b>**+6**</b></summary>
+<details open>
+<summary><b>#422</b> 你现在完全嗨了 <small>(stoned（NOVA 覆写）)</small> · 心情 <b>**+6**</b></summary>
 
 - **心情值**: **+6**
 - **超时**: 3 MINUTES
@@ -4339,7 +4339,6 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 - **描述**: 你现在完全嗨了……「You're totally baked right now...」
 - **触发源**: NOVA THC 大麻试剂/状态效果"stoned"（thc.dm:61；基础版 code/datums/mood_events/drug_events.dm 为 +1）
 </details>
-
 
 ## 附录 · 代码路径索引
 
