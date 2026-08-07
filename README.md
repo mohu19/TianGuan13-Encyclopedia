@@ -1,4 +1,4 @@
-# TianGuan13 中文玩家百科 (TianGuan13 Encyclopedia)
+# 天关13服务器 中文玩家百科 (TianGuan13 Encyclopedia)
 
 > **空间站 13（SS13）· TianGuan13 分支** 的全系统中文玩家攻略文档合集
 > 仓库地址：https://github.com/mohu19/TianGuan13-Encyclopedia
