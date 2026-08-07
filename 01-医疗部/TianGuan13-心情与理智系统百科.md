@@ -10,6 +10,7 @@
 - [三、理智分级（Sanity Levels）](#三理智分级sanity-levels)
 - [四、营养心情](#四营养心情)
 - [五、HUD 与显示](#五hud-与显示)
+- [五b、心情高低的影响（Mood Effects）](#五b心情高低的影响mood-effects)
 - [六、心情事件全录（530 个）](#六心情事件全录530-个)
 - [附录 · 代码路径索引](#附录--代码路径索引)
 
@@ -105,6 +106,89 @@ mood 值 → 按阈值映射到 mood_level（1-9 级）
 | 濒饿 | 0-150 | starving | -10 |
 
 > 特质影响：TRAIT_FAT（肥胖）→ fat -6；TRAIT_GLUTTON（贪吃）→ 恒 hungry；TRAIT_VORACIOUS（暴食）→ 永不满足；TRAIT_NOHUNGER（无饥饿）→ 无事件。
+
+---
+
+## 五、HUD 与显示
+
+**代码**: `code/datums/mood.dm` L308-398
+
+### 5.1 心情图标（mood_screen_object）
+
+| 属性 | 值 |
+|---|---|
+| 位置 | HUD 心情槽（HUD_MOB_MOOD） |
+| 图标 | `mood[mood_level]`（1-9 档，对应 SAD4→HAPPY4） |
+| 点击 | 显示心情/理智/心情事件列表（print_mood） |
+| 默认色 | `#4b96c4`（蓝） |
+
+### 5.2 理智颜色（sanity 分级着色）
+
+| sanity_level | 颜色 | 值 |
+|---|---|---|
+| GREAT | 蓝 `#4b96c4` | 125-150 |
+| NEUTRAL | 蓝 `#4b96c4` | 100-125 |
+| DISTURBED | 橙 `#dfa65b` | 75-100 |
+| UNSTABLE | 橙 `#dfa65b` | 50-75 |
+| CRAZY | 深橙 `#f38943` | 25-50 |
+| INSANE | 红 `#f15d36` | 0-25 |
+
+### 5.3 特殊图标（special_screen_obj）
+
+- 有 `special_screen_obj` 的事件覆盖默认图标（如 honked_nose 红鼻子 / badass_sun / birthday）
+- 多个冲突事件时选 `mood_change` 绝对值最大的
+- NOVA：`TRAIT_MOOD_NOEXAMINE`（述情障碍）持有者恒显示 mood5 蓝色（不显示真实心情）
+
+### 5.4 查看
+
+- 点击 HUD 心情图标 → 打印心情值/理智值/全部心情事件（含隐藏事件？——隐藏事件不显示）
+
+---
+
+## 五b、心情高低的影响（Mood Effects）
+
+> **源码**: `code/modules/actionspeed/modifiers/mood.dm` + `code/modules/movespeed/modifiers/components.dm` + `code/datums/mood.dm` L610-641
+
+### 5b.1 移速影响（movespeed）
+
+| sanity 区间 | 等级 | 修饰符 | 减速 |
+|---|---|---|---|
+| 0-25 | INSANE（疯癫） | `sanity/insane` | **×2 移动耗时**（multiplicative_slowdown = 1） |
+| 25-50 | CRAZY（疯狂） | `sanity/crazy` | **减速 50%**（0.5） |
+| 50-75 | UNSTABLE（不稳） | `sanity/disturbed` | **减速 25%**（0.25） |
+| 75+ | DISTURBED 以上 | 无 | 正常 |
+
+### 5b.2 行动速度影响（actionspeed）
+
+| sanity 区间 | 等级 | 修饰符 | 效果 |
+|---|---|---|---|
+| 0-75 | INSANE/CRAZY/UNSTABLE | `low_sanity` | **行动减速 25%**（multiplicative_slowdown = 0.25） |
+| 75-100 | DISTURBED | 无 | 正常 |
+| 100-150 | NEUTRAL/GREAT | `high_sanity` | **行动加速 10%**（multiplicative_slowdown = -0.1） |
+
+### 5b.3 濒死阈值影响（insanity_effect）
+
+| 等级 | 惩罚 | 效果 |
+|---|---|---|
+| SAD4（绝望，-20 以下） | **+10** | crit_threshold 降低 10（更早进入濒死/倒地） |
+| SAD3（悲伤，-15~-20） | **+5** | crit_threshold 降低 5 |
+| 其他 | 0 | 无 |
+
+### 5b.4 综合影响一览
+
+| 心情等级 | mood 值 | 移速 | 行动速度 | 濒死阈值 |
+|---|---|---|---|---|
+| HAPPY4 狂喜 | +15+ | 正常 | **+10%** | 正常 |
+| HAPPY3 开心 | +10~15 | 正常 | **+10%** | 正常 |
+| HAPPY2 愉快 | +6~10 | 正常 | **+10%** | 正常 |
+| HAPPY1 不错 | +2~6 | 正常 | **+10%** | 正常 |
+| NEUTRAL 中性 | -3~+2 | 正常 | **+10%** | 正常 |
+| SAD1 低落 | -3~-7 | 正常 | 正常 | 正常 |
+| SAD2 难过 | -7~-15 | 正常 | 正常 | 正常 |
+| SAD3 悲伤 | -15~-20 | 正常 | 正常 | **-5** |
+| SAD4 绝望 | -20 以下 | **×2**（sanity<25 时） | **-25%**（sanity<75 时） | **-10** |
+
+> **核心逻辑**：心情（mood）→ 理智（sanity）→ 移速/行动速度/濒死阈值。低心情持续会掉理智（见第二节 process 表），理智掉到 75 以下开始减速，25 以下移速翻倍——**长期抑郁的玩家会越走越慢**。
 
 ---
 
