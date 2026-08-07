@@ -32,6 +32,8 @@
 
 ### 2.2 手术"诱发生物坏死"（Bionecrosis）
 
+> **前置科技树完整链路**（见下方 2.2a 专章）——该手术是**隐藏外星科技**，需要从蓝空间+外星科技解锁。
+
 **代码**: `code/modules/surgery/operations/operation_zombie.dm`
 
 | 属性 | 值 |
@@ -48,6 +50,74 @@
 | 研究名 | Bionecroplasty (Necrotic Revival) |
 
 > **制造流程**：搞到 rezadone 或 zombiepowder → 开皮 + 锯骨 → 5 秒手术 → 脑内植入感染器官 → 等目标死亡 → 复活为丧尸。
+
+
+### 2.2a 手术解锁：科技树完整链路（Bionecroplasty）
+
+> **本手术是隐藏科技（hidden = TRUE）**，不在常规科技树显示，需要扫描外星物品才能出现。
+
+#### ① 手术设计（research design）
+
+**代码**: `code/modules/research/designs/medical_designs.dm:1425`
+
+| 属性 | 值 |
+|---|---|
+| 设计 | `/datum/design/surgery/necrotic_revival` |
+| ID | `surgery_zombie` |
+| 手术 | `/datum/surgery_operation/limb/bionecrosis` |
+| 图标 | surgery_head |
+| 解锁方式 | 科技树节点（非直接设计） |
+
+#### ② 科技节点：Alien Surgery（外星手术）
+
+**代码**: `code/modules/research/techweb/nodes/alien_nodes.dm:73`
+
+| 属性 | 值 |
+|---|---|
+| 节点 ID | TECHWEB_NODE_ALIEN_SURGERY |
+| 名称 | **Alien Surgery**（外星手术）——"Abductors did nothing wrong." |
+| 费用 | **5 级点数**（TECHWEB_TIER_5_POINTS） |
+| **隐藏** | ✅（hidden = TRUE，需扫描解锁） |
+| 折扣实验 | 史莱姆硬扫描（TECHWEB_TIER_5_POINTS） |
+| 公告 | 医疗频道 |
+
+**前置节点（2 个，需同时满足）**：
+| 前置 | 来源 |
+|---|---|
+| **Alien Technology**（外星科技） | alien_nodes.dm:9 |
+| **Advanced Surgery Tools**（高级手术工具） | surgery_nodes.dm:76 |
+
+**解锁的设计（同节点 11 个）**：外星烧灼器/外星钻/外星止血钳/外星牵开器/外星锯/外星手术刀（外星手术工具全套）+ 医疗机器人升级 4 级 + 脑洗手术 + 脑洗手术（机械）+ femto 治疗组合升级 + **surgery_zombie（本手术）**
+
+**解锁需扫描的外星物品（10 种）**：外星烧灼器/外星圆锯/外星撬棍/外星能量枪/缩小射线枪/外星止血钳/外星电击棒/外星多功能工具/外星牵开器/外星手术刀/外星螺丝刀/外星手术钻/外星焊枪/外星剪线钳/外星扳手 + 外星矿物板
+
+#### ③ 前置节点链（完整展开）
+
+```
+Applied Bluespace（应用蓝空间）
+ └→ Bluespace Travel（蓝空间旅行）        ← 二级科技（research_nodes.dm:55）
+     └→ Alien Technology（外星科技）      ← 扫描外星物品解锁
+         └─┐
+Advanced Surgery（高级手术）
+ └→ Experimental Surgery（实验外科）      ← surgery_nodes.dm:43
+     └→ Advanced Surgery Tools（高级手术工具） ← 4 级点数（surgery_nodes.dm:76）
+         └─┘
+          └→ Alien Surgery（外星手术）    ← 5 级点数 + 隐藏（alien_nodes.dm:73）
+              └→ 解锁 surgery_zombie → Bionecrosis 手术
+```
+
+#### ④ 手术本身前置条件（操作时）
+
+| 条件 | 要求 |
+|---|---|
+| 前置状态 | 皮肤切开 + 骨骼锯开 |
+| 阻塞状态 | 血管未夹闭 |
+| 所需试剂 | rezadone 或 zombiepowder **>1u**（工具或患者体内） |
+| 目标 | 脑部存在 + 未已有感染 |
+| 时长 | 5 秒 |
+
+> **实用建议**：rezadone（复生丹）是医疗常规药（可合成），比 zombiepowder（毒素，假死）更好获取——手术时把试剂装进注射器/滴管里用就行。完整科技链（应用蓝空间→蓝空间旅行→外星科技→高级手术工具→外星手术）是**科研部大后期**内容，通常只有 R&D 深度研究 + 获得外星样本后才能解锁。
+
 
 ### 2.3 罗梅洛披萨（20% 概率彩蛋）
 
