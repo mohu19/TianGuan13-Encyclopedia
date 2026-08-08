@@ -299,7 +299,7 @@ results = list(/datum/reagent/consumable/ethanol/XXX = 产量)
 | **Pousse Cafe** | 10 种利口酒分层（按密度从下到上：Herbal/Bitters/Branca Menta/Irish Cream/Yuyake/Aperitivo/Amaretto/Curacao/Maraschino/Toechtauese） |
 | **Vieux Carré** | Manhattan6+Cognac4+Vermouth2+Herbal Liqueur2+Bitters1 → 15u |
 | **Bartender's Handshake** | Aperitivo1+Fernet1 → 2u；治疗+2耐力 |
-| **Grand Marnier 系** | — | — | — |
+| **Grand Marnier 系** | — |
 
 ## 3.12 补遗（核查增补）
 
@@ -482,7 +482,81 @@ results = list(/datum/reagent/consumable/ethanol/XXX = 产量)
 | **葡萄醋 Grape Vinegar** | Grape Juice5（催化 酶5） | 醋5 | |
 | **马提安面糊** | 见上 | — | |
 
-## 6.3 汤/饮品反应
+## 6.3 汤反应全录（64 种 · 源码全量）
+
+> **基类机制**（`soup_mixtures.dm`）：所有汤反应需在**汤锅**（soup_pot）中加热至**沸腾 450K** 才反应；`ingredient_reagent_multiplier` 默认 **0.8**（食材试剂转汤倍率）；`percentage_of_nutriment_converted` 默认 **0.25**；食材接受子类型。
+> 上次审计仅 10 行 → 本次全量补录 **64 种**。
+
+| 反应 | 所需试剂 | 所需食材 | 产物 | 特殊机制 |
+|---|---|---|---|---|
+| meatballsoup 肉丸汤 | 水 50u | 肉丸×1、胡萝卜×1、土豆×1 | 肉丸汤 30u + 水 9u | — |
+| vegetable_soup 蔬菜汤 | 水 50u | 胡萝卜×1、玉米×1、茄子×1、土豆×1 | 蔬菜汤 30u + 水 9u | — |
+| nettlesoup 荨麻汤 | 水 50u | 荨麻×1、土豆×1、煮蛋×1 | 荨麻汤 30u + 水 9u + 欧米尼嗪(omnizine) 6u | 食材试剂倍率 0.2（荨麻酸太多）；营养转化 0（补偿酸伤） |
+| wingfangchu 翼牙楚 | 水 50u + 酱油 5u | 异形肉排(xeno cutlet)×2 | 翼牙楚 30u + 酱油 10u | — |
+| hotchili 辣味辣椒 | 水 50u | 肉排×2、辣椒×1、番茄×1 | 辣味辣椒汤 30u + 番茄汁 10u | 食材试剂倍率 0.33（辣椒自带大量辣椒素，可做"温和版"）；营养转化 0 |
+| coldchili 冷辣椒 | 水 50u | 肉排×2、冰椒(icepepper)×1、番茄×1 | 冷辣椒汤 30u + 番茄汁 10u | 食材试剂倍率 0.33（冰椒自带大量霜油）；营养转化 0 |
+| clownchili 嘉年华辣椒 | 水 50u | 肉排×2、辣椒×1、番茄×1、**小丑鞋×1** | 嘉年华辣椒汤 30u + 番茄汁 8u + 笑声(laughter) 4u + 香蕉 4u | 彩蛋：把小丑鞋扔进锅里；营养转化 0.15 |
+| chili_sin_carne 素辣椒 | 水 30u + 盐水 10u | 辣椒×1、番茄×1 | 素辣椒汤 30u + 番茄汁 10u | 纯素版本 |
+| tomatosoup 番茄汤 | 水 50u + 奶油 5u | 番茄×2 | 番茄汤 30u + 番茄汁 20u | 营养转化 0.1 |
+| eyeballsoup 眼球汤 | 水 50u | 番茄×2、**眼球器官(/obj/item/organ/eyes)×1** | 眼球汤 20u + 番茄汤 10u + 营养 2u + 蛋白 6u + 番茄汁 6u + 液体内脏 6u | 彩蛋：用真眼球；营养转化 0.1 |
+| misosoup 味噌汤 | 水 50u | 豆渣饼(soydope)×2、豆腐×2 | 味噌汤 30u + 水 10u | 营养转化 0（大豆营养极低） |
+| bloodsoup 血汤 | 盐水 10u + 血 10u | 血番茄×2 | 血 10u + 水 8u + 蛋白 7u | 伪"番茄汤"；NOVA 修改：原版用水 10u 改为盐水 10u；营养转化 0.1 |
+| slimesoup 史莱姆汤 | 水 40u | 史莱姆提取物×1 | 史莱姆汤 30u + 史莱姆胶 20u + 营养 7u + 维生素 7u + 水 6u | 对非史莱姆种族有毒；营养凭空产生 |
+| slimesoup/alt 史莱姆汤(备选) | 水 40u + 史莱姆胶 20u | 无 | 同 slimesoup 产物 | **变体**：纯化学混合即可（覆盖 pre_reaction_other_checks 直接返回 TRUE，不需要食材） |
+| clownstears 小丑之泪 | 润滑油(lube) 30u | 香蕉×1、香蕉矿石板(bananium)×1 | 小丑之泪 30u + 香蕉 8u + 维生素 12u + 润滑油 5u | 营养转化 0 |
+| mysterysoup 神秘汤 | 水 50u | 坏食谱(badrecipe)×1、豆腐×1、煮蛋×1、奶酪块×1 | 神秘汤 30u | **彩蛋**：反应完成时随机追加 10u 额外试剂（血/碳/香蕉/辣椒素/霜油/眼药水/欧米尼嗪/毒素/史莱姆胶 之一）；营养转化 0.33 |
+| monkey 猴子快乐汤 | 水 20u + 面粉 5u + 盐水 10u + 黑胡椒 5u | 猴子方块×1、香蕉×1 | 猴子快乐汤 30u + 营养 12u + 盐 4u + 黑胡椒 4u | 彩蛋："May contain a monkey."（做 2 批时猴子方块会变成真猴子） |
+| mushroomsoup 蘑菇汤(香特蕾尔) | 水 40u + 牛奶 10u | 鸡油菌(chanterelle)×1 | 蘑菇汤 30u + 营养 9u + 维生素 8u + 牛奶 2u | — |
+| beetsoup 甜菜汤 | 水 50u | 白甜菜×1、卷心菜×1 | 甜菜汤 30u + 水 10u | 彩蛋：名称随机变成 Borscht 的拼写错误（borsch/bortsch/borstch/borsh/borshch/borscht 之一）；营养转化 0.1 |
+| stew 炖菜 | 水 50u | 番茄×1、肉排×3、土豆×1、胡萝卜×1、茄子×1、蘑菇×1 | 炖菜汤 30u + 番茄汁 10u | 从多样食材获得大量额外营养 |
+| sweetpotatosoup 红薯汤 | 水 40u + 牛奶 10u | 红薯×2 | 红薯汤 30u + 水 10u | 注释：牛奶≈椰奶替代 |
+| redbeetsoup 红甜菜汤 | 水 50u | 红甜菜×1、卷心菜×1 | 红甜菜汤 30u + 水 10u | 营养转化 0.1 |
+| onionsoup 法式洋葱汤 | 水 50u | 洋葱×1、奶酪块×1 | 法式洋葱汤 30u + 蛋白 8u + 番茄汁 8u | 食材试剂倍率 0.5（洋葱富含试剂）；营养转化 0.1 |
+| bisque 蟹肉浓汤 | 水 50u | 蟹肉×1、熟米饭×1 | 浓汤 30u + 蛋白 6u + 维生素 4u + 水 5u | — |
+| bungocurry bungo咖喱 | 水 40u + 奶油 10u | 辣椒×1、bungo果×1 | bungo咖喱 30u + bungo果汁 15u | 营养转化 0.1 |
+| electron 电子汤 | 水 40u + 盐水 10u | 木星杯蘑菇(jupitercup)×1 | 电子汤 30u + 浓缩液态电(enriched liquidelectricity) 10u | 为以太族(Ethereal)设计的能量汤；营养转化 0.10 |
+| peasoup 豌豆汤 | 水 50u | 豌豆×2、欧防风×1、胡萝卜×1 | 豌豆汤 30u + 水 10u | — |
+| indian_curry 印度鸡肉咖喱 | 水 50u + 奶油 5u | 鸡肉块×1、洋葱×2、辣椒×1、大蒜×1、黄油片×1、熟米饭×1 | 印度鸡肉咖喱 30u | 从食材获得大量额外试剂 |
+| oatmeal 燕麦粥 | 牛奶 20u | 燕麦×2 | 燕麦粥 20u + 维生素 8u | 营养转化 0（燕麦几乎无营养） |
+| zurek 波兰酸汤 | 水 40u + 面粉 10u | 煮蛋×1、肉排×1、胡萝卜×1、洋葱×1 | 酸汤(zurek) 30u | 食材试剂倍率 0.5；营养转化 0.1 |
+| cullen_skink 苏格兰鱼汤 | 水 40u + 牛奶 10u + 黑胡椒 4u | 鱼肉×1、洋葱×1、土豆×1 | 鱼汤 30u + 营养 6u + 蛋白 4u + 维生素 4u + 水 6u | 食材试剂倍率 0.5；营养转化 0 |
+| chicken_noodle_soup 鸡汤面 | 水 30u | 胡萝卜×1、鸡肉块×1、熟意大利面×1 | 鸡汤面 30u + 营养 2u + 维生素 3u + 蛋白 5u | — |
+| corn_chowder 玉米浓汤 | 水 40u + 奶油 5u | 玉米×1、土豆×1、胡萝卜×1、培根×1 | 玉米浓汤 30u + 蛋白 4u + 营养 2u | — |
+| atrakor_dumplings 阿特拉科尔饺子汤 | 水 40u + 酱油 10u | 生肉排×2、洋葱×1、蜥蜴饺子(lizard_dumplings)×1 | 阿特拉科尔饺子汤 30u + 水 10u | 蜥蜴族节日菜（Tizira 文化）；食材试剂倍率 0.5；营养转化 0.2 |
+| meatball_noodles 肉丸面汤 | 水 50u | 生肉排×2、洋葱×1、nizaya面×1、肉丸×2、花生×1 | 肉丸面汤 30u + 水 10u | 蜥蜴族菜；食材试剂倍率 0.5；营养转化 0.1 |
+| black_broth 提西兰黑汤 | 水 40u + 醋 8u + 血 8u + 冰 4u | 提西兰香肠×1、洋葱×1 | 黑汤 30u + 血 8u + 液体内脏 7u + 醋 5u | 蜥蜴族菜，冰镇食用；食材试剂倍率 0.5；营养转化 0.1 |
+| jellyfish_stew 水母炖汤 | 水 50u | 罐头水母×1、大豆×1、红甜菜×1、土豆×1 | 水母汤 30u + 水 5u | 蜥蜴族菜 |
+| jellyfish_stew_two 水母炖汤(鲜) | 水 50u | **枪手水母鱼片(gunner_jellyfish)×1**、大豆×1、红甜菜×1、土豆×1 | 水母汤 **50u** | **变体**：用新鲜水母鱼片替换罐头水母，产量更高（50u vs 30u+5u水） |
+| rootbread_soup 根面包汤 | 水 50u + 蛋黄 2u + 蛋白 4u | 根面包片×2、大蒜×1、辣椒×1 | 根面包汤 30u + 蛋白 8u | 蜥蜴族菜；营养转化 0.2 |
+| cottonball 棉花汤(Flöfrölenmæsch) | 水 50u | 棉花(衣物原料)×1、洋葱×1、胡萝卜×1、茄子×1、烤玉米×1 | 棉花汤 30u | 蛾族专属菜；食材试剂倍率 0.5；营养转化 0.1（棉花无营养）；彩蛋注释："Why are you buying clothes at the soup store?!" |
+| cheese 奶酪汤(Ælosterrmæsch) | 水 30u + 牛奶 10u | 面团片×2、奶酪块×2、黄油片×1、红薯×1 | 奶酪汤 30u + 蛋白 8u + 牛奶 2u | 蛾族专属菜 |
+| seed 种子汤(Misklmæsch) | 水 40u + 醋 10u | 向日葵种子×1、罂粟百合种子×1、ambrosia种子×1 | 种子汤 30u + 维生素 13u + 营养 12u + 醋 8u + 水 7u | 蛾族专属菜（发芽种子煮沸，苦味用醋中和） |
+| beans 豆汤(Prickeldröndolhaskl) | 水 50u | 罐头豆×1、卷心菜×1、番茄×1、洋葱×1、辣椒×1、烤玉米×1 | 豆汤 30u + 蛋白 10u + 水 10u | 蛾族专属菜；食材试剂倍率 0.5；营养转化 0.1 |
+| moth_oats 燕麦炖(Häfmisklhaskl) | 水 50u | 燕麦×1、红薯×1、欧防风×1、胡萝卜×1 | 燕麦炖汤 30u | 蛾族专属菜；营养转化 0.1 |
+| fire_soup 心火汤(Tömpröttkrakklmæsch) | 水 30u + 酸奶 15u + 醋 5u | 鬼椒(ghost_chili)×1、豆腐×1 | 心火汤 30u + 蛋白 8u + 醋 2u | 蛾族冷汤；食材试剂倍率 0.33（辣椒素）；营养转化 0 |
+| rice_porridge 米粥 | 水 20u + 盐水 10u | 熟米饭×1 | 米粥 20u + 盐 5u | 营养转化 0.15 |
+| cornmeal_porridge 玉米粥 | 玉米粉 20u + 水 20u | 无 | 玉米粥 20u | 纯化学反应（覆盖 pre_reaction_other_checks 返回 TRUE 跳过食材检查）；可作为其他汤的基础 |
+| cheese_porridge 奶酪粥 | 牛奶 5u + 玉米粥 20u + 水 20u | 硬奶酪片×1、凝乳奶酪×1、黄油片×1 | 奶酪粥 30u + 维生素 8u + 蛋白 4u | — |
+| toechtauese_rice_porridge 图希陶斯米粥 | 米粥 20u + toechtauese糖浆 10u + 水 10u | 辣椒×1 | 图希陶斯米粥 30u + 蛋白 6u + 维生素 6u + 糖浆 6u | 蛾族专属菜 |
+| red_porridge 红粥(Eltsløsk) | 香草 10u + 酸奶 20u + 糖 10u | 红甜菜×1 | 红粥 24u + 蛋白 8u + 糖 8u | 蛾族甜品；**特殊温度**：required_temp=沸腾点、optimal_temp=400K、overheat_temp=415K（焦糖化）、thermic_constant=0；营养转化 0.1 |
+| boilednoodles 煮面条 | 盐 2u | 生面条×1 | **熟面条物品**(/obj/item/food/spaghetti/boilednoodles) | 催化剂：盐水 10u（required_catalysts）；resulting_food_path 产出物品而非试剂；食材试剂倍率 0 |
+| beef_ramen 牛肉拉面 | 牛肉味(beef_flavour) 5u | 干拉面×1 | **牛肉拉面物品** | resulting_food_path；食材试剂倍率 0 |
+| dashi 出汁高汤 | 出汁浓缩液 5u + 水 40u | 无 | 出汁 40u | 日式料理母汤基底 |
+| teriyaki 照烧酱 | 酱油 10u + 清酒 10u + 蜂蜜 5u | 无 | 照烧酱 20u | — |
+| curry_sauce 咖喱酱 | 水 30u + 咖喱粉 10u + 酱油 5u + 玉米淀粉 5u | 无 | 咖喱酱 40u | — |
+| shoyu_ramen 酱油拉面 | 出汁 20u + 照烧酱 15u | 熟面条×1、鱼糕片×1、肉排×1、煮蛋×1 | 酱油拉面 30u + 维生素 8u + 蛋白 8u | 火星族(Martian)菜；营养转化 0.2 |
+| gyuramen 牛肉拉面(Miy Käzu) | 出汁 20u + 酱油 5u | 熟面条×1、奶酪块×1、洋葱片×2、肉排×1 | 牛肉拉面 30u + 维生素 2u + 蛋白 10u | 火星族菜；营养转化 0.15 |
+| new_osaka_sunrise 新大阪日出汤 | 味噌汤 15u | 香草×1、茄子×1、洋葱片×1、豆腐×1 | 新大阪日出汤 30u + 维生素 8u + 蛋白 2u | 火星族早餐；营养转化 0.15 |
+| satsuma_black 萨摩黑汤 | 出汁 20u | 熟面条×1、海苔片×1、豆腐×1、鱿鱼墨罐头×1 | 萨摩黑汤 30u + 维生素 4u + 蛋白 6u | 火星族菜（鱿鱼墨上色）；营养转化 0.15 |
+| dragon_ramen 龙式拉面 | 出汁 20u + 照烧酱 10u + 红月桂(red_bay) 5u | 熟面条×1、鬼椒×1、辣椒×1、鱼糕片×1、煮蛋×1 | 龙式拉面 30u + 维生素 4u + 蛋白 6u | 传统需 7 种辣椒；食材试剂倍率 0.3（降低辣椒冲击） |
+| hong_kong_borscht 港式罗宋汤 | 水 50u + 酱油 5u | 番茄×1、卷心菜×1、洋葱×1、胡萝卜×1、肉排×1 | 港式罗宋汤 30u + 维生素 8u + 蛋白 2u | 营养转化 0.1 |
+| hong_kong_macaroni 港式通心粉汤 | 水 30u + 奶油 10u | 熟意大利面×1、鸡肉排×1、培根×1 | 港式通心粉汤 30u + 蛋白 6u | 火星族早餐；营养转化 0.2 |
+| foxs_prize_soup 狐狸奖汤 | 出汁 30u + 蛋白 10u | 鸡肉排×1、豆腐×1 | 狐狸奖汤 30u + 蛋白 6u | 蛋花汤+油豆腐+出汁（吸引狐狸） |
+| secret_noodle_soup 秘密面条汤 | 出汁 30u | 鸡肉排×1、熟面条×1、鸡油菌×1 | 秘密面条汤 30u + 蛋白 6u | 彩蛋："秘密配方在好几本 cookbook 里都有"（调侃） |
+| budae_jjigae 部队锅 | 水 30u | 罐头豆×1、生面条×1、美式香肠×1、午餐肉片×2、泡菜×1、奶酪块×1 | 部队锅 30u + 蛋白 6u | 韩美混搭菜；营养转化 0.1 |
+| volt_fish 24伏鱼 | 伏特能量饮料(volt_energy) 15u | 鱼肉×1 | **伏特鱼物品**(/obj/item/food/volt_fish) | 用沸腾能量饮料煮鱼；resulting_food_path；食材试剂倍率 0；彩蛋 mix_message："空气中弥漫着鱼和人工调味料的诡异混合气味" |
+
+### 6.3b 布丁/煎饼/转化反应
 
 | 反应 | 配方 | 结果 | 说明 |
 |---|---|---|---|
