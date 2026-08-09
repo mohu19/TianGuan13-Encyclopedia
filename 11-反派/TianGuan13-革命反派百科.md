@@ -9,14 +9,20 @@
 
 ## 目录
 
-- [一、核心概念](#一核心概念)
-- [二、革命军（Revolutionary）](#二革命军revolutionary)
-- [三、革命头目（Head Revolutionary）](#三革命头目head-revolutionary)
-- [四、转化机制（闪光）](#四转化机制闪光)
-- [五、目标系统](#五目标系统)
-- [六、国敌（Enemy of the State）变体](#六国敌enemy-of-the-state变体)
-- [七、对战攻略](#七对战攻略)
-- [八、数值速查表](#八数值速查表)
+- [TianGuan13 · 革命（Revolution）反派百科](#tianguan13--革命revolution反派百科)
+  - [目录](#目录)
+  - [一、核心概念](#一核心概念)
+  - [二、革命军（Revolutionary）](#二革命军revolutionary)
+  - [三、革命头目（Head Revolutionary）](#三革命头目head-revolutionary)
+  - [四、转化机制（闪光）](#四转化机制闪光)
+  - [五、目标系统](#五目标系统)
+    - [5.1 叛乱目标（objective/mutiny）](#51-叛乱目标objectivemutiny)
+    - [5.2 革命处理者（revolution\_handler）](#52-革命处理者revolution_handler)
+  - [六、国敌（Enemy of the State）变体](#六国敌enemy-of-the-state变体)
+  - [七、对战攻略](#七对战攻略)
+    - [怎么玩革命（推荐流程）](#怎么玩革命推荐流程)
+    - [怎么防革命（船员对策）](#怎么防革命船员对策)
+  - [八、数值速查表](#八数值速查表)
 
 ---
 
@@ -130,8 +136,7 @@
 ① 出生头目 → 拿闪光器 → 找落单船员
 ② 闪光转化 → 壮大队伍（目标：人数碾压）
 ③ 头目带小队 → 逐个处理指挥层目标
-④ 转化安保人员（拿到武器库钥匙）
-⑤ 目标完成：所有指挥层下台 → 宣布胜利
+④ 目标完成：所有指挥层下台 → 宣布胜利
 （变体国敌：选流亡苟活 或 劫持穿梭机硬刚）
 ```
 
