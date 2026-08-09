@@ -22,15 +22,41 @@
 
 ## 一、核心机制
 
+**代码**: `datums/operative.dm`（229 行）+ `datums/operative_team.dm`（362 行）
+
 | 机制 | 值 |
 |---|---|
-| 团队 | 辛迪加小队（随机队名）|
-| 目标 | **核弹摧毁空间站**（核心目标）|
+| 团队 | 辛迪加小队（随机队名 syndicate_name）|
+| 目标 | **核弹摧毁空间站**（objective/nuclear）|
 | 队长折扣 | 5 团队折扣 + 10 限量折扣 |
 | 玩家加成 TC | 每 5 人 +5TC（取整）|
 | 渗透者 | 飞船 spawn（infiltrator_basic）|
 | 副目标 | 盗取认证磁盘（nuclear disk）|
-| 核弹计时 | 90s 默认（30s 最小 / 3600s 最大）|
+| 核弹计时 | 90s 默认（90s 最小 / 3600s 最大）|
+
+### 1.1 核心属性（operative.dm datum）
+
+| 属性 | 值 |
+|---|---|
+| roundend_category | "syndicate operatives" |
+| pref_flag | ROLE_OPERATIVE |
+| HUD | synd（辛迪加 HUD）|
+| 心情 | focused（聚焦）|
+| **劫机速度** | **2**（"打不掉空间站就抢穿梭机"）|
+| 自杀口号 | "FOR THE SYNDICATE!!" |
+| **出场音效** | **ops.ogg**（stinger_sound）|
+| 预览套装 | 精英核弹队套装（+背后普通套装）|
+
+### 1.2 目标系统
+
+| 项 | 值 |
+|---|---|
+| 核心目标 | **nuclear**（核弹爆炸）|
+| 生成时机 | 队伍创建即生成（operative_team.New）|
+| 核弹分配 | 延迟 **5 秒**（等渗透者飞船加载）|
+| 记忆码 | memorized_code（核弹启动码记忆）|
+| 战争按钮 | war_button_ref（战争按钮引用）|
+| 队伍折扣 | team_discounts（队长专属）|
 
 **核心循环**:
 ```
@@ -92,28 +118,50 @@
 
 ## 四、装备全录
 
-### 4.1 标准核弹队套装（outfits.dm 236 行）
+**代码**: `outfits.dm`（236 行，7 种套装）
 
-| 槽位 | 装备 |
-|---|---|
-| 制服 | 辛迪加制服 |
-| 背包 | 防火背包 |
-| ID | 精英变色龙 ID（chameleon/elite）|
-| 腰带 | 隐秘手枪（clandestine pistol）|
+### 4.1 套装变体总览
 
-### 4.2 精英套装（Elite）
+| # | 套装 | 说明 |
+|---|---|---|
+| 1 | Syndicate Operative - Basic | 基础套装 |
+| 2 | Syndicate Leader - Basic | 队长基础套装 |
+| 3 | **Syndicate Operative - Full Kit** | **满配套装**（标准核弹队）|
+| 4 | Full Kit (Loneop) | 独狼变体（独立 Uplink+植入体）|
+| 5 | Full Kit (Plasmaman) | 等离子人变体 |
+| 6 | Full Kit (Loneop Plasmaman) | 独狼等离子人 |
+| 7 | Syndicate Operative - Reinforcement | 增援套装 |
+| + | 各变体等离子人版（Plasmaman）| 等离子人专属 |
+
+### 4.2 满配套装（Full Kit）槽位全录
 
 | 槽位 | 装备 |
 |---|---|
 | 眼镜 | 夜视镜（night）|
 | 面罩 | 辛迪加气体面罩 |
 | 背部 | **MOD 服**（nuclear 型号）|
+| 右口袋 | 工程应急氧气罐 |
 | 腰带 | 军用腰带 |
-| 特殊 | 等离子人变体（plasmaman）|
+| 右手 | **Bulldog 霰弹枪** |
+| 背包 | 隐秘手枪 + 匕首笔 + 3×12g 弹匣 |
+| 植入体（Loneop）| 武器认证植入体 + 爆炸植入体 + 队长战术地图 |
 
-### 4.3 渗透者装备
+### 4.3 其他套装
 
-- 潜入套装（satchel 背包等）
+| 套装 | 特点 |
+|---|---|
+| Basic | 辛迪加制服+防火背包+变色龙 ID+隐秘手枪 |
+| Leader | 队长版 Basic |
+| Plasmaman | 等离子人 MOD 服+制服+氧气罐 |
+| Reinforcement | 增援专用 |
+
+### 4.4 装备数值
+
+| 装备 | 数值 |
+|---|---|
+| 精英特工服 | 高级护甲（nuclear_operative_elite）|
+| 认证磁盘 | 核弹启动必需（pinpointer 追踪）|
+| 瞭望工具 | 指挥视角（overwatch）|
 
 ---
 
@@ -174,12 +222,17 @@
 | 项 | 值 |
 |---|---|
 | 源码 | nukeop/ 16 文件 2,464 行 |
-| 目标 | 核弹摧毁空间站 |
+| 目标 | 核弹摧毁空间站（objective/nuclear）|
 | 核弹计时 | 90s 默认（90-3600 可调）|
 | 结局 | 10 种 + Darwin 奖 |
 | 队长折扣 | 5 团队 + 10 限量 |
 | TC 加成 | 每 5 人 +5 |
-| 精英套装 | MOD 服+夜视+变色龙 ID |
+| 满配套装 | MOD 服+夜视+Bulldog+隐秘手枪+匕首笔 |
+| 套装变体 | 7 种（Basic/Leader/Full Kit/Loneop/Plasmaman/增援）|
+| 劫机速度 | 2 |
+| 出场音效 | ops.ogg |
+| 心情 | focused |
+| 核弹分配 | 延迟 5 秒 |
 | 挑战模式 | 裸装+单弹+时限 |
 
 ---

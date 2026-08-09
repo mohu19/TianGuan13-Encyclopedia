@@ -50,6 +50,18 @@
 
 **识别号**：每条血虫有随机 `id_number`（1-999），名字格式"血虫 (ID)"，成长阶段继承同一编号。
 
+### 1.1 Antag 属性（blood_worm_antag.dm datum）
+
+| 属性 | 值 |
+|---|---|
+| roundend_category | "blood worms" |
+| pref_flag | ROLE_BLOOD_WORM |
+| HUD | blood_worm（血虫 HUD）|
+| 心情 | **blood_worm**（血虫专属心情）|
+| **劫机速度** | **0.5**（10 秒/阶段）|
+| **出场音效** | **exit_blood.ogg**（血液音）|
+| 寄生变体 flag | ROLE_BLOOD_WORM_INFESTATION（感染流变体）|
+
 ---
 
 ## 二、成长三阶段（数值全录）
