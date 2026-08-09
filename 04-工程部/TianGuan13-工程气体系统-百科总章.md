@@ -404,7 +404,7 @@ O₂/Plasma < 96  → 正常:              1 Plasma + 0.75CO₂ + 0.25H₂O（+�
 | 热冰 | 120~160K 且 2% 概率（`HOT_ICE_FORMATION_PROB=2`）→ 生成 hot_ice 热冰 |
 | 热点 | 温度 <283K 时 hotspot_expose（低温火） |
 
-**factor 官方描述**: 氧耗随温从 1.4→0.4 mol/mol；Freon 消耗速率随距 283K 距离缩放；每 mol Freon 产 1 CO₂；仅 20 ~ 283K 可发生；每 mol 吸热 300,000 J；120 ~ 160K 产热冰。
+**factor 官方描述**: 氧耗随温从 1.4→0.4 mol/mol；Freon 消耗速率随距 283K 距离缩放；每 mol Freon 产 1 CO₂；仅 20~283K 可发生；每 mol 吸热 300,000 J；120~160K 产热冰。
 
 ---
 
