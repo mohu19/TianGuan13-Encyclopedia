@@ -1,7 +1,7 @@
 # TianGuan13 百科遗漏清单（2026-08-06 翻新核查）
 
 > **来源**: 以 `TianGuan13-玩法目录与代码出处.md`（866 行全玩法索引）为基准，对比现有 26 篇主百科 + 辅助文档的实际覆盖。
-> **状态**: 2026-08-06 翻新核查——现有百科的"偷懒点"（声明数量未列全）已由子代理逐篇增补，本篇列出**源码中存在但百科完全没有专篇覆盖**的系统。
+> **状态**: 2026-08-06 翻新核查——现有百科的"偷懒点"（声明数量未列全）已由子代理逐篇增补；2026-08-09 二次刷新——**原清单绝大部分条目已补齐专篇**（Nova 模块 25 项中 24 项有覆盖、核心系统 10 项中 9 项有专篇），本篇保留"曾缺失→已补齐"轨迹，剩余未覆盖仅：**抓捕旗 CTF（无玩法专章）** 与 **Fabcraft（路径待核实）**。
 
 ---
 
@@ -37,66 +37,72 @@
 
 ## 一、玩家核心系统缺失（高优先级）
 
-### 1.1 开局特质 Quirks 系统 — ❌ 无专篇
-- **源码**: `code/datums/quirks/`（`_quirk.dm` + positive/neutral/negative 三个子目录）
-- **现状**: 现有百科仅职业百科 L25-26 顺带提了 `mind_traits`/`liver_traits` 字段名，**无任何百科系统介绍特质玩法**
-- **内容量**: 正面特质（酒精耐受/共情/多语种/自由奔跑/快乐/音乐家/太空人/饕餮等）+ 中性特质（秃头/素食/恐惧症/摄影师/菠萝爱/恨/贼眼等）+ 负面特质（失明/耳聋/哑巴/截瘫/四肢截肢/嗜睡/社交焦虑/偏瘫等）
-- **建议**: 新增专篇 `TianGuan13-开局特质百科.md`，全量列出三类特质（名称+效果+代价）
+> **2026-08-09 状态刷新**：本表两项均已完成专篇（详见下方），保留条目作为"曾缺失→已补齐"记录。
 
-### 1.2 种族选择 Species 系统 — ❌ 无专篇
+### 1.1 开局特质 Quirks 系统 — ✅ 已补齐（2026-08-06）
+- **源码**: `code/datums/quirks/`（`_quirk.dm` + positive/neutral/negative 三个子目录）
+- **现状**: ✅ **《TianGuan13-开局特质百科.md》已完成**（168 特质全录，2,419 行——正面/中性/负面三类全量）
+- **内容量**: 正面特质（酒精耐受/共情/多语种/自由奔跑/快乐/音乐家/太空人/饕餮等）+ 中性特质（秃头/素食/恐惧症/摄影师/菠萝爱/恨/贼眼等）+ 负面特质（失明/耳聋/哑巴/截瘫/四肢截肢/嗜睡/社交焦虑/偏瘫等）
+
+### 1.2 种族选择 Species 系统 — ✅ 已补齐（2026-08-06）
 - **源码**: `code/modules/mob/living/carbon/human/species_types/`（18 个基础种族）+ `modular_nova/modules/voxes/` `teshari/` `shadekin/`（3 个 NOVA 种族）
-- **现状**: 职业百科 0 提及，仅服装/战斗/休闲等百科顺带提种族外观
+- **现状**: ✅ **《TianGuan13-种族系统百科.md》已完成**（50 种族全录）+ 2026-08-09 升级为"种族系统与种族特质百科"（新增第五章特质全录 基础22+NOVA27 / 第六章 107 特质总览矩阵）
 - **内容量**: 人类/蜥蜴人/蛾人/等离子人/蝇人/果冻人/骷髅/植物人/以太体/猫人/暗影人/外星掳掠者/安卓/无头骑士/魔像/蘑菇人/蜗牛人/吸血鬼/丧尸 + NOVA 鸟人/鸟形族/暗影猫
-- **建议**: 新增专篇 `TianGuan13-种族系统百科.md`（各种族特性/优劣势/专属机制/配装需求）
 
 ---
 
 ## 二、Nova Sector 特色模块缺失（中优先级）
 
-| # | 模块 | 源码路径 | 说明 | 状态 |
+> **2026-08-09 状态刷新**：本表原 25 项中 **20 项已被《Nova特色模块百科.md》（单卷 41 章）覆盖**，仅个别标注更新；另新增独立专篇《蓝空间采矿机教学.md》。覆盖核对基准：`Nova特色模块百科.md` 章节清单（10 蓝空间采矿机 / 11 军火 / 12 细胞枪 / 13 Tarkon / 14 地下交易 / 15 高级飞船 / 16 蓝图武器 / 18 舰桥助理 / 19 通信专家 / 20 咬人 / 21 机器人增强 / 24 自我实现 / 25 兵棋 / 26 部落 / 27 经济 / 28 站台特质 / 30 货运物品 / 31 物种合成器 / 32 SEVA / 33 幽灵采矿 / 34 殖民地制造器 / 35 死亡竞赛 等）。
+
+| # | 模块 | 源码路径 | 说明 | 状态（2026-08-09 更新） |
 |---|---|---|---|---|
-| 1 | **Armaments 军火配装站** | `modular_nova/modules/armaments/` | 军火配装 | ❌ 无覆盖 |
-| 2 | **Bluespace Miner 蓝空间采矿** | `modular_nova/modules/bluespace_miner/` | 蓝空间采矿玩法 | ❌ 无覆盖 |
-| 3 | **Shadekin 暗影猫族** | `modular_nova/modules/shadekin/` | NOVA 专属种族 | ❌ 无覆盖 |
-| 4 | **Advanced Shuttles 高级飞船** | `modular_nova/modules/advanced_shuttles/` | 高级飞船引擎 | ❌ 无覆盖 |
-| 5 | **BSA Overhaul 蓝图武器** | `modular_nova/modules/bsa_overhaul/` | 蓝图武器改造 | ❌ 无覆盖 |
-| 6 | **Bridge Assistant 舰桥助理** | `modular_nova/modules/bridge_assistant/` | 舰桥助理职业 | ❌ 无覆盖 |
-| 7 | **Telecomms Specialist 通信专家** | `modular_nova/modules/telecomms_specialist/` | 通信专家职业 | ❌ 无覆盖 |
-| 8 | **Capitalism 资本主义经济** | `modular_nova/modules/economy/`（49 行，非 capitalism） | 资本主义经济系统（银河市场调价+材料货箱） | ⚠️ 已在 Nova 下卷 #27 经济覆盖 |
-| 9 | **Station Traits 站台特质** | `modular_nova/modules/station_traits/` | 空间站全局特征 | ❌ 无覆盖 |
-| 10 | **Biteng 咬人特质** | `modular_nova/modules/bitey_quirk/` | 咬人特质 | ❌ 无覆盖 |
-| 11 | **Borg Buffs 机器人增强** | `modular_nova/modules/borg_buffs/` | 机器人增强 | ❌ 无覆盖 |
+| 1 | **Armaments 军火配装站** | `modular_nova/modules/armaments/` | 军火配装 | ✅ 已覆盖（Nova特色模块百科 #11） |
+| 2 | **Bluespace Miner 蓝空间采矿** | `modular_nova/modules/bluespace_miner/` | 蓝空间采矿玩法 | ✅ 已覆盖（Nova特色模块百科 #10）+ **新增独立专篇《蓝空间采矿机教学.md》** |
+| 3 | **Shadekin 暗影猫族** | `modular_nova/modules/shadekin/` | NOVA 专属种族 | ✅ 已覆盖（Nova特色模块百科 #3 + 种族系统百科） |
+| 4 | **Advanced Shuttles 高级飞船** | `modular_nova/modules/advanced_shuttles/` | 高级飞船引擎 | ✅ 已覆盖（Nova特色模块百科 #15 + 穿梭机百科） |
+| 5 | **BSA Overhaul 蓝图武器** | `modular_nova/modules/bsa_overhaul/` | 蓝图武器改造 | ✅ 已覆盖（Nova特色模块百科 #16） |
+| 6 | **Bridge Assistant 舰桥助理** | `modular_nova/modules/bridge_assistant/` | 舰桥助理职业 | ✅ 已覆盖（Nova特色模块百科 #18） |
+| 7 | **Telecomms Specialist 通信专家** | `modular_nova/modules/telecomms_specialist/` | 通信专家职业 | ✅ 已覆盖（Nova特色模块百科 #19） |
+| 8 | **Capitalism 资本主义经济** | `modular_nova/modules/economy/`（49 行，非 capitalism） | 资本主义经济系统（银河市场调价+材料货箱） | ✅ 已覆盖（Nova特色模块百科 #27 经济） |
+| 9 | **Station Traits 站台特质** | `modular_nova/modules/station_traits/` | 空间站全局特征 | ✅ 已覆盖（Nova特色模块百科 #28 + 站点特质百科） |
+| 10 | **Biteng 咬人特质** | `modular_nova/modules/bitey_quirk/` | 咬人特质 | ✅ 已覆盖（Nova特色模块百科 #20） |
+| 11 | **Borg Buffs 机器人增强** | `modular_nova/modules/borg_buffs/` | 机器人增强 | ✅ 已覆盖（Nova特色模块百科 #21） |
 | 12 | **Brain Tumor 脑瘤** | base `code/datums/quirks/negative/brain_tumor.dm`（非独立模块） | 脑瘤怪癖 | ✅ 已在开局特质百科覆盖 |
-| 13 | **Cell Guns 细胞枪** | `modular_nova/modules/cellguns/` | 细胞武器 | ❌ 无覆盖 |
-| 14 | **Underworld Connections 地下交易** | `modular_nova/modules/underworld_connections/` | 地下交易 | ❌ 无覆盖 |
-| 15 | **Self Actualization Device** | `modular_nova/modules/self_actualization_device/` | 自我实现装置 | ❌ 无覆盖 |
-| 16 | **Wargame Projectors 兵棋投影** | `modular_nova/modules/wargame_projectors/` | 兵棋推演投影 | ❌ 无覆盖 |
-| 17 | **Tribal Extended 部落扩展** | `modular_nova/modules/tribal_extended/` | 部落扩展 | ❌ 无覆盖 |
-| 18 | **Tarkon 公司模块** | `modular_nova/modules/tarkon/` | Tarkon 公司 | ⚠️ 仅提及 2 次 |
-| 19 | **Cargo Items (Nova)** | `modular_nova/modules/cargo_items/` | 新增货运物品 | ❌ 无覆盖 |
-| 20 | **Spider 蜘蛛种族** | `modular_nova/modules/spider/` | 蜘蛛种族 | ❌ 无覆盖（注意生物图鉴 3.5 有蜘蛛家族 48 种，但那是生物非种族） |
-| 21 | **Species Synthesizer 物种合成器** | `modular_nova/modules/species_synthesizer/` | 物种合成器 | ❌ 无覆盖 |
-| 22 | **SEVA Suit** | `modular_nova/modules/SEVA_suit/` | SEVA 防护服（潜行者风格） | ❌ 无覆盖 |
-| 23 | **Fabcraft 以物易物合成** | 源码无此独立模块（为 base crafting 系统扩展，见 `code/modules/crafting/`） | 以物易物合成 | 🔍 待核实实际模块名 |
-| 24 | **Solfed Mecha** | `modular_nova/modules/solfed_mechs/` | 机甲战斗 | ⚠️ 载具百科有提及但无专章 |
-| 25 | **Teshari 鸟形族** | `modular_nova/modules/teshari/` | 鸟形族 | ⚠️ 仅提及 2 次 |
+| 13 | **Cell Guns 细胞枪** | `modular_nova/modules/cellguns/` | 细胞武器 | ✅ 已覆盖（Nova特色模块百科 #12） |
+| 14 | **Underworld Connections 地下交易** | `modular_nova/modules/underworld_connections/` | 地下交易 | ✅ 已覆盖（Nova特色模块百科 #14） |
+| 15 | **Self Actualization Device** | `modular_nova/modules/self_actualization_device/` | 自我实现装置 | ✅ 已覆盖（Nova特色模块百科 #24） |
+| 16 | **Wargame Projectors 兵棋投影** | `modular_nova/modules/wargame_projectors/` | 兵棋推演投影 | ✅ 已覆盖（Nova特色模块百科 #25） |
+| 17 | **Tribal Extended 部落扩展** | `modular_nova/modules/tribal_extended/` | 部落扩展 | ✅ 已覆盖（Nova特色模块百科 #26） |
+| 18 | **Tarkon 公司模块** | `modular_nova/modules/tarkon/` | Tarkon 公司 | ✅ 已覆盖（Nova特色模块百科 #13，含公司/科技/物品全录） |
+| 19 | **Cargo Items (Nova)** | `modular_nova/modules/cargo_items/` | 新增货运物品 | ✅ 已覆盖（Nova特色模块百科 #30） |
+| 20 | **Spider 蜘蛛种族** | `modular_nova/modules/spider/` | 蜘蛛种族 | ✅ 已覆盖（Nova特色模块百科 #5 蜘蛛族 + 生物图鉴蜘蛛家族） |
+| 21 | **Species Synthesizer 物种合成器** | `modular_nova/modules/species_synthesizer/` | 物种合成器 | ✅ 已覆盖（Nova特色模块百科 #31） |
+| 22 | **SEVA Suit** | `modular_nova/modules/SEVA_suit/` | SEVA 防护服（潜行者风格） | ✅ 已覆盖（Nova特色模块百科 #32） |
+| 23 | **Fabcraft 以物易物合成** | 源码无此独立模块（为 base crafting 系统扩展，见 `code/modules/crafting/`） | 以物易物合成 | 🔍 仍待核实（玩法目录登记 `modules/fabcraft/`，但仓库无此路径——疑似上游/历史模块名） |
+| 24 | **Solfed Mecha** | `modular_nova/modules/solfed_mechs/` | 机甲战斗 | ✅ 部分覆盖（Nova特色模块百科 #8 外星文物含 Phantom/Medivac 机甲全录 + 载具百科提及） |
+| 25 | **Teshari 鸟形族** | `modular_nova/modules/teshari/` | 鸟形族 | ✅ 已覆盖（Nova特色模块百科 #2 + 种族系统百科） |
+
+> **附：Nova特色模块百科 第 33~41 章为清单外新增覆盖**（幽灵采矿 / 殖民地制造器 / 死亡竞赛 / 模块化武器 / 时钟邪教 / 敌对势力 / 掠夺者 / RBMK2 核电站 / 配装系统），清单未列但已全录。
 
 ---
 
 ## 三、核心游戏系统缺失（中优先级）
 
-| # | 系统 | 源码路径 | 现状 |
+> **2026-08-09 状态刷新**：原 10 项中 **9 项已补齐专篇**，仅 1 项（抓捕旗 CTF）无玩法专章（仅有零星提及）。
+
+| # | 系统 | 源码路径 | 现状（2026-08-09 更新） |
 |---|---|---|---|
-| 1 | **穿梭机/飞船系统** | `code/modules/shuttle/`（16 种类型） | 各百科零星提及（紧急穿梭机/采矿穿梭机），**无专篇**。16 种：紧急/货运/采矿/到达/定期/突击舱/逃生舱/ERT/渗透艇/海盗船/猎船/劳改/辅助基地/白船/废墟/星怒战斗机 |
-| 2 | **通信系统** | `code/modules/telecommunications/` + `code/game/say.dm` | 无专篇。对话/喊话/耳语/广播/全息通话/请求消息/无线电加密频道/数据 HUD |
-| 3 | **AI 玩家系统** | `code/modules/mob/living/silicon/ai/` | 管理员参考提 7 次（AI 管理命令），**无 AI 玩家玩法专篇**（AI 核心/法则/视角摄像头） |
-| 4 | **远征任务 Away Missions** | `code/modules/awaymissions/` | 仅生物图鉴提 1 次，无专篇 |
-| 5 | **全局天气系统** | `code/datums/weather/` | 仅拉瓦兰灰烬风暴有局部覆盖，**无全局天气专篇**（灰烬风暴/辐射/雪/雨） |
-| 6 | **成就系统** | `code/datums/achievements/` | 战斗百科提 1 次，无专篇（BOSS/职业/技能/杂项成就） |
-| 7 | **记录系统** | `code/datums/records/` | 无专篇（犯罪/医疗/机组档案） |
-| 8 | **街机 Arcade** | `code/game/machinery/computer/arcade/` | 小游戏百科 0 提及，无专篇（打飞机/猎户座等） |
-| 9 | **抓捕旗 CTF** | `code/modules/capture_the_flag/` | 无覆盖 |
-| 10 | **死亡竞赛** | `code/modules/deathmatch/` | 战斗百科提及但无专章 |
+| 1 | **穿梭机/飞船系统** | `code/modules/shuttle/`（16 种类型） | ✅ 已覆盖（《穿梭机与飞船百科》16 类型 130+ 型号全录） |
+| 2 | **通信系统** | `code/modules/telecommunications/` + `code/game/say.dm` | ✅ 已覆盖（《通信系统百科》频道 38+机器 30+耳机 39 全录） |
+| 3 | **AI 玩家系统** | `code/modules/mob/living/silicon/ai/` | ✅ 已覆盖（《AI与机器人百科》31 法则+23 模型+55 升级件） |
+| 4 | **远征任务 Away Missions** | `code/modules/awaymissions/` | ✅ 已覆盖（《天气与远征百科》远征 10 目的地） |
+| 5 | **全局天气系统** | `code/datums/weather/` | ✅ 已覆盖（《天气与远征百科》天气 18 种） |
+| 6 | **成就系统** | `code/datums/achievements/` | ✅ 已覆盖（《成就与记录百科》95 成就+21 积分） |
+| 7 | **记录系统** | `code/datums/records/` | ✅ 已覆盖（《成就与记录百科》） |
+| 8 | **街机 Arcade** | `code/game/machinery/computer/arcade/` | ✅ 已覆盖（《小游戏百科》第五卷街机游戏全章） |
+| 9 | **抓捕旗 CTF** | `code/modules/capture_the_flag/` | ⚠️ 无玩法专章（仅零星提及：穿梭机 medisim 穹顶 CTF 模式 / 通信百科红蓝绿黄队伍频道 121.5~122.1 / 管理员卸载命令） |
+| 10 | **死亡竞赛** | `code/modules/deathmatch/` | ✅ 已覆盖（《Nova特色模块百科》#35 死亡竞赛 129 行全录） |
 
 ---
 
@@ -117,11 +123,10 @@
 
 ## 五、建议处理顺序
 
-1. **立即补**（玩家可交互性最高）：种族系统、开局特质——玩家创建角色必见
-2. **随主百科补**：穿梭机系统（并入载具百科或新增）、通信系统（并入模块电脑或新增）、AI 玩家系统（并入反派 Malf 章节或新增）
-3. **Nova 特色模块**：挑内容量大的独立成篇（Bluespace Miner/Capitalism/Station Traits），小模块合并成一个"Nova 特色模块合集"
-4. **天关专属**：合并成一个小章节即可
-5. **成就/记录/街机等**：并入现有相关百科（成就→管理员参考、街机→小游戏）
+> **2026-08-09 更新**：以下 1~4 项**均已完成**（见上表 ✅ 标注）。剩余待办仅：
+
+1. **抓捕旗 CTF**（`code/modules/capture_the_flag/`）——唯一无玩法专章的核心系统，可并入战斗百科或小游戏百科补一章；
+2. **Fabcraft**（`modules/fabcraft/`）——玩法目录登记但仓库无此路径，待确认是否上游/历史模块名后决定去留。
 
 ---
 
