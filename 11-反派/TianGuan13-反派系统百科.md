@@ -16,25 +16,55 @@
 
 ---
 
-## 一、反派独立篇导航（11 篇）
+## 一、反派独立篇导航（28 篇）
 
-> 原第一至第八卷已拆分独立成篇（`11-反派/`），全部从源码全量审计（数量声明 vs 实际列表逐一核对）：
+> 全部反派已拆分独立成篇（`11-反派/`），每篇按叛徒标准：核心属性全录（moodlet/音效/口号/hijack_speed/hardcore）+ 目标系统全量 + 风味彩蛋 + 数值速查表 + 源码审计。
 
-| # | 反派 | 独立篇 | 审计要点 |
-|---|---|---|---|
-| 1 | **叛徒 Traitor** | [叛徒反派百科](TianGuan13-叛徒反派百科.md) | Uplink **395 件**全量/承包商/终局 3 选 |
-| 2 | **核弹队 Nukeop** | [核弹队反派百科](TianGuan13-核弹队反派百科.md) | 10 结局/核弹 90s/精英 MOD 套装 |
-| 3 | **异端 Heretic** | [异端反派百科](TianGuan13-异端反派百科.md) | 8 路径 **120 知识节点**/67 法术块/8 升阶 |
-| 4 | **巫师 Wizard** | [巫师反派百科](TianGuan13-巫师反派百科.md) | **法术书 79 条目**（旧宣称 50+ 实列 12 → 全量）|
-| 5 | **邪教 Cult** | [邪教反派百科](TianGuan13-邪教反派百科.md) | 10 可画符文（旧宣称 12 → 修正）/血魔法 10/构造体 6 |
-| 6 | **变形怪 Changeling** | [变形怪反派百科](TianGuan13-变形怪反派百科.md) | **40 能力全量**（旧宣称 40+ 实列 15 → 全量）|
-| 7 | **绑架者 Abductor** | [绑架者反派百科](TianGuan13-绑架者反派百科.md) | 腺体 15 种+uses 次数/外星手术 |
-| 8 | **菌潮 Blob** | [菌潮反派百科](TianGuan13-菌潮反派百科.md) | **14+1 菌株全量**/NOVA 不结束回合改动 |
-| 9 | **血虫 Blood Worm** | [血虫反派百科](TianGuan13-血虫反派百科.md) | 三阶段成长/宿主机制/55 项审计 |
-| 10 | **异形 Xeno** | [异形反派百科](TianGuan13-异形反派百科.md) | 感染链 6 阶段/职阶全录 |
-| 11 | **间谍/海盗/虚空/革命/太空龙** | [间谍](TianGuan13-间谍反派百科.md) [海盗](TianGuan13-太空海盗反派百科.md) [虚空](TianGuan13-虚空行者反派百科.md) [革命](TianGuan13-革命反派百科.md) [太空龙](TianGuan13-太空龙反派百科.md) | 各独立成篇 |
+### 大反派（8 篇）
+| 反派 | 独立篇 | 审计要点 |
+|---|---|---|
+| 叛徒 Traitor | [叛徒反派百科](TianGuan13-叛徒反派百科.md) | 目标系统 8 类型/暗号/承包商/雇主 4 列表 |
+| 核弹队 Nukeop | [核弹队反派百科](TianGuan13-核弹队反派百科.md) | 10 结局/核弹 90s/7 套装/ops.ogg |
+| 异端 Heretic | [异端反派百科](TianGuan13-异端反派百科.md) | 8 路径 120 知识/67 法术/8 升阶/heretic_gain.ogg |
+| 巫师 Wizard | [巫师反派百科](TianGuan13-巫师反派百科.md) | 法术书 79 条目/学徒机制/FOR THE FEDERATION!! |
+| 邪教 Cult | [邪教反派百科](TianGuan13-邪教反派百科.md) | 10 符文/血魔法 10/构造体 6/FOR NAR'SIE!! |
+| 变形怪 Changeling | [变形怪反派百科](TianGuan13-变形怪反派百科.md) | 40 能力/化学制剂/FOR THE HIVE!! |
+| 菌潮 Blob | [菌潮反派百科](TianGuan13-菌潮反派百科.md) | 14+1 菌株/blobalert.ogg |
+| 恶意 AI Malf AI | [恶意AI反派百科](TianGuan13-恶意AI反派百科.md) | 23 AI 模块/CPU 点系统 |
 
-**相关**: [叛徒补充装备百科](TianGuan13-叛徒补充装备百科.md)（NOVA Uplink 69 新物品）/ [电磁卡EMAG百科](TianGuan13-电磁卡EMAG百科.md)（143 钩子明细）/ [变种怪感染百科](TianGuan13-变种怪感染百科.md) / [脑寄生蠕虫百科](TianGuan13-脑寄生蠕虫百科.md)
+### 中反派（10 篇）
+| 反派 | 独立篇 | 审计要点 |
+|---|---|---|
+| 绑架者 Abductor | [绑架者反派百科](TianGuan13-绑架者反派百科.md) | 腺体 15/外星手术/ayylien.ogg |
+| 血虫 Blood Worm | [血虫反派百科](TianGuan13-血虫反派百科.md) | 三阶段/宿主机制/exit_blood.ogg |
+| 异形 Xeno | [异形反派百科](TianGuan13-异形反派百科.md) | 感染链 6 阶段/职阶全录 |
+| 间谍 Spy | [间谍反派百科](TianGuan13-间谍反派百科.md) | 赏金 4 类/黑市价/偷穿梭机 |
+| 太空海盗 Pirate | [太空海盗反派百科](TianGuan13-太空海盗反派百科.md) | 10 帮派/FOR ME MATEYS!! |
+| 虚空行者 Voidwalker | [虚空行者反派百科](TianGuan13-虚空行者反派百科.md) | 凝视致晕/FOR THE VOID!!/FOR THE SUN!! |
+| 革命 Revolution | [革命反派百科](TianGuan13-革命反派百科.md) | 闪光转化/VIVA LA REVOLUTION!! |
+| 太空龙 Space Dragon | [太空龙反派百科](TianGuan13-太空龙反派百科.md) | 裂隙召唤鲤群 |
+| 逃犯 Fugitive | [逃犯反派百科](TianGuan13-逃犯反派百科.md) | 5 背景/猎人机制 |
+| 小丑核弹队 Clown Ops | [小丑核弹队反派百科](TianGuan13-小丑核弹队反派百科.md) | 香蕉武器/Dark H.O.N.K. |
+
+### 小反派（10 篇）
+| 反派 | 独立篇 | 审计要点 |
+|---|---|---|
+| 太空忍者 Ninja | [太空忍者反派百科](TianGuan13-太空忍者反派百科.md) | 7 目标/能量武士刀/FOR THE SPIDER CLAN!! |
+| 亡魂 Revenant | [亡魂反派百科](TianGuan13-亡魂反派百科.md) | 精华系统/能力全录 |
+| 噩梦 Nightmare | [噩梦反派百科](TianGuan13-噩梦反派百科.md) | 黑暗能力 |
+| 兄弟 Brother | [兄弟反派百科](TianGuan13-兄弟反派百科.md) | 结拜/共享目标 |
+| 痴迷 Obsessed | [痴迷反派百科](TianGuan13-痴迷反派百科.md) | 脑创伤/5+1 目标/FOR MY LOVE!! |
+| 分裂分子 Separatist | [分裂分子反派百科](TianGuan13-分裂分子反派百科.md) | 部门建国/灭国目标/FOR THE MOTHERLAND!! |
+| 高地人 Highlander | [高地人反派百科](TianGuan13-高地人反派百科.md) | 剑决斗/FOR SCOTLAND!! |
+| 情人节 Valentine | [情人节反派百科](TianGuan13-情人节反派百科.md) | 配对互保/Heartbreaker |
+| 生存主义者 Survivalist | [生存主义者反派百科](TianGuan13-生存主义者反派百科.md) | 3 变体/FOR MYSELF!! |
+| 灰烬行者 Ashwalker | [灰烬行者反派百科](TianGuan13-灰烬行者反派百科.md) | 守护 Necropolis/献祭产卵 |
+
+### 相关
+- [叛徒补充装备百科](TianGuan13-叛徒补充装备百科.md)（NOVA Uplink 69 新物品）
+- [上行链路 Uplink 系统百科](TianGuan13-上行链路Uplink系统百科.md)（395 件全录）
+- [电磁卡EMAG百科](TianGuan13-电磁卡EMAG百科.md)（143 钩子明细）
+- [变种怪感染百科](TianGuan13-变种怪感染百科.md) / [脑寄生蠕虫百科](TianGuan13-脑寄生蠕虫百科.md)
 
 ---
 
