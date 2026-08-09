@@ -14,9 +14,13 @@
 - [二、叛徒目标系统（全量）](#二叛徒目标系统全量)
 - [三、目标生成流程](#三目标生成流程)
 - [四、目标类型全录](#四目标类型全录)
+  - [4.1 偷窃目标物品池全录](#41-偷窃目标物品池全录steal-物品池)
 - [五、终局目标详解](#五终局目标详解)
 - [六、承包商契约](#六承包商契约)
 - [七、暗号与风味](#七暗号与风味)
+  - [7.1 辛迪加暗号系统](#71-辛迪加暗号系统codewords)
+  - [7.2 雇主系统](#72-雇主系统flavor)
+  - [7.3 其他风味](#73-其他风味)
 - [八、对战攻略](#八对战攻略)
 - [九、数值速查表](#九数值速查表)
 
@@ -139,6 +143,75 @@ forge_ending_objective:
 | 7 | **Martyr 殉道**（终局）| 带着目标一起死（NOVA 关闭）|
 | 8 | **Escape 逃脱**（终局）| 活着逃离空间站 |
 
+### 4.1 偷窃目标物品池全录（Steal 物品池）
+
+> **代码**: `code/game/gamemodes/objective_items.dm`（`/datum/objective_item/steal/*`，共 72 定义）
+
+**叛徒专属偷窃目标（23 种）**（`/datum/objective_item/steal/traitor/*`）:
+
+| # | 目标 | 物品 |
+|---|---|---|
+| 1 | 调酒师的霰弹枪 | 双管霰弹枪（bartender_shotgun）|
+| 2 | 消防斧 | 消防斧（fireaxe）|
+| 3 | 机甲拆卸工具 | 机械拆卸撬棍（big_crowbar）|
+| 4 | 牧师的圣杖 | 空杖（nullrod）|
+| 5 | 小丑的鞋 | 小丑鞋（clown_shoes）|
+| 6 | 哑剧的面具 | 哑剧面具（mime_mask）|
+| 7 | 原动动能加速器 | PKA 矿枪（pka）|
+| 8 | 花式假胡子 | 意大利假胡子（chef_moustache）|
+| 9 | 侦探的左轮 | 侦探.38 左轮（det_revolver）|
+| 10 | 律师的徽章 | 律师徽章（lawyers_badge）|
+| 11 | 总工程师的腰带 | 总工工具腰带（chief_engineer_belt）|
+| 12 | 主管的伸缩警棍 | 伸缩警棍（telebaton）|
+| 13 | 货运部门预算 | 货运部门预算卡（cargo_budget）|
+| 14 | 船长的 MAGNATE MOD 控制单元 | 船长 MOD 服（captain_modsuit）|
+| 15 | 船长的备用 ID | 金色备用 ID（captain_spare）|
+| 16 | 绝缘手套 | 黄色绝缘手套（insuls）|
+| 17 | 可爱的飞蛾毛绒 | 飞蛾毛绒玩具（moth_plush）|
+| 18 | 可爱的蜥蜴毛绒 | 蜥蜴毛绒玩具（lizard_plush）|
+| 19 | 货运的 DENIED 印章 | DENIED 印章（denied_stamp）|
+| 20 | 货运的 GRANTED 印章 | GRANTED 印章（granted_stamp）|
+| 21 | 太空法书籍 | 太空法书（space_law）|
+| 22 | 快速管道分配器 | RPD 管道枪（rpd）|
+| 23 | 一盒珍贵甜甜圈 | 甜甜圈盒（donut_box）|
+
+**通用偷窃目标（44 种）**（`/datum/objective_item/steal/*`）:
+
+| # | 目标 | 物品 |
+|---|---|---|
+| 1 | 船长的古董激光枪 | 船长激光枪（caplaser）|
+| 2 | 安保主管的个人激光枪 | HOS 激光枪（hoslaser）|
+| 3 | 典狱长的个人紧凑霰弹枪 | 战斗霰弹枪（compactshotty）|
+| 4 | 手持传送器 | 手持传送器（handtele）|
+| 5 | 船长的喷气背包 | 船长喷气包（jetpack）|
+| 6 | 总工程师的高级磁力靴 | 高级磁靴（magboots）|
+| 7 | 舰长勋章 | 金色勋章（capmedal）|
+| 8 | 注射器 | CMO 注射器（hypo）|
+| 9 | 核弹认证磁盘 | 核弹磁盘（nukedisc）|
+| 10 | 烧蚀风衣 | 烧蚀风衣（ablative）|
+| 11 | 反应传送护甲 | 反应装甲（reactive）|
+| 12 | 秘密文件 | 任何组织秘密文件（documents）|
+| 13 | 自毁核心的钚芯 | 钚核心（nuke_core）|
+| 14 | Project Goon 源代码 | R&D 主服务器硬盘（hdd_extraction）|
+| 15 | 超物质晶体碎片 | 超物质碎片（supermatter）|
+| 16 | 功能 AI | AI 卡（functionalai）|
+| 17 | 空间站蓝图 | 蓝图（blueprints）|
+| 18 | 黑匣子 | 黑匣子（blackbox）|
+| 19 | 防暴霰弹枪 | 防暴霰弹枪（shotgun）|
+| 20 | 安保温度枪 | 温度枪（temp_gun）|
+| 21 | 主管的印章 | 主管印章（stamp）|
+| 22 | 太阳镜 | 太阳镜（sunglasses）|
+| 23 | 总工程师的高级 MOD | 高级 MOD（ce_modsuit）|
+| 24 | 研发总监的科研 MOD | 科研 MOD（rd_modsuit）|
+| 25 | 首席医疗官的救援 MOD | 救援 MOD（cmo_modsuit）|
+| 26 | CMO 的紧凑除颤器 | 紧凑除颤器（cmo_defib）|
+| 27 | 安保主管的守护 MOD | 守护 MOD（hos_modsuit）|
+| 28 | 眩晕警棍 | 安保警棍（stun_baton）|
+| 29 | 侦探的警棍 | 侦探警棍（det_baton）|
+| 30 | 船长的军刀鞘 | 军刀鞘（captain_sabre_sheathe）|
+
+> 另有间谍专属 steal 子类（lamarr 等 4 种，见间谍百科）。通用池 + 叛徒池 = **67 种可生成偷窃目标**（72 定义含抽象类/子类）。
+
 **目标特性**:
 | 特性 | 说明 |
 |---|---|
@@ -190,13 +263,60 @@ forge_ending_objective:
 
 ## 七、暗号与风味
 
+### 7.1 辛迪加暗号系统（Codewords）
+
+**代码**: `code/controllers/subsystem/traitor.dm`（暗号生成）+ `code/datums/components/codeword_hearing.dm`（组件）+ `code/__HELPERS/names.dm` L209（generate_code_phrase）
+
+**双暗号机制**:
+| 暗号 | 颜色 | 用途 |
+|---|---|---|
+| **Phrase 暗语** | 蓝 | 叛徒先说（隐藏身份接头的暗号）|
+| **Response 回应** | 红 | 另一叛徒回应（确认身份）|
+
+**生成规则**（generate_code_phrase）:
+| 规则 | 值 |
+|---|---|
+| 词数 | **2-5 个词**（3 词最常见：权重 200/325；2 和 4 词各 50；5 词 25）|
+| 词源 | 船员名（70% 概率）/随机名 / 职业名（**反转显示**）/ 食物 / 饮品 / 空间站区域名 |
+| 组合规则 | 至少 1 个"特定词"（人名/职业/食物/饮品/地点）+ 抽象名词/物体/形容词/威胁词 |
+| 生成时机 | SS_traitor 初始化时全局生成（全服同用）|
+| NOVA I18N | 中文服暗号本地化（lang_reverse_text 反查，显示/说出/高亮同源）|
+
+**暗号组件**（codeword_hearing）:
+- 叛徒获得 2 个组件：phrase（蓝高亮）+ response（红高亮）
+- 听到暗号 → 对应词**高亮显示**（蓝/红）
+- 战斗中（战斗模式）暗号不生效
+- 用途：叛徒之间互相识别 + 确认接头（说暗号→对方回应对应→确认队友）
+
+**实战用法**:
+```
+① 叛徒 A 在频道里说暗语（phrase）——比如 "Banana, 总工程师, 咖啡"
+② 叛徒 B 听到后看到蓝色高亮 → 知道 A 是叛徒
+③ B 回应（response）——红色高亮 → 双方确认
+④ 接头成功 → 商量合作/交换情报
+```
+
+**暗号示例**（生成可能结果）:
+- "John Doe, Chief Engineer, coffee"（人名+职业+饮品）
+- "station, bananas, clown"（地点+食物+职业）
+- "the void, firewall, red"（名词+物体+形容词）
+
+### 7.2 雇主系统（flavor）
+
+| 机制 | 值 |
+|---|---|
+| 雇主 | 75% 辛迪加 / 25% Nanotrasen（flavor 系统）|
+| 影响 | 仅 flavor 文案（雇主名/主题），不影响目标 |
+| 劫机排除 | 劫机目标时排除劫机雇主（GLOB.hijack_employers）|
+
+### 7.3 其他风味
+
 | 机制 | 说明 |
 |---|---|
-| 辛迪加暗号 | syndicate_code_phrase（蓝）/ response（红）|
-| 雇主系统 | 75% 辛迪加 / 25% Nanotrasen（flavor）|
 | 伪装 | 部分角色可伪装成其他阵营 |
 | 自杀口号 | "FOR THE SYNDICATE!!" |
 | 终局音效 | final_objective.ogg（提交目标时播放）|
+| 小丑转化 | handle_clown_mutation（小丑叛徒克服武器自伤）|
 
 ---
 
