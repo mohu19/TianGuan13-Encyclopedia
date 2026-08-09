@@ -32,6 +32,12 @@
 - **2 次转化**：conversions_remaining = 2（可转化人类成为虚空行者）
 - **变体**：太阳行者（Sunwalker）——恒星冕实体
 
+**Antag 属性**（voidwalker.dm datum）:
+| 项 | 值 |
+|---|---|
+| pref_flag | ROLE_VOIDWALKER |
+| **自杀口号** | **"FOR THE VOID!!"**（为了虚空！）|
+
 **基础属性**:
 | 项 | 值 |
 |---|---|

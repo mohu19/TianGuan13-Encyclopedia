@@ -39,6 +39,13 @@
 | DNA 档案槽（dna_max） | **6** 个（满员时挤掉最老的非保护档案）|
 | 刺针射程（sting_range） | **2** 格（寻路判定，中键/Alt 点击施放）|
 | 刺针机制 | 未选刺针时中键点击 = 选择刺针+DNA；已选时 = 施放；对同类变形怪**免化学消耗** |
+| roundend_category | "changelings" |
+| pref_flag | ROLE_CHANGELING |
+| 心情 | **ling**（变形怪专属心情）|
+| **劫机速度** | **0.5**（10 秒/阶段）|
+| **自杀口号** | **"FOR THE HIVE!!"**（为了蜂巢！）|
+| **出场音效** | **ling_alert.ogg** |
+| 硬核奖励 | hardcore_random_bonus = TRUE |
 | 天生特质 | 无灵魂假象 FAKE_SOULLESS + 无脑碳基 BRAINLESS_CARBON + 蜂巢思维 HIVEMIND + 全语种 Omnitongue + 诱饵大脑（decoy brain）|
 | 假死抗性 | 假死状态下大多数能力禁用（`ignores_fakedeath` 例外者另注）|
 | 目标 | 吸收 **6-8** 个基因组（`gen_amount_goal(6, 8)`）；60% 概率加偷窃、70% 刺杀/30% 放逐、50% 逃脱/50% 身份逃脱 |
