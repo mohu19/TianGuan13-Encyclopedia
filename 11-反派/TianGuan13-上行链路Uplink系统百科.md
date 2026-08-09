@@ -10,27 +10,91 @@
 ## 目录
 
 - [一、核心机制](#一核心机制)
-- [二、TC 货币与获取](#二tc-货币与获取)
-- [三、Uplink 物品全录（395 件 · 21 分类）](#三uplink-物品全录395-件--21-分类)
-- [四、购买规则与限制](#四购买规则与限制)
-- [五、各反派 Uplink 差异](#五各反派-uplink-差异)
-- [六、数值速查表](#六数值速查表)
+  - [1.1 Uplink 载体与位置偏好](#11-uplink-载体与位置偏好)
+  - [1.2 Uplink 解锁码机制](#12-uplink-解锁码机制)
+  - [1.3 声誉与全局进度](#13-声誉与全局进度)
+  - [1.4 折扣销售机制](#14-折扣销售机制)
+- [二、Uplink 物品全录（395 件 · 21 分类）](#二uplink-物品全录395-件--21-分类)
+- [三、购买规则与限制](#三购买规则与限制)
+- [四、各反派 Uplink 差异](#四各反派-uplink-差异)
+- [五、数值速查表](#五数值速查表)
 
 ---
 
 ## 一、核心机制
 
-**代码**: `uplink_handler.dm`（138 行）
+**代码**: `uplink_handler.dm`（138 行）+ `code/datums/components/uplink.dm`（439 行）
 
 | 机制 | 值 |
 |---|---|
 | TC 购买 | telecrystals 扣除 |
-| 声誉 | progression_points（经验，解锁高级物品） |
-| 库存 | 套装/盈余各 1 库存（shared stock） |
+| 声誉 | progression_points（经验，解锁高级物品）|
+| 库存 | 套装/盈余各 1 库存（shared stock）|
 | 限制 | 角色限定/物种限定/population 要求 |
-| 购买锁定 | shop_locked（被 EMP/黑客可锁） |
+| 购买锁定 | shop_locked（被 EMP/黑客可锁）|
+| 载体 | 4 种：PDA（默认）/收音机/笔/植入体（4TC）|
 
-## 1.3 Uplink 物品全录（395 件，21 分类）
+### 1.1 Uplink 载体与位置偏好
+
+**位置偏好**（`code/modules/client/preferences/uplink_location.dm`）:
+| 载体 | 偏好值 | 说明 |
+|---|---|---|
+| **PDA** | UPLINK_PDA | **默认**（新手推荐）|
+| **收音机** | UPLINK_RADIO | 调频触发 |
+| **笔** | UPLINK_PEN | "like a real spy!"（像真间谍）|
+| **植入体** | UPLINK_IMPLANT | 花 **4 TC**（UPLINK_IMPLANT_TELECRYSTAL_COST）手术植入 |
+
+### 1.2 Uplink 解锁码机制
+
+**双码机制**（`uplink.dm` 组件）:
+| 项 | 值 |
+|---|---|
+| **unlock_code 解锁码** | 每个 Uplink 独立生成（generate_code，去重）|
+| **failsafe_code 保险码** | 独立生成（与解锁码不同——防撞码）|
+| 解锁显示 | examine 显示 "the code to unlock it is [解锁码]"（持有者可见）|
+| 锁定状态 | locked=TRUE 初始，正确解锁码 → 打开 Uplink 界面 |
+
+**3 种解锁方式**:
+| 方式 | 操作 | 判定 |
+|---|---|---|
+| **PDA 铃声** | 改铃声为解锁码 | 匹配 → 解锁；匹配保险码 → 引爆 |
+| **收音机频率** | 调频到解锁码 | 匹配 → 解锁；匹配保险码 → 引爆 |
+| **收音机消息** | Uplink 频道发消息含解锁码 | 匹配 → 解锁；含保险码 → 引爆 |
+
+**Failsafe 保险引爆**:
+| 项 | 值 |
+|---|---|
+| 触发 | 输入保险码（failsafe_code）|
+| 效果 | **爆炸**（销毁 Uplink + 可能杀死持有者）|
+| 用途 | 防 Uplink 落入敌手——紧急自毁 |
+| 防撞码 | generate_code 去重确保保险码 ≠ 解锁码 |
+| PDA 例外 | check_detonate → COMPONENT_TABLET_NO_DETONATE（PDA 载体不引爆）|
+
+### 1.3 声誉与全局进度
+
+**代码**: `code/controllers/subsystem/traitor.dm`（SStraitor）
+
+| 项 | 值 |
+|---|---|
+| 计算 | `station_time × traitor_scaling_multiplier`（配置）|
+| 缩放 | current_progression_scaling = 1 分钟 × 缩放系数 |
+| 保底 | **所有叛徒进度 ≥ 全局进度**（不能落后）|
+| 新加入 | newjoin_progression_coeff = 1（按全局进度起步）|
+| 用途 | 购买需 progression_minimum 的高级物品 |
+| 意义 | **时间越久解锁越多**——越到后期越强 |
+
+**Badass 彩蛋**: 叛徒获胜且 **0 TC** 消费 → 显示 Badass 图标（badass.dmi）
+
+### 1.4 折扣销售机制
+
+| 项 | 值 |
+|---|---|
+| 数量 | 每局 **4-6 件**（uplink_sales_min/max = 4/6）|
+| 过滤 | 不可折扣排除（cant_discount）+ 价格 ≥ **4 TC**（TRAITOR_DISCOUNT_MIN_PRICE）|
+| 范围 | 本 Uplink 旗标可购 + 角色/物种匹配 |
+| 折扣 | -1 点（extra_purchasable，discounts 分类）|
+
+## 二、Uplink 物品全录（395 件，21 分类）
 
 **代码**: `code/modules/uplink/`（20 文件 3,746 行）
 
@@ -62,9 +126,6 @@
 ---
 
 ## 三、Uplink 物品全录（395 件 · 21 分类）
-
-## 三、Uplink 物品全录（395 件）
-
 
 **代码**: `code/modules/uplink/`（20 文件 3,746 行）
 
@@ -581,7 +642,7 @@
 
 ---
 
-## 四、购买规则与限制
+## 三、购买规则与限制
 
 | 规则 | 说明 |
 |---|---|
@@ -592,10 +653,11 @@
 | 购买锁定 | shop_locked（被 EMP/黑客可锁）|
 | 声誉解锁 | progression 点数解锁高级物品 |
 | 折扣销售 | 每局 4-6 件折扣物品 |
+| 锁定购买 | lock_other_purchases（购买后锁其他购买）|
 
 ---
 
-## 五、各反派 Uplink 差异
+## 四、各反派 Uplink 差异
 
 | 反派 | Uplink 差异 |
 |---|---|
@@ -606,16 +668,19 @@
 
 ---
 
-## 六、数值速查表
+## 五、数值速查表
 
 | 项 | 值 |
 |---|---|
-| 源码 | uplink/ 20 文件 3,746 行 |
+| 源码 | uplink/ 20 文件 3,746 行 + uplink 组件 439 行 |
 | 物品 | **395 件 · 21 分类** |
 | 货币 | TC 电信水晶 |
-| 声誉 | progression_points（经验）|
+| 载体 | PDA（默认）/收音机/笔/植入体（4TC）|
+| 解锁码 | unlock_code + failsafe_code |
+| 声誉 | progression_points（全局进度保底）|
+| 折扣 | 每局 4-6 件（≥4 TC）|
 | 共享库存 | 套装/盈余各 1 |
-| 折扣 | 每局 4-6 件 |
+| Badass | 0 TC 获胜彩蛋 |
 
 ---
 

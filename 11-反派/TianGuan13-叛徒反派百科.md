@@ -23,12 +23,11 @@
   - [7.1 辛迪加暗号系统](#71-辛迪加暗号系统codewords)
   - [7.2 雇主系统](#72-雇主系统flavor)
   - [7.3 其他风味](#73-其他风味)
-- [八、Uplink 解锁与安全机制](#八uplink-解锁与安全机制)
-- [九、声誉与全局进度系统](#九声誉与全局进度系统)
-- [十、职业目标与特殊目标](#十职业目标与特殊目标)
-- [十一、宣传组件（Demoraliser）](#十一宣传组件demoraliser)
-- [十二、对战攻略](#十二对战攻略)
-- [十三、数值速查表](#十三数值速查表)
+- [八、Uplink 系统（已独立成篇）](#八uplink-系统已独立成篇)
+- [九、职业目标与特殊目标](#九职业目标与特殊目标)
+- [十、宣传组件（Demoraliser）](#十宣传组件demoraliser)
+- [十一、对战攻略](#十一对战攻略)
+- [十二、数值速查表](#十二数值速查表)
 
 > **Uplink 系统**（TC 货币/395 件物品全录/购买规则）已独立成篇：[上行链路 Uplink 系统百科](TianGuan13-上行链路Uplink系统百科.md)
 
@@ -365,103 +364,75 @@ forge_ending_objective:
 
 ### 7.2 雇主系统（flavor）
 
+**代码**: `code/__DEFINES/antagonists.dm` L211-245（4 个雇主列表）
+
+**雇主选择**:
 | 机制 | 值 |
 |---|---|
-| 雇主 | 75% 辛迪加 / 25% Nanotrasen（flavor 系统）|
-| 影响 | 仅 flavor 文案（雇主名/主题），不影响目标 |
+| 阵营 | 75% 辛迪加 / 25% Nanotrasen（flavor 系统）|
+| 影响 | 仅 flavor 文案（雇主名/主题/UI），不影响目标 |
 | 劫机排除 | 劫机目标时排除劫机雇主（GLOB.hijack_employers）|
+| 逃跑排除 | 逃脱/殉道时排除普通雇主（GLOB.normal_employers）|
+
+**辛迪加雇主（9 个）**（`syndicate_employers`）:
+| # | 雇主 |
+|---|---|
+| 1 | Animal Rights Consortium 动物权益联盟 |
+| 2 | Bee Liberation Front 蜜蜂解放阵线 |
+| 3 | Cybersun Industries 赛博太阳工业 |
+| 4 | Donk Corporation Donk 公司 |
+| 5 | Gorlex Marauders 戈莱克斯掠夺者 |
+| 6 | MI13 |
+| 7 | Tiger Cooperative Fanatic 老虎合作社狂热者 |
+| 8 | Waffle Corporation Terrorist 华夫公司恐怖分子 |
+| 9 | Waffle Corporation 华夫公司 |
+
+**Nanotrasen 雇主（5 个）**（`nanotrasen_employers`）:
+| # | 雇主 |
+|---|---|
+| 1 | Champions of Evil 邪恶冠军 |
+| 2 | Corporate Climber 企业攀登者 |
+| 3 | Gone Postal 邮局暴走 |
+| 4 | Internal Affairs Agent 内务部特工 |
+| 5 | Legal Trouble 法律麻烦 |
+
+**劫机雇主（5 个）**（`hijack_employers`）: 动物权益联盟/蜜蜂解放阵线/邮局暴走/老虎合作社狂热者/华夫公司恐怖分子
+
+**普通雇主（5 个）**（`normal_employers`）: 邪恶冠军/企业攀登者/赛博太阳工业/Donk 公司/（+戈莱克斯掠夺者等）
 
 ### 7.3 其他风味
 
 | 机制 | 说明 |
 |---|---|
 | 伪装 | 部分角色可伪装成其他阵营 |
-| 自杀口号 | "FOR THE SYNDICATE!!" |
+| 自杀口号 | "FOR THE SYNDICATE!!"（suicide_cry）|
+| 出场音效 | **tatoralert.ogg**（stinger_sound，叛徒警报）|
 | 终局音效 | final_objective.ogg（提交目标时播放）|
 | 小丑转化 | handle_clown_mutation（小丑叛徒克服武器自伤）|
+| 心情 | antag_moodlet = focused（聚焦心情）|
+| 劫机速度 | hijack_speed = 0.5（**10 秒/劫机阶段**）|
+| 硬核奖励 | hardcore_random_bonus = TRUE（硬核随机模式加成）|
+| 默认目标文案 | "Perform an overcomplicated heist on valuable Nanotrasen assets."|
 
 ---
 
-## 八、Uplink 解锁与安全机制
+## 八、Uplink 系统（已独立成篇）
 
-**代码**: `code/datums/components/uplink.dm`（439 行，/datum/component/uplink）
+> Uplink 的全部机制（TC 货币/载体 4 种/解锁码+failsafe/声誉全局进度/折扣/395 件物品全录）已移至 **[上行链路 Uplink 系统百科](TianGuan13-上行链路Uplink系统百科.md)**，叛徒篇不再重复。
 
-### 8.1 Uplink 载体（4 种）
-
-Uplink 组件可附着在 4 种载体上（RegisterSignal 分派）:
-| 载体 | 触发信号 | 解锁方式 |
-|---|---|---|
-| **植入体** | 植入（COMSIG_IMPLANT_IMPLANTING）| 手术植入 |
-| **PDA/模块电脑** | 更换铃声（COMSIG_TABLET_CHANGE_ID）| 铃声设为解锁码 |
-| **收音机** | 换频（COMSIG_RADIO_NEW_MESSAGE）| 频率设为解锁码 |
-| **笔** | 旋转（COMSIG_PEN_ROTATED）| 转笔 |
-
-### 8.2 解锁码机制
-
+**叛徒侧要点**（其余见 Uplink 百科）:
 | 项 | 值 |
 |---|---|
-| **unlock_code 解锁码** | 每个 Uplink 独立生成（generate_code，去重）|
-| **failsafe_code 保险码** | 独立生成（与解锁码不同——防撞码）|
-| 解锁显示 | examine 显示 "the code to unlock it is [解锁码]"（只有持有者能看）|
-| 锁定状态 | locked=TRUE 初始，输入正确解锁码 → 打开 Uplink 界面 |
+| Uplink 授予 | 叛徒获得 UPLINK_TRAITORS 旗标 Uplink（give_uplink=TRUE）|
+| 载体偏好 | PDA（默认）/收音机/笔/植入体（4TC）|
+| 折扣 | 每局 4-6 件（≥4 TC）|
+| 声誉 | 全局进度保底（station_time × 缩放）|
 
-### 8.3 解锁方式（3 种触发）
-
-| 方式 | 操作 | 判定 |
-|---|---|---|
-| **PDA 铃声** | 改铃声为解锁码 | 匹配 → 解锁；匹配保险码 → 引爆 |
-| **收音机频率** | 调频到解锁码 | 匹配 → 解锁；匹配保险码 → 引爆 |
-| **收音机消息** | Uplink 频道发消息含解锁码 | 匹配 → 解锁；含保险码 → 引爆 |
-
-### 8.4 Failsafe 保险引爆
-
-| 项 | 值 |
-|---|---|
-| 触发 | 输入保险码（failsafe_code）|
-| 效果 | **爆炸**（销毁 Uplink + 可能杀死持有者）|
-| 用途 | 防叛徒被捕获后 Uplink 落入敌手——紧急自毁 |
-| 防止撞码 | generate_code 去重逻辑确保保险码 ≠ 解锁码 |
-
-### 8.5 防 PDA 爆炸
-
-- `check_detonate`：返回 COMPONENT_TABLET_NO_DETONATE（PDA 载体不会被引爆）
-
----
-
-## 九、声誉与全局进度系统
-
-**代码**: `code/controllers/subsystem/traitor.dm`（SStraitor）+ `uplink_handler.dm`
-
-### 9.1 全局进度（current_global_progression）
-
-| 项 | 值 |
-|---|---|
-| 计算 | `station_time × traitor_scaling_multiplier`（配置）|
-| 缩放 | current_progression_scaling = 1 分钟 × 缩放系数 |
-| 保底 | **所有叛徒的进度 ≥ 全局进度**（不能落后）|
-| 新加入 | newjoin_progression_coeff = 1（新叛徒按全局进度起步）|
-
-### 9.2 声誉（progression_points）
-
-| 机制 | 说明 |
-|---|---|
-| 来源 | 跟随全局进度自动增长（每 tick 补齐到当前全局值）|
-| 用途 | 购买需要 progression_minimum 的高级 Uplink 物品 |
-| 判定 | not_enough_reputation = progression_points < 物品要求 |
-| 意义 | **时间越久解锁越多**——叛徒越到后期越强 |
-
-### 9.3 Badass 彩蛋
-
-- 回合结束：叛徒获胜且 **使用 0 TC** → 显示 **Badass 图标**（badass.dmi）+ "badass" 标记
-- 条件：traitor_won + used_telecrystals == 0
-
----
-
-## 十、职业目标与特殊目标
+## 九、职业目标与特殊目标
 
 **代码**: `code/modules/jobs/job_types/`（generate_traitor_objective）
 
-### 10.1 通用机制
+### 9.1 通用机制
 
 | 项 | 值 |
 |---|---|
@@ -469,7 +440,7 @@ Uplink 组件可附着在 4 种载体上（RegisterSignal 分派）:
 | 调用 | assigned_role.generate_traitor_objective()（默认返回 null = 无专属目标）|
 | 占用 | 生成后占用 1 个目标名额（job_objective）|
 
-### 10.2 人事部长的专属目标（唯一有职业目标的职业）
+### 9.2 人事部长的专属目标（唯一有职业目标的职业）
 
 **`captain_replacement` 船长夺权**（head_of_personnel.dm L52-86）:
 | 项 | 值 |
@@ -483,7 +454,7 @@ Uplink 组件可附着在 4 种载体上（RegisterSignal 分派）:
 
 ---
 
-## 十一、宣传组件（Demoraliser）
+## 十、宣传组件（Demoraliser）
 
 **代码**: `code/modules/antagonists/traitor/components/demoraliser.dm`（180 行）
 
@@ -516,7 +487,7 @@ Uplink 组件可附着在 4 种载体上（RegisterSignal 分派）:
 
 ---
 
-## 十二、对战攻略
+## 十一、对战攻略
 
 ### 怎么玩叛徒（推荐流程）
 
@@ -540,7 +511,7 @@ Uplink 组件可附着在 4 种载体上（RegisterSignal 分派）:
 
 ---
 
-## 十三、数值速查表
+## 十二、数值速查表
 
 | 项 | 值 |
 |---|---|
