@@ -37,6 +37,14 @@
 | 界面 | AntagInfoSpy（赏金面板）|
 | 默认目标 | "Rob the station blind."（把空间站偷个精光）|
 | 随机目标 | 1-3 个自定义任务 + 25% 保护/越狱任务 |
+| pref_flag | ROLE_SPY |
+| roundend_category | "spies" |
+| 心情 | **focused**（聚焦）|
+| **劫机速度** | **1**（hijack_speed）|
+| 预览套装 | /datum/outfit/spy |
+| 可自选目标 | can_assign_self_objectives = TRUE（与叛徒 NOVA 收紧不同）|
+
+> **终局变体**：部分间谍目标含**偷穿梭机**（steal_the_shuttle 劫机目标）——"Rob the station blind"的终局延伸。
 
 ---
 
