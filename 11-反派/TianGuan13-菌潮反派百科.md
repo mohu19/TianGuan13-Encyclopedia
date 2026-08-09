@@ -37,6 +37,16 @@
 | 核心自动放置 | **6 分钟**未放置 → 随机合法点自动放 | `OVERMIND_STARTING_AUTO_PLACE_TIME (6 MINUTES)` |
 | 胜利条件 | **400 格**合法菌块（Critical Mass） | `OVERMIND_WIN_CONDITION_AMOUNT 400` |
 | 公开警报 | 菌块达 **75 格** 或开局 **10 分钟** | `OVERMIND_ANNOUNCEMENT_MIN_SIZE 75` / `OVERMIND_ANNOUNCEMENT_MAX_TIME (10 MINUTES)` |
+
+**Antag 属性**（blob_antag.dm datum）:
+| 项 | 值 |
+|---|---|
+| roundend_category | "blobs" |
+| pref_flag | ROLE_BLOB |
+| HUD | blob（菌潮 HUD）|
+| **出场音效** | **blobalert.ogg** |
+| 感染变体 | ROLE_BLOB_INFECTION（感染流变体）|
+| 预览 | 矿工套装预览（/datum/outfit/job/miner）|
 | 主宰相机 | 只能游走菌块 **3×3** 范围（1 格） | `OVERMIND_MAX_CAMERA_STRAY "3x3"` |
 | 扩张花费 | **4 点/格**；攻击命中目标则退 **2 点** | `BLOB_EXPAND_COST 4` / `BLOB_ATTACK_REFUND 2` |
 | 目标 | "Reach critical mass!"（达成临界质量） | `blob_antag.dm` create_objectives |
