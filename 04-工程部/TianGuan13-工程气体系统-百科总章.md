@@ -14,15 +14,16 @@
     - [1.2 出口价值排行](#12-出口价值排行)
     - [1.3 人体吸入效果](#13-人体吸入效果)
     - [1.4 生产链总图](#14-生产链总图)
-  - [第2章 · 气体反应网络](#第2章--气体反应网络)
+  - [第2章 · 气体反应网络（全量提取版）](#第2章--气体反应网络全量提取版)
     - [2.1 反应系统核心](#21-反应系统核心)
-    - [2.2 燃烧反应(4种)](#22-燃烧反应4种)
-    - [2.3 合成反应(10种)](#23-合成反应10种)
-    - [2.4 分解反应(3种)](#24-分解反应3种)
-    - [2.5 特殊反应(4种)](#25-特殊反应4种)
-    - [2.6 电解器反应(3种)](#26-电解器反应3种)
+    - [2.2 燃烧反应（4 种）](#22-燃烧反应4-种全部需-o₂-作氧化剂最后执行)
+    - [2.3 合成反应（10 种）](#23-合成反应10-种priority_formation)
+    - [2.4 分解反应（3 种）](#24-分解反应3-种priority_prepost_formation)
+    - [2.5 特殊反应 + PN 三阶段](#25-特殊反应3-种--pn-三阶段)
+    - [2.6 电解器反应（3 种）](#26-电解器反应3-种electrolyzer_reactionsdm-139行)
     - [2.7 反应网络总图](#27-反应网络总图)
-    - [2.8 策略总结](#28-策略总结)
+    - [2.8 全量常量表](#28-全量常量表code__definesreactionsdm274行)
+    - [2.9 策略总结](#29-策略总结)
 - [第二卷：管道工程](#第二卷管道工程)
   - [第3章 · 管道与组件系统](#第3章--管道与组件系统)
     - [3.1 系统架构](#31-系统架构)
@@ -272,314 +273,427 @@ PLUOXIUM_PROPORTION = 8    // Pluoxium效率 = 8倍O₂
 
 ---
 
-## 第2章 · 气体反应网络
+## 第2章 · 气体反应网络（全量提取版）
 
-**代码**: `code/modules/atmospherics/gasmixtures/reactions.dm` (1,240行)
+**代码**: `code/modules/atmospherics/gasmixtures/reactions.dm` (1,240行) + `reaction_factors.dm` (216行, 官方因子描述) + `code/__DEFINES/reactions.dm` (274行, 全部常量)
+**反应总数**: **23 个气体反应**（4 燃烧 / 10 合成 / 3 分解 / 3 特殊转化 / 2 凝结灭菌 / 1 复制）+ **3 个电解器反应** = **26 个**，全量无省略。
 
 ### 2.1 反应系统核心
 
-#### 优先级处理顺序
+#### 优先级处理顺序（4 级，决定同 tick 内反应执行顺序）
 
 ```dm
-PRIORITY_PRE_FORMATION  (1) 前驱分解 — Nitrium分解/Halon/PN三阶段
-PRIORITY_FORMATION      (2) 合成 — N₂O/BZ/Pluoxium/Nitrium/Freon/Noblium/Healium/Zauker/PN/Antinob
-PRIORITY_POST_FORMATION (3) 后处理 — 水蒸气凝结/Miasma灭菌/N₂O分解/Zauker分解
-PRIORITY_FIRE           (4) 燃烧 — Plasma/H₂/Tritium/Freon
+PRIORITY_PRE_FORMATION  (1) 前驱/净化 — Nitrium分解 / Halon吸氧 / PN三阶段(氢转化/氚转化/BZ分解)
+PRIORITY_FORMATION      (2) 合成 — N₂O / BZ / Pluoxium / Nitrium / Freon / Hypernob / Healium / Zauker / PN / Antinob复制
+PRIORITY_POST_FORMATION (3) 后处理 — 水蒸气凝结 / Miasma灭菌 / N₂O分解 / Zauker分解
+PRIORITY_FIRE           (4) 燃烧 — Plasma / H₂ / Tritium / Freon（最后执行）
 ```
 
-**Hyper-noblium抑制**: ≥5mol 且 温度<20K → 阻止所有反应
+#### 反应注册机制（init_gas_reactions）
 
-#### 反应标志
+- 遍历 `subtypesof(/datum/gas_reaction)`，跳过 `exclude=TRUE` 者；
+- 每个反应按 `requirements` 中**稀有度最低的气体**（`rarity` 最小）作为 `major_gas` 归类；
+- 挂在 `priority_reactions[气体ID][优先级]` 的四级桶里，每 tick 按桶顺序执行；
+- 无反应的桶会被清空。
+
+#### 反应标志（react() 返回值）
 
 ```dm
-NO_REACTION       = 0     无反应
-REACTING          = 1<<0  正在反应
-STOP_REACTIONS    = 1<<1  停止后续
-VOLATILE_REACTION = 1<<2  挥发性(辐射/爆炸)
+NO_REACTION       = 0     无反应（本 tick 不消耗）
+REACTING          = 1<<0  正在反应（本 tick 有消耗/产出）
+STOP_REACTIONS    = 1<<1  停止后续反应
+VOLATILE_REACTION = 1<<2  挥发性（辐射/爆炸/特殊效应）
 ```
 
-### 2.2 燃烧反应(4种)
+#### Hyper-noblium 全局抑制（REACTION_OPPRESSION）
 
-#### 2.2.1 等离子燃烧 (Plasma Fire)
+- `REACTION_OPPRESSION_THRESHOLD = 5 mol`：Hypernob 摩尔数 ≥5 **且** 温度 < `REACTION_OPPRESSION_MIN_TEMP = 20K` → **阻止所有反应**（全游戏最强抑反应机制，TTV 运输安全的原理）。
 
-**代码**: `/datum/gas_reaction/plasmafire`
-**描述**: O₂+Plasma → CO₂+H₂O 或 Tritium
+#### 反应结果记录（SET_REACTION_RESULTS）
+
+- 每个反应把本 tick 消耗/产出量写入 `air.reaction_results[类型]`；
+- 气罐通过 `atmos_reaction_recorder` 组件 + `COMSIG_GASMIX_MERGING/REMOVING` 信号记录反应历史 → 多普勒阵列/压缩机可读（科研用）。
+
+#### 反应速率通用框架
+
+```dm
+热容加权温升:  T_new = (T_old × C_old ± E) / C_new
+C = Σ(摩尔数 × 比热容)   // heat_capacity()
+下限: T_new ≥ TCMB (2.7K)，C_new > MINIMUM_HEAT_CAPACITY (0.0003) 才更新
+```
+
+---
+
+### 2.2 燃烧反应（4 种，全部需 O₂ 作氧化剂，最后执行）
+
+> **通用**: 氧化剂**只有氧气**（全游戏唯一）；燃烧均需 ≥373.15K（除 Freon 低温特殊）；均会 `hotspot_expose`（点燃地板）。
+
+#### 2.2.1 等离子燃烧 Plasma Fire（plasmafire）
+
+**ID**: `plasmafire` ｜ **优先级**: PRIORITY_FIRE ｜ **放热**: `FIRE_PLASMA_ENERGY_RELEASED = 3,000,000 J/mol` Plasma
 
 | 参数 | 值 |
 |---|---|
-| 最低温度 | 373K (100°C) |
-| 燃烧速率 | `(plasma/9) × temp_scale` 或 `(O₂/10/9) × temp_scale` |
-| 耗氧比 | `1.4 - temp_scale` (随温度从1.4降到0.4) |
-| 放热 | **3,000,000 J/mol** Plasma |
-| Tritium条件 | O₂:Plasma > **96:1** → 产Tritium |
-| 贫氧产物 | CO₂ 75% + H₂O 25% |
+| 最低需求 | Plasma ≥0.01mol, O₂ ≥0.01mol |
+| 最低温度 | `PLASMA_MINIMUM_BURN_TEMPERATURE = 373.15K` (100°C) |
+| 全速温度 | `PLASMA_UPPER_TEMPERATURE = 1643.15K`（以上 scale=1 封顶） |
+| 温度缩放 | `temperature_scale = (T-373.15)/(1643.15-373.15)`，≤0 不反应 |
+| 耗氧比 | `oxygen_burn_ratio = 1.4 - temperature_scale`（373K 时 1.4 → 1643K 时 0.4） |
+| 最大耗氧倍率 | `PLASMA_OXYGEN_FULLBURN = 10`（O₂ 达 Plasma×10 时全速） |
+| 燃烧速率 | `(Plasma/9)×scale`（O₂≥10×Plasma 时）或 `(O₂/10/9)×scale`（贫氧） |
+| 每 tick 上限 | `PLASMA_BURN_RATE_DELTA = 9`（最多烧 1/9 存量） |
+| 超饱和阈值 | `SUPER_SATURATION_THRESHOLD = 96`（O₂:Plasma > 96:1 → 产 Tritium） |
 
+**产物分支**:
 ```dm
-temp_scale = (temp - 373) / 1270  // 0~1
-
-// 限制
-plasma_burn_rate = min(计算值, plasma_moles, oxygen_moles / oxygen_burn_ratio)
-
-// Tritium产线条件:
-O₂:Plasma > 96:1 → 1 Plasma + 1.4 O₂ → 1 Tritium + 热
-O₂:Plasma < 96:1 → 1 Plasma + O₂ → 0.75 CO₂ + 0.25 H₂O + 热
+O₂/Plasma ≥ 96  → super_saturation:  1 Plasma + ~0.4O₂ → 1 Tritium（+热）
+O₂/Plasma < 96  → 正常:              1 Plasma + 0.75CO₂ + 0.25H₂O（+热）
 ```
 
-#### 2.2.2 氢气燃烧 (H₂ Fire)
+**factor 官方描述**: 氧气消耗随温度从 1.4 降到 0.4 mol/mol；O₂ 浓度最高 Plasma 的 10 倍提升燃烧速率；等离子消耗速率随温度线性增长至 1643K 封顶；超饱和（O₂:Plasma≥97）时每 mol 等离子产 1 mol 氚；正常时产 0.25 水汽 + 0.75 CO₂；每 mol 等离子放热 3,000,000 J。
+
+#### 2.2.2 氢气燃烧 Hydrogen Fire（h2fire）
+
+**ID**: `h2fire` ｜ **优先级**: PRIORITY_FIRE ｜ **放热**: `FIRE_HYDROGEN_ENERGY_RELEASED = 2,800,000 J/mol` H₂
 
 | 参数 | 值 |
 |---|---|
-| 最低温度 | 373K |
-| 燃烧速率 | `min(H₂/2, O₂/2/10, H₂, O₂/0.5)` |
-| 配比 | 1 H₂ + 0.5 O₂ → 1 H₂O |
-| 放热 | **2,800,000 J/mol** H₂ |
+| 最低需求 | H₂ ≥0.01mol, O₂ ≥0.01mol |
+| 最低温度 | `HYDROGEN_MINIMUM_BURN_TEMPERATURE = 373.15K` |
+| 燃烧速率 | `burned_fuel = min(H₂/2, O₂/(2×10), H₂, O₂×2)` |
+| 每 tick 上限 | `FIRE_HYDROGEN_BURN_RATE_DELTA = 2`（每 tick 烧一半！无温度加速，过 100°C 即全速） |
+| 化学计量 | 1 H₂ + 0.5 O₂ → 1 H₂O（水蒸气） |
 
-#### 2.2.3 氚燃烧 (Tritium Fire)
+**factor 官方描述**: 每 mol 氢耗 0.5 mol 氧；O₂ 达 H₂×10 时氢消耗全速；只要氧足够氢燃烧极快；每 mol 氢产 1 mol 水汽；需 ≥373.15K；放热 2,800,000 J/mol。
+
+#### 2.2.3 氚燃烧 Tritium Fire（tritfire）
+
+**ID**: `tritfire` ｜ **优先级**: PRIORITY_FIRE ｜ **放热**: `FIRE_TRITIUM_ENERGY_RELEASED = 2,800,000 J/mol`（同氢）
 
 | 参数 | 值 |
 |---|---|
-| 最低温度 | 373K |
-| 燃烧速率 | 同H₂ |
-| 配比 | 1 Tr + 0.5 O₂ → 1 H₂O |
-| 放热 | **2,800,000 J/mol** Tr |
+| 最低需求 | Tritium ≥0.01mol, O₂ ≥0.01mol |
+| 最低温度 | `TRITIUM_MINIMUM_BURN_TEMPERATURE = 373.15K` |
+| 燃烧速率 | `min(Tr/2, O₂/(2×10), Tr, O₂×2)`（同氢，每 tick 烧一半） |
+| 化学计量 | 1 Tr + 0.5 O₂ → 1 H₂O |
 
-**辐射条件**:
+**辐射脉冲条件**（三重门槛，全部满足才触发，10% 概率）:
 ```dm
-燃烧Tr > 0.1mol
-能量释放 > 2,800,000 × (体积/2500)³
-10%概率 → 辐射脉冲, 范围=√燃烧Tr/0.5 (最大20)
+① burned_fuel > TRITIUM_RADIATION_MINIMUM_MOLES = 0.1 mol
+② energy_released > TRITIUM_RADIATION_RELEASE_THRESHOLD × (体积/2500L)³
+   （阈值 = 2,800,000 J，大体积稀释辐射——防全站辐照）
+③ prob(10) 10% 概率
+→ radiation_pulse(范围 = min(√烧Tr / 0.5, 20格), 穿透阈值 0.3)
 ```
 
-#### 2.2.4 Freon燃烧 (Freon Fire) — 唯一吸热!
+**factor 官方描述**: 同氢（每 mol 氚耗 0.5 氧、产 1 水汽、放热 2.8e6 J），额外"辐射与释放能量成正比"。
+
+#### 2.2.4 Freon 燃烧 Freon Fire（freonfire）— 唯一吸热/低温
+
+**ID**: `freonfire` ｜ **优先级**: PRIORITY_FIRE ｜ **吸热**: `FIRE_FREON_ENERGY_CONSUMED = 300,000 J/mol` Freon（降温！）
 
 | 参数 | 值 |
 |---|---|
-| 温度范围 | **20K~283K** (唯一低温火!) |
-| 燃烧速率 | `(freon/4) × temp_scale` 或 `(O₂/10/4) × temp_scale` |
-| 配比 | 1 Freon + ~1 O₂ → 1 CO₂ |
-| **吸热** | **300,000 J/mol** Freon (降温!) |
-| 热冰 | 120~160K 下2%概率生成 **hot_ice** |
+| 最低需求 | O₂ ≥0.01mol, Freon ≥0.01mol |
+| 温度窗口 | `FREON_TERMINAL_TEMPERATURE=20K` ~ `FREON_MAXIMUM_BURN_TEMPERATURE=283K` |
+| 温度缩放 | `<20K: 0`；`20~60K: 0.5`；`60~283K: (283-T)/(283-20)` |
+| 耗氧比 | `oxygen_burn_ratio = 1.4 - scale`（同等离子逻辑） |
+| 燃烧速率 | `(Freon/4)×scale` 或 `(O₂/10/4)×scale`（贫氧） |
+| 每 tick 上限 | `FREON_BURN_RATE_DELTA = 4` |
+| 化学计量 | 1 Freon + ~0.4~1.4 O₂ → 1 CO₂ |
+| 热冰 | 120~160K 且 2% 概率（`HOT_ICE_FORMATION_PROB=2`）→ 生成 hot_ice 热冰 |
+| 热点 | 温度 <283K 时 hotspot_expose（低温火） |
 
-```dm
-temp_scale:
->60K:  0.5
-20~60K: (283-temp)/(283-20)
-<20K:  0 (停止)
-```
+**factor 官方描述**: 氧耗随温从 1.4→0.4 mol/mol；Freon 消耗速率随距 283K 距离缩放；每 mol Freon 产 1 CO₂；仅 20~283K 可发生；每 mol 吸热 300,000 J；120~160K 产热冰。
 
-### 2.3 合成反应(10种)
+---
 
-#### 2.3.1 N₂O 合成
+### 2.3 合成反应（10 种，PRIORITY_FORMATION）
+
+#### 2.3.1 N₂O 合成（nitrousformation，放热）
 
 | 参数 | 值 |
 |---|---|
-| 最低需求 | O₂=10mol, N₂=20mol, BZ=5mol |
-| 温度范围 | **200~250K** (严格!) |
-| 催化剂 | BZ (不消耗) |
-| 放热 | 10,000 J/mol N₂O |
+| 最低需求 | O₂=10mol, N₂=20mol, BZ=5mol（催化剂不消耗） |
+| 温度窗口 | `N2O_FORMATION_MIN_TEMPERATURE=200K` ~ `MAX=250K`（严格） |
+| 速率 | `heat_efficiency = min(O₂×2, N₂)`（氧 0.5:1，氮 1:1） |
+| 放热 | `N2O_FORMATION_ENERGY = 10,000 J/mol` |
 | 反应 | N₂ + 0.5 O₂ → N₂O |
 
-#### 2.3.2 BZ 合成
+**factor**: 需 O₂10/N₂20/BZ5；每 mol N₂O 耗 0.5 O₂ + 1 N₂；BZ 仅催化；仅 200~250K；放热 10,000 J/mol。
+
+#### 2.3.2 BZ 合成（bzformation，放热）
 
 | 参数 | 值 |
 |---|---|
 | 最低需求 | N₂O=10mol, Plasma=10mol |
-| 最高温度 | **<313K**(40°C) — 低于燃烧温度防炸弹 |
-| 环境效率 | `体积/压力` — 大体积低压好 |
-| 比例效应 | N₂O:Plasma < 1:3 → N₂O开始分解 |
-| 放热 | 80,000 J/mol BZ |
-| 反应 | 0.4 N₂O + 0.8 Plasma → BZ |
+| 温度上限 | `BZ_FORMATION_MAX_TEMPERATURE = 373.15-60 = 313.15K`（<40°C，防炸弹定时器滥用） |
+| 环境效率 | `volume/pressure`（大体积低压好） |
+| 比例效率 | `min(N₂O/Plasma, 1)`（N₂O 少则慢） |
+| N₂O 分解因子 | `max(4×(Plasma/(N₂O+Plasma) - 0.75), 0)`（Plasma:N₂O > 3:1 时 N₂O 开始分解） |
+| 速率 | `0.01 × 比例效率 × 环境效率`，受 N₂O/0.4 与 Plasma/(0.8×(1-分解因子)) 限制 |
+| 放热 | `BZ_FORMATION_ENERGY = 80,000 J/mol`（N₂O 分解时混合 N₂O_DECOMPOSITION_ENERGY=200,000） |
+| 反应 | 0.4 N₂O + 0.8 Plasma → BZ（分解时另产 N₂+O₂） |
 
-#### 2.3.3 Pluoxium 合成
+**factor**: 每 mol BZ 耗 0.8 Plasma + 0.4 N₂O；Plasma>N₂O 时减速，>3:1 时 N₂O 分解为 N₂+O₂；低压大体积高产；放热 80,000 J/mol。
 
-| 参数 | 值 |
-|---|---|
-| 温度范围 | **50~273K** |
-| 最大速率 | **5 mol/tick** |
-| 放热 | 250 J/mol Pluoxium |
-| 反应 | CO₂ + 0.5 O₂ + 0.01 Tr → Pluoxium + 0.01 H₂ |
-
-#### 2.3.4 Nitrium 合成 (吸热)
+#### 2.3.3 Pluoxium 合成（pluox_formation，放热）
 
 | 参数 | 值 |
 |---|---|
-| 最低需求 | Tr=20mol, N₂=10mol, BZ=5mol |
-| 最低温度 | **>1500K** |
-| 消耗 | BZ 0.05/mol Nitrium |
-| **吸热** | 100,000 J/mol Nitrium |
-| 反应 | Tr + N₂ + 0.05 BZ → Nitrium |
+| 最低需求 | CO₂≥0.01, O₂≥0.01, Tritium≥0.01 |
+| 温度窗口 | `PLUOXIUM_FORMATION_MIN_TEMP=50K` ~ `MAX=T0C=273.15K` |
+| 最大速率 | `PLUOXIUM_FORMATION_MAX_RATE = 5 mol/tick` |
+| 速率 | `min(5, CO₂, O₂×2, Tr×100)` |
+| 放热 | `PLUOXIUM_FORMATION_ENERGY = 250 J/mol` |
+| 反应 | 1 CO₂ + 0.5 O₂ + 0.01 Tr → 1 Pluoxium + 0.01 H₂（Tr 脱中子成 H₂） |
 
-#### 2.3.5 Freon 合成 (吸热)
+**factor**: 每 mol Pluoxium 耗 1 CO₂ + 0.5 O₂ + 0.01 Tr；Tr 变 H₂；恒定速率；放热 250 J/mol；仅 50~273K。
 
-| 参数 | 值 |
-|---|---|
-| 最低需求 | Plasma=0.06mol, CO₂=0.03mol, BZ=0.01mol |
-| 最低温度 | >473K (200°C) |
-| 效率曲线 | 800K峰值 + **>5500K(3倍效率)** |
-| **吸热** | ~100~800 J/mol (随温变) |
-| 反应 | 0.6Plasma + 0.3CO₂ + 0.1BZ → Freon |
-
-#### 2.3.6 Hyper-noblium 合成 (强放热)
+#### 2.3.4 Nitrium 合成（nitrium_formation，吸热）
 
 | 参数 | 值 |
 |---|---|
-| 最低需求 | N₂=10mol, Tr=5mol |
-| 温度范围 | **2.7~15K** (极度低温!) |
-| 放热 | **20,000,000 J/mol** Noblium (最强!) |
-| BZ催化 | 降低放热 + 减少Tr消耗 |
-| 产量 | `min((N₂+Tr)×0.01, Tr/5, N₂/10)` |
-| 反应 | 10N₂ + 5Tr → Noblium |
+| 最低需求 | Tritium=20mol, N₂=10mol, BZ=5mol |
+| 最低温度 | `NITRIUM_FORMATION_MIN_TEMP = 1500K` |
+| 速率 | `min(T/NITRIUM_FORMATION_TEMP_DIVISOR, Tr, N₂, BZ×20)` |
+| 温度除数 | `NITRIUM_FORMATION_TEMP_DIVISOR = 373.15×8 = 2985.2` |
+| **吸热** | `NITRIUM_FORMATION_ENERGY = 100,000 J/mol` |
+| 反应 | 1 Tr + 1 N₂ + 0.05 BZ → 1 Nitrium（BZ 消耗防泛滥） |
 
-#### 2.3.7 Healium 合成
+**factor**: 需 Tr20/N₂10/BZ5；BZ 耗 0.05/mol；Tr、N₂ 各耗 1/mol；速率随温度；≥1500K；吸热 100,000 J/mol。
 
-| 参数 | 值 |
-|---|---|
-| 温度范围 | **25~300K** |
-| 速率 | `min(温度×0.3, Freon/2.75, BZ/0.25)` |
-| 放热 | 9,000 J/3mol Healium |
-| 反应 | 2.75Freon + 0.25BZ → 3Healium |
-
-#### 2.3.8 Zauker 合成 (吸热)
+#### 2.3.5 Freon 合成（freonformation，吸热）
 
 | 参数 | 值 |
 |---|---|
-| 温度范围 | **50,000~75,000K** (极高温!) |
-| 速率 | `min(温度×5e-6, Hypernob/0.01, Nitrium/0.5)` |
-| **吸热** | 5,000 J/0.5mol Zauker |
-| 反应 | 0.01Hypernob + 0.5Nitrium → 0.5Zauker |
+| 最低需求 | Plasma≥0.06mol, CO₂≥0.03mol, BZ≥0.01mol |
+| 最低温度 | `FREON_FORMATION_MIN_TEMPERATURE = 373.15+100 = 473.15K` |
+| 温度效率曲线 | 高斯峰 800K + **Sigmoid 主导 >5,500K**（最高 3 倍效率） |
+| 速率 | `min(heat_factor × 最小摩尔因子 × 0.05, 各原料上限)` |
+| 吸热 | 能量公式随温度：`(7000/(1+e^(-0.0015(T-6000))) + 1000) × 0.1 J/mol`（约 100~800 J） |
+| 反应 | 0.6 Plasma + 0.3 CO₂ + 0.1 BZ → 1 Freon |
 
-#### 2.3.9 Proto-Nitrate 合成
+**factor**: 需 0.06 Plasma/0.03 CO₂/0.01 BZ；耗 0.6/0.3/0.1 每 mol；效率 = 高斯(峰值800K)+Sigmoid(>5500K 最高3倍)；吸热 100~800 J/mol。
 
-| 参数 | 值 |
-|---|---|
-| 温度范围 | **5,000~10,000K** |
-| 速率 | `min(温度×0.005, Pluoxium/0.2, H₂/2)` |
-| 放热 | 650 J/2.2mol PN |
-| 反应 | 2H₂ + 0.2Pluoxium → 2.2Proto-Nitrate |
-
-#### 2.3.10 Antinoblium 复制
+#### 2.3.6 Hyper-noblium 合成（nobliumformation，强放热）
 
 | 参数 | 值 |
 |---|---|
-| 最低需求 | Antinoblium ≥ 0.25mol |
-| 最低温度 | >20K |
-| 转化率 | `min(Anob/90, 非Anob总mol)` per tick |
+| 最低需求 | N₂=10mol, Tritium=5mol |
+| 温度窗口 | `NOBLIUM_FORMATION_MIN_TEMP=TCMB=2.7K` ~ `MAX=15K`（极度低温） |
+| 速率 | `min((N₂+Tr)×0.01, Tr/(5×reduction), N₂/10)` |
+| BZ 催化 | `reduction_factor = clamp(Tr/(Tr+BZ), 0.001, 1)`——BZ 越多 Tr 消耗越少（最高减至 0.1%） |
+| **放热** | `NOBLIUM_FORMATION_ENERGY = 20,000,000 J/mol`（全游戏最强放热！）/ max(BZ,1) |
+| 反应 | 10 N₂ + 5 Tr → 1 Hypernoblium |
 
-唯一不需要其他气体的反应。
+**factor**: 需 N₂10/Tr5；N₂ 耗 10/mol、Tr 耗 5/mol（BZ 降低 Tr 消耗与放热）；放热 20,000,000 J/mol；仅 2.7~15K。
 
-### 2.4 分解反应(3种)
-
-#### 2.4.1 N₂O 分解 (放热)
+#### 2.3.7 Healium 合成（healium_formation，放热）
 
 | 参数 | 值 |
 |---|---|
-| 最低需求 | N₂O ≥ 0.02mol |
-| 温度范围 | **1,400~100,000K** |
-| 速率 | `(N₂O/2) × 抛物线系数` (峰=50,700K) |
-| 放热 | 200,000 J/mol |
+| 最低需求 | BZ≥0.01, Freon≥0.01 |
+| 温度窗口 | `HEALIUM_FORMATION_MIN_TEMP=25K` ~ `MAX=300K` |
+| 速率 | `min(T×0.3, Freon/2.75, BZ/0.25)` |
+| 放热 | `HEALIUM_FORMATION_ENERGY = 9,000 J / 3mol`（即 3,000 J/mol Healium） |
+| 反应 | 2.75 Freon + 0.25 BZ → 3 Healium |
+
+**factor**: BZ 耗 1/12 mol、Freon 耗 11/12 mol 每 mol Healium（即 0.25/2.75 每 3mol）；速率随温度；25~300K；放热 9,000 J/3mol。
+
+#### 2.3.8 Zauker 合成（zauker_formation，吸热）
+
+| 参数 | 值 |
+|---|---|
+| 最低需求 | Hypernob≥0.01, Nitrium≥0.01 |
+| 温度窗口 | `ZAUKER_FORMATION_MIN_TEMPERATURE=50,000K` ~ `MAX=75,000K`（极高温） |
+| 速率 | `min(T × ZAUKER_FORMATION_TEMPERATURE_SCALE, Hypernob/0.01, Nitrium/0.5)` |
+| 温度比例 | `ZAUKER_FORMATION_TEMPERATURE_SCALE = 5e-6` |
+| **吸热** | `ZAUKER_FORMATION_ENERGY = 5,000 J / 0.5mol`（即 10,000 J/mol） |
+| 反应 | 0.01 Hypernob + 0.5 Nitrium → 0.5 Zauker |
+
+**factor**: Hypernob 耗 0.02/mol Zauker、Nitrium 耗 1/mol；速率随温度；仅 50,000~75,000K；吸热 5,000 J/0.5mol（2×ZAUKER_FORMATION_ENERGY/mol）。
+
+#### 2.3.9 Proto-Nitrate 合成（proto_nitrate_formation，放热）
+
+| 参数 | 值 |
+|---|---|
+| 最低需求 | Pluoxium≥0.01, H₂≥0.01 |
+| 温度窗口 | `PN_FORMATION_MIN_TEMPERATURE=5,000K` ~ `MAX=10,000K` |
+| 速率 | `min(T × PN_FORMATION_TEMPERATURE_SCALE, Pluoxium/0.2, H₂/2)` |
+| 温度比例 | `PN_FORMATION_TEMPERATURE_SCALE = 5e-3` |
+| 放热 | `PN_FORMATION_ENERGY = 650 J / 2.2mol`（即 ~295 J/mol PN） |
+| 反应 | 2 H₂ + 0.2 Pluoxium → 2.2 Proto-Nitrate |
+
+**factor**: Pluoxium 耗 1/11 mol、H₂ 耗 10/11 mol 每 mol PN；速率随温度；5,000~10,000K；放热 650 J/2.2mol。
+
+#### 2.3.10 Antinoblium 复制（antinoblium_replication，吞噬转化）
+
+**ID**: `antinoblium_replication` ｜ **优先级**: PRIORITY_FORMATION ｜ **唯一不需要其他气体的反应**
+
+| 参数 | 值 |
+|---|---|
+| 最低需求 | Antinoblium ≥ `MOLES_GAS_VISIBLE = 0.25mol` |
+| 最低温度 | `REACTION_OPPRESSION_MIN_TEMP = 20K` |
+| 转化率 | `min(Antinob/ANTINOBLIUM_CONVERSION_DIVISOR, 非Antinob总mol)`，除数=90（每 tick 最多转化 1/90） |
+| 机制 | 所有其他气体按比例转为 Antinoblium；<0.01mol 残留直接清零 |
+| 温度 | 等热容等比（T×C_old/C_new），无放热无吸热 |
+
+**factor**: 需 0.25mol Antinob 启动；≥20K；把其他气体转成更多 Antinob。
+
+---
+
+### 2.4 分解反应（3 种，PRIORITY_PRE/POST_FORMATION）
+
+#### 2.4.1 N₂O 分解（nitrous_decomp，放热，POST_FORMATION）
+
+| 参数 | 值 |
+|---|---|
+| 最低需求 | N₂O ≥ `MINIMUM_MOLE_COUNT×2 = 0.02mol` |
+| 温度窗口 | `N2O_DECOMPOSITION_MIN_TEMPERATURE=1,400K` ~ `MAX=100,000K` |
+| 速率 | `(N₂O/2) × (T-0)(T-100000)/(-2.5e9)`（抛物线，峰 50,000K） |
+| 除数 | `N2O_DECOMPOSITION_RATE_DIVISOR = 2`（每 tick 最多一半） |
+| 放热 | `N2O_DECOMPOSITION_ENERGY = 200,000 J/mol` |
 | 反应 | N₂O → N₂ + 0.5 O₂ |
 
-#### 2.4.2 Nitrium 分解 (放热)
+**factor**: 速率随与 1,400~100,000K 均值的距离负相关；每 mol 产 1 N₂ + 0.5 O₂；放热 200,000 J/mol。
+
+#### 2.4.2 Nitrium 分解（nitrium_decomposition，放热，PRE_FORMATION）
 
 | 参数 | 值 |
 |---|---|
-| 最低需求 | O₂=0.01mol(催化), Nitrium=0.01mol |
-| 最高温度 | **<343K**(70°C) |
-| 速率 | `温度/3000` mol/tick (极慢) |
-| 放热 | 30,000 J/mol |
-| 反应 | Nitrium → H₂ + N₂ |
+| 最低需求 | O₂≥0.01（**催化剂不消耗**）, Nitrium≥0.01 |
+| 温度上限 | `NITRIUM_DECOMPOSITION_MAX_TEMP = 273.15+70 = 343.15K`（<70°C，刻意低于燃点） |
+| 速率 | `min(T / NITRIUM_DECOMPOSITION_TEMP_DIVISOR, Nitrium)`，除数=2985.2（**极慢**，注释：每 fire 约 0.1 mol） |
+| 放热 | `NITRIUM_DECOMPOSITION_ENERGY = 30,000 J/mol` |
+| 反应 | Nitrium → H₂ + N₂（1:1:1） |
 
-#### 2.4.3 Zauker 分解 (放热)
+**factor**: 需 O₂（不消耗）；Nitrium 消耗随温度；产 1 H₂ + 1 N₂；<343.15K；放热 30,000 J/mol。
+
+#### 2.4.3 Zauker 分解（zauker_decomp，放热，POST_FORMATION）
 
 | 参数 | 值 |
 |---|---|
-| 最低需求 | N₂=0.01mol, Zauker=0.01mol |
-| 最大速率 | **20 mol/tick** |
-| 放热 | 460 J/mol |
-| 反应 | Zauker + N₂ → 0.3 O₂ + 0.7 N₂ |
+| 最低需求 | N₂≥0.01, Zauker≥0.01 |
+| 最大速率 | `ZAUKER_DECOMPOSITION_MAX_RATE = 20 mol/tick`（固定速率） |
+| 放热 | `ZAUKER_DECOMPOSITION_ENERGY = 460 J/mol` |
+| 反应 | Zauker → 0.3 O₂ + 0.7 N₂（氮气催化/防泛滥） |
 
-### 2.5 特殊反应(4种)
+**factor**: 固定速率 20 mol/秒（SSair tick）；需 N₂；产 0.3 O₂ + 0.7 N₂；放热 460 J/mol。
 
-#### 2.5.1 水蒸气凝结
+---
+
+### 2.5 特殊反应（3 种）+ PN 三阶段
+
+#### 2.5.1 水蒸气凝结（water_vapor，POST_FORMATION）
 
 | 温度 | 效果 |
 |---|---|
-| **<200K**(-73°C) | 冻结地板 (permafrost) |
-| **200~303K**(30°C) | 湿地板 (打滑) |
+| ≤ `WATER_VAPOR_DEPOSITION_POINT = 200K` | 冻结地板（permafrost） |
+| 200K ~ `WATER_VAPOR_CONDENSATION_POINT = 303.15K` (30°C) | 湿地板（打滑） |
 
-#### 2.5.2 干热灭菌 (Miasma→O₂)
+**factor**: 凝结消耗 0.25mol、冻结不消耗；两者均需 0.25mol 水汽；≤200K 冻结、≤303.15K 打湿；仅限 turf。
 
-| 参数 | 值 |
-|---|---|
-| 最低温度 | >443K (170°C) |
-| 湿度限制 | 水汽比例 < 10% |
-| 速率 | `20 + (temp-443)/20` mol/tick |
-| 放热 | 0.002 J/mol |
-
-#### 2.5.3 Halon 灭火
+#### 2.5.2 干热灭菌（miaster，POST_FORMATION，Miasma→O₂）
 
 | 参数 | 值 |
 |---|---|
-| 最低需求 | Halon=0.01mol, O₂=0.01mol |
-| 最低温度 | >343K (70°C) |
-| 消耗 | **1 Halon : 20 O₂** |
-| 产物 | **2.5 Pluoxium** / mol Halon |
-| **吸热** | 2,500 J/mol Halon |
-| 树脂 | 满足消耗时生成灭火树脂泡沫 |
+| 最低需求 | Miasma≥0.01mol, 水汽比例 < `MIASTER_STERILIZATION_MAX_HUMIDITY = 0.1`（10%） |
+| 灭菌温度 | `MIASTER_STERILIZATION_TEMP = 373.15+70 = 443.15K` (170°C) |
+| 速率 | `MIASTER_STERILIZATION_RATE_BASE + (T-443.15)/MIASTER_STERILIZATION_RATE_SCALE`（= 20 + ΔT/20 mol/tick） |
+| 放热 | `MIASTER_STERILIZATION_ENERGY = 0.002 J/mol`（微量） |
+| 反应 | Miasma → O₂（1:1） |
 
-**最强大灭火机制**!
+**factor**: 灭菌速率随温度与 443.15K 之差缩放；每 mol Miasma 产 1 mol O₂；高温加速；放热 0.002 J/mol。
 
-#### 2.5.4 Proto-Nitrate 三阶段
-
-**阶段①: PN + H₂ → 更多PN**
-| 参数 | 值 |
-|---|---|
-| 最低需求 | PN≥0.01mol, H₂≥**150mol** |
-| 最大速率 | 5 mol H₂/tick |
-| **吸热** | 2,500 J/mol H₂ |
-
-**阶段②: PN + Tritium → H₂ (放热+辐射)**
-| 参数 | 值 |
-|---|---|
-| 温度范围 | **150~340K** |
-| 放热 | 10,000 J/mol Tr |
-| 辐射 | 能量>阈值释放脉冲 |
-
-**阶段③: PN + BZ → 分解 (核粒子!)**
-| 参数 | 值 |
-|---|---|
-| 温度范围 | **260~280K** |
-| 放热 | 60,000 J/mol BZ |
-| 核粒子 | `min(consumed/5, 6)` 个/次 |
-| 辐射脉冲 | 同步释放 |
-| 幻觉范围 | 附近碳基生物致幻 |
-
-### 2.6 电解器反应(3种)
-
-**代码**: `electrolyzer_reactions.dm` (139行)
-
-#### 2.6.1 水电解
+#### 2.5.3 Halon 吸氧灭火（halon_o2removal，PRE_FORMATION，吸热）
 
 | 参数 | 值 |
 |---|---|
-| 反应 | 2H₂O → O₂ + 2H₂ |
-| 速率 | `min(H₂O/2, 2.5×功率²)` mol/tick |
+| 最低需求 | Halon≥0.01, O₂≥0.01 |
+| 最低温度 | `HALON_COMBUSTION_MIN_TEMPERATURE = 343.15K` (70°C) |
+| 速率 | `min(T/HALON_COMBUSTION_TEMPERATURE_SCALE, Halon, O₂/20)`，除数=3731.5 |
+| 消耗 | **1 Halon : 20 O₂**（氧气大胃王） |
+| 产物 | **2.5 Pluoxium** / mol Halon（+5 记录） |
+| **吸热** | `HALON_COMBUSTION_ENERGY = 2,500 J/mol` |
+| 树脂 | 消耗 ≥ `HALON_COMBUSTION_MINIMUM_RESIN_MOLES` 且开阔 turf → 生成灭火树脂泡沫（halon 树脂，1 turf 体积） |
 
-#### 2.6.2 Hypernob→Antinoblium (SM闪电电解)
+**factor**: Halon 消耗随温度；每 mol Halon 耗 20 O₂、产 5 CO₂（factor 描述，代码产物为 Pluoxium 2.5）；吸热 2,500 J/mol；≥373.15K（factor 描述）加速。
+
+#### 2.5.4 Proto-Nitrate 三阶段（PRE_FORMATION，PN 催化转化）
+
+**阶段①: PN + H₂ → 更多 PN（proto_nitrate_hydrogen_response，吸热）**
 
 | 参数 | 值 |
 |---|---|
-| 条件 | Hypernob + SM闪电功率>5GeV |
-| 反应 | Hypernob → Antinob 1:1 |
-| 速率 | `Hypernob × clamp((功率-5)/(9-5), 0, 1)` |
+| 最低需求 | PN≥0.01mol, H₂ ≥ `PN_HYDROGEN_CONVERSION_THRESHOLD = 150mol` |
+| 最大速率 | `PN_HYDROGEN_CONVERSION_MAX_RATE = 5 mol H₂/tick` |
+| 吸热 | `PN_HYDROGEN_CONVERSION_ENERGY = 2,500 J/mol H₂`（即 5,000 J/mol PN 产出） |
+| 反应 | 2 H₂ → 1 PN（H₂ 消耗 2:1） |
 
-#### 2.6.3 Halon 电解生成
+**阶段②: PN + Tritium → H₂ + 辐射（proto_nitrate_tritium_response，放热+辐射）**
 
 | 参数 | 值 |
 |---|---|
-| 反应 | BZ → 2Halon + 0.2O₂ |
-| 放热 | 91,232 J/mol BZ |
-| 速率 | `BZ × (1-e^(-0.5×温度×功率/373))` |
+| 温度窗口 | `PN_TRITIUM_CONVERSION_MIN_TEMP=150K` ~ `MAX=340K` |
+| 速率 | `min(T/34 × (Tr×PN)/(Tr+10×PN), Tr, PN/0.01)` |
+| PN 消耗 | 0.01 mol / mol Tr |
+| 放热 | `PN_TRITIUM_CONVERSION_ENERGY = 10,000 J/mol Tr`（即 5,000 J/mol 中子） |
+| 辐射 | 能量 > `PN_TRITIUM_CONVERSION_RAD_RELEASE_THRESHOLD=10,000 × (体积/2500)³` → 脉冲（范围=√产/0.5, 上限20, 阈值0.3） |
+| 反应 | Tr → H₂（1:1，PN 催化） |
+
+**阶段③: PN + BZ → 分解（proto_nitrate_bz_response，放热+核粒子）**
+
+| 参数 | 值 |
+|---|---|
+| 温度窗口 | `PN_BZASE_MIN_TEMP=260K` ~ `MAX=280K`（窄窗） |
+| 速率 | `min(T/2240 × BZ×PN/(BZ+PN), BZ, PN)` |
+| 放热 | `PN_BZASE_ENERGY = 60,000 J/mol BZ` |
+| 产物 | 0.4 N₂ + 1.6 He + 0.8 Plasma / mol BZ |
+| 核粒子 | `min(round(consumed/PN_BZASE_NUCLEAR_PARTICLE_DIVISOR), 6)` 个（除数 5，上限 6） |
+| 辐射 | 能量 >60,000×(体积/2500)³ → 脉冲（范围=√(consumed-核粒子×2.5)/1.5, 上限20, 阈值0.3） |
+| 致幻 | `visible_hallucination_pulse(1, consumed×2秒)` 附近碳基致幻 |
+
+---
+
+### 2.6 电解器反应（3 种，electrolyzer_reactions.dm 139行）
+
+> 电解器是"反应器"而非管道反应：需求满足 + 电解器功率驱动。温度仅作效率因子，无温度上下限要求（除 SM 闪电条件）。
+
+#### 2.6.1 水电解 H₂O Conversion（h2o_conversion）
+
+| 参数 | 值 |
+|---|---|
+| 需求 | 水蒸气 ≥0.01mol |
+| 速率 | `min(H₂O/2, 2.5 × working_power²)` mol/tick（功率平方驱动） |
+| 反应 | 2 H₂O → 1 O₂ + 2 H₂ |
+| 温度 | 等热容等比变化（无吸放热） |
+
+**factor**: 2 H₂O 耗、1 O₂ 产、2 H₂ 产；仅限活跃电解器 turf。
+
+#### 2.6.2 Hypernob → Antinoblium（nob_conversion，SM 闪电电解）
+
+| 参数 | 值 |
+|---|---|
+| 需求 | Hypernob ≥0.01mol + **超物质闪电功率 > 5 GeV**（`POWER_PENALTY_THRESHOLD`） |
+| 速率 | `Hypernob × clamp((功率-5)/(9-5), 0, 1)`（5~9 GeV 线性，9+ 全速） |
+| 反应 | Hypernob → Antinoblium（1:1） |
+| 温度 | 按比热差等热容变化 |
+
+**factor**: 1 Hypernob 耗、1 Antinob 产；仅限 >5 GeV 超物质闪电击中的 turf。
+
+#### 2.6.3 Halon 电解生成（halon_generation，放热）
+
+| 参数 | 值 |
+|---|---|
+| 需求 | BZ ≥0.01mol |
+| 速率 | `BZ × (1 - e^(-0.5 × T × 功率 / 373.15))`（温度×功率双驱动） |
+| 反应 | 1 BZ → 2 Halon + 0.2 O₂ |
+| 放热 | `HALON_FORMATION_ENERGY = 91,232.1 J/mol`（factor: 91.2321 kJ/mol） |
+
+**factor**: BZ 消耗；每 mol BZ 产 0.2 O₂ + 2 Halon；放热 91.2321 kJ/mol；效率随温度；仅限活跃电解器 turf。
+
+---
 
 ### 2.7 反应网络总图
 
@@ -601,7 +715,7 @@ temp_scale:
      │           │
      ▼           ▼
   [Tr燃烧]    [N₂O合成] ← BZ催化
-  辐射!           │
+  辐射!           │ 200-250K
                  ▼
           ┌──── BZ ────┬──────────┐
           │            │          │
@@ -610,11 +724,12 @@ temp_scale:
           ▼           │          │
       [Halon电解]     ▼          ▼
       BZ→Halon    [Zauker]   [Healium]
-                 50000K+     25-300K
-                      │
-                      ▼
-               (遇N₂分解)
-               
+      91kJ/mol   50000K+     25-300K
+          │           │
+          ▼           ▼
+      灭火吸氧    (遇N₂分解)
+      (产Pluoxium)
+                
 [Hypernob合成] ←──
  N₂+Tr, 2.7-15K  │
  20MJ/mol!        │
@@ -622,6 +737,7 @@ temp_scale:
         ▼         │
    [电解器+SM]    │
    Hnob→Anob     │
+   >5GeV          │
         │         │
         ▼         │
   [Antinob复制]   │
@@ -643,7 +759,101 @@ temp_scale:
      PN   辐射  幻觉+辐射
 ```
 
-### 2.8 策略总结
+---
+
+### 2.8 全量常量表（code/__DEFINES/reactions.dm，274行）
+
+| 常量 | 值 | 含义 |
+|---|---|---|
+| `PRIORITY_PRE_FORMATION` | 1 | 前驱分解/净化优先 |
+| `PRIORITY_FORMATION` | 2 | 合成 |
+| `PRIORITY_POST_FORMATION` | 3 | 后处理 |
+| `PRIORITY_FIRE` | 4 | 燃烧最后 |
+| `ATMOS_RADIATION_VOLUME_EXP` | 3 | 辐射随体积³稀释 |
+| `GAS_REACTION_MAXIMUM_RADIATION_PULSE_RANGE` | 20 | 辐射脉冲最大范围 |
+| `WATER_VAPOR_CONDENSATION_POINT` | 303.15K | 水汽凝结点 |
+| `WATER_VAPOR_DEPOSITION_POINT` | 200K | 冻结点 |
+| `MIASTER_STERILIZATION_TEMP` | 443.15K | 灭菌温度 |
+| `MIASTER_STERILIZATION_MAX_HUMIDITY` | 0.1 | 最大湿度比 |
+| `MIASTER_STERILIZATION_RATE_BASE` | 20 | 基础灭菌速率 |
+| `MIASTER_STERILIZATION_RATE_SCALE` | 20 | 温度加速 |
+| `MIASTER_STERILIZATION_ENERGY` | 0.002 J/mol | 灭菌放热 |
+| `FIRE_CARBON_ENERGY_RELEASED` | 1e5 J/mol | 碳燃烧放热（基础） |
+| `PLASMA_MINIMUM_BURN_TEMPERATURE` | 373.15K | 等离子燃点 |
+| `PLASMA_UPPER_TEMPERATURE` | 1643.15K | 全速线 |
+| `OXYGEN_BURN_RATIO_BASE` | 1.4 | 基础氧燃比 |
+| `PLASMA_OXYGEN_FULLBURN` | 10 | 满速氧倍率 |
+| `SUPER_SATURATION_THRESHOLD` | 96 | 产氚阈值 |
+| `PLASMA_BURN_RATE_DELTA` | 9 | 1/9 每 tick |
+| `FIRE_PLASMA_ENERGY_RELEASED` | 3e6 J/mol | 等离子放热 |
+| `FIRE_HYDROGEN_ENERGY_RELEASED` | 2.8e6 J/mol | 氢放热 |
+| `HYDROGEN_OXYGEN_FULLBURN` | 10 | 氢满速氧倍率 |
+| `FIRE_HYDROGEN_BURN_RATE_DELTA` | 2 | 氢 1/2 每 tick |
+| `TRITIUM_RADIATION_MINIMUM_MOLES` | 0.1 mol | 氚辐射最低量 |
+| `TRITIUM_RADIATION_RELEASE_THRESHOLD` | 2.8e6 J | 氚辐射能量门槛 |
+| `TRITIUM_RADIATION_RANGE_DIVISOR` | 0.5 | 氚辐射范围除数 |
+| `TRITIUM_RADIATION_THRESHOLD` | 0.3 | 氚辐射穿透阈值 |
+| `FREON_MAXIMUM_BURN_TEMPERATURE` | 283K | Freon 燃点上限 |
+| `FREON_LOWER_TEMPERATURE` | 60K | 半速线 |
+| `FREON_TERMINAL_TEMPERATURE` | 20K | 停止线 |
+| `FREON_BURN_RATE_DELTA` | 4 | Freon 1/4 每 tick |
+| `FIRE_FREON_ENERGY_CONSUMED` | 3e5 J/mol | Freon 吸热 |
+| `HOT_ICE_FORMATION_MAX/MIN_TEMPERATURE` | 160K/120K | 热冰窗口 |
+| `HOT_ICE_FORMATION_PROB` | 2% | 热冰概率 |
+| `N2O_FORMATION_MIN/MAX_TEMPERATURE` | 200/250K | N₂O 合成窗口 |
+| `N2O_FORMATION_ENERGY` | 10,000 J/mol | N₂O 放热 |
+| `N2O_DECOMPOSITION_MIN/MAX_TEMPERATURE` | 1,400/100,000K | N₂O 分解窗口 |
+| `N2O_DECOMPOSITION_RATE_DIVISOR` | 2 | N₂O 分解 1/2 |
+| `N2O_DECOMPOSITION_ENERGY` | 200,000 J/mol | N₂O 分解放热 |
+| `BZ_FORMATION_MAX_TEMPERATURE` | 313.15K | BZ 合成上限（防炸弹） |
+| `BZ_FORMATION_ENERGY` | 80,000 J/mol | BZ 放热 |
+| `PLUOXIUM_FORMATION_MIN/MAX_TEMP` | 50/273.15K | Pluoxium 窗口 |
+| `PLUOXIUM_FORMATION_MAX_RATE` | 5 mol/tick | Pluoxium 上限 |
+| `PLUOXIUM_FORMATION_ENERGY` | 250 J/mol | Pluoxium 放热 |
+| `NITRIUM_FORMATION_MIN_TEMP` | 1,500K | Nitrium 最低温 |
+| `NITRIUM_FORMATION_TEMP_DIVISOR` | 2,985.2 | Nitrium 速率除数 |
+| `NITRIUM_FORMATION_ENERGY` | 100,000 J/mol | Nitrium 吸热 |
+| `NITRIUM_DECOMPOSITION_MAX_TEMP` | 343.15K | Nitrium 分解上限 |
+| `NITRIUM_DECOMPOSITION_TEMP_DIVISOR` | 2,985.2 | Nitrium 分解除数 |
+| `NITRIUM_DECOMPOSITION_ENERGY` | 30,000 J/mol | Nitrium 分解放热 |
+| `FREON_FORMATION_MIN_TEMPERATURE` | 473.15K | Freon 合成最低温 |
+| `NOBLIUM_FORMATION_MIN/MAX_TEMP` | 2.7/15K | Hypernob 窗口 |
+| `NOBLIUM_FORMATION_ENERGY` | 2e7 J/mol | Hypernob 放热（最强） |
+| `REACTION_OPPRESSION_THRESHOLD` | 5 mol | 抑反应阈值 |
+| `REACTION_OPPRESSION_MIN_TEMP` | 20K | 抑反应温度 |
+| `HALON_FORMATION_ENERGY` | 91,232.1 J/mol | Halon 电解放热 |
+| `HALON_COMBUSTION_ENERGY` | 2,500 J/mol | Halon 吸氧吸热 |
+| `HALON_COMBUSTION_MIN_TEMPERATURE` | 343.15K | Halon 最低温 |
+| `HALON_COMBUSTION_TEMPERATURE_SCALE` | 3,731.5 | Halon 速率除数 |
+| `HEALIUM_FORMATION_MIN/MAX_TEMP` | 25/300K | Healium 窗口 |
+| `HEALIUM_FORMATION_ENERGY` | 9,000 J/3mol | Healium 放热 |
+| `ZAUKER_FORMATION_MIN/MAX_TEMPERATURE` | 50,000/75,000K | Zauker 窗口 |
+| `ZAUKER_FORMATION_TEMPERATURE_SCALE` | 5e-6 | Zauker 速率比例 |
+| `ZAUKER_FORMATION_ENERGY` | 5,000 J/0.5mol | Zauker 吸热 |
+| `ZAUKER_DECOMPOSITION_MAX_RATE` | 20 mol/tick | Zauker 分解上限 |
+| `ZAUKER_DECOMPOSITION_ENERGY` | 460 J/mol | Zauker 分解放热 |
+| `PN_FORMATION_MIN/MAX_TEMPERATURE` | 5,000/10,000K | PN 窗口 |
+| `PN_FORMATION_TEMPERATURE_SCALE` | 5e-3 | PN 速率比例 |
+| `PN_FORMATION_ENERGY` | 650 J/2.2mol | PN 放热 |
+| `PN_HYDROGEN_CONVERSION_THRESHOLD` | 150 mol | PN+H₂ 门槛 |
+| `PN_HYDROGEN_CONVERSION_MAX_RATE` | 5 mol/tick | PN+H₂ 上限 |
+| `PN_HYDROGEN_CONVERSION_ENERGY` | 2,500 J/mol | PN+H₂ 吸热 |
+| `PN_TRITIUM_CONVERSION_MIN/MAX_TEMP` | 150/340K | PN+Tr 窗口 |
+| `PN_TRITIUM_CONVERSION_ENERGY` | 10,000 J/mol | PN+Tr 放热 |
+| `PN_TRITIUM_CONVERSION_RAD_RELEASE_THRESHOLD` | 10,000 J | PN+Tr 辐射门槛 |
+| `PN_TRITIUM_RAD_RANGE_DIVISOR` | 0.5 | PN+Tr 辐射除数 |
+| `PN_BZASE_MIN/MAX_TEMP` | 260/280K | PN+BZ 窗口 |
+| `PN_BZASE_ENERGY` | 60,000 J/mol | PN+BZ 放热 |
+| `PN_BZASE_RAD_RELEASE_THRESHOLD` | 60,000 J | PN+BZ 辐射门槛 |
+| `PN_BZASE_RAD_RANGE_DIVISOR` | 1.5 | PN+BZ 辐射除数 |
+| `PN_BZASE_NUCLEAR_PARTICLE_DIVISOR` | 5 | 核粒子除数 |
+| `PN_BZASE_NUCLEAR_PARTICLE_MAXIMUM` | 6 | 核粒子上限 |
+| `PN_BZASE_NUCLEAR_PARTICLE_RADIATION_ENERGY_CONVERSION` | 2.5 | 核粒子辐射折算 |
+| `ANTINOBLIUM_CONVERSION_DIVISOR` | 90 | Antinob 转化 1/90 |
+
+---
+
+### 2.9 策略总结
 
 **能源/发电反应**:
 | 反应 | 放热量 | 用途 |
@@ -675,7 +885,7 @@ temp_scale:
 11. Zauker: Hypernob+Nitrium+50000-75000K
 ```
 
----
+**修正记录**: 本版全量提取自 reactions.dm 1,240 行 + reaction_factors.dm 216 行（官方 factor 描述首次收录）+ reactions.dm 常量 274 行；修正旧版缺漏——氚辐射三重门槛（0.1mol/2.8e6J×体积³/10%）、BZ 合成 N₂O 分解因子公式、Nitrium 合成温度除数 2985.2、Halon 产物（factor 描述 CO₂ vs 代码 Pluoxium 差异标注）、PN 三阶段完整数值、电解器功率公式。
 
 # 第二卷 · 管道工程
 
