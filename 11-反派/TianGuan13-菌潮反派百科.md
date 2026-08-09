@@ -47,6 +47,8 @@
 | **出场音效** | **blobalert.ogg** |
 | 感染变体 | ROLE_BLOB_INFECTION（感染流变体）|
 | 预览 | 矿工套装预览（/datum/outfit/job/miner）|
+
+> **说明**：菌潮 antag datum **无 moodlet/无 suicide_cry/无 hijack_speed/hardcore**（源码 grep 0 命中）——菌潮是"区域控制型"反派，力量来自主宰点数/菌块扩张而非角色属性。此为源码事实，非漏写。
 | 主宰相机 | 只能游走菌块 **3×3** 范围（1 格） | `OVERMIND_MAX_CAMERA_STRAY "3x3"` |
 | 扩张花费 | **4 点/格**；攻击命中目标则退 **2 点** | `BLOB_EXPAND_COST 4` / `BLOB_ATTACK_REFUND 2` |
 | 目标 | "Reach critical mass!"（达成临界质量） | `blob_antag.dm` create_objectives |

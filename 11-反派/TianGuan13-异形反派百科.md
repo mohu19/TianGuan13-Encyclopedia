@@ -240,6 +240,8 @@
 - `pref_flag = ROLE_ALIEN`（异形偏好角色）
 - `show_in_antagpanel = FALSE`（管理面板隐藏——通常由地图/事件生成）
 - `show_to_ghosts = TRUE`（幽灵可见，可报名破胸）
+
+> **说明**：异形 antag datum 是全库最简之一——**无 moodlet/无 stinger 音效/无 suicide_cry/无 hijack_speed/hardcore**（源码 grep 0 命中），异形力量完全来自生物本体（等离子/职阶/感染链），非 datum 属性。此为源码事实，非漏写。
 - 附身方式：`mind_initialize` 自动检测——若**异形卵已送达**且在**俘虏区** → 分配 captive 变体；否则标准 xeno
 - 职业：`/datum/job/xenomorph`（异形职业）
 

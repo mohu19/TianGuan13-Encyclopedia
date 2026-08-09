@@ -41,6 +41,8 @@
 | 物种 | `/datum/species/abductor`（灰皮外星人）|
 | 天赋 | 绑架者训练 + 绑架者 HUD + 不可转化 |
 | 自杀喊话 | "FOR THE MOTHERSHIP!!"（为了母舰！）|
+
+> **说明**：绑架者 antag datum 较简——**无 moodlet/无 hijack_speed/无 hardcore**（源码 grep 0 命中）；目标系统由 `experiment 6 名人类`（target_amount=6）硬编码 + 团队报告构成，无随机目标池。此为源码事实，非漏写。
 | 出场音乐 | ayylien.ogg |
 | 皮肤色 | 默认灰；**2% 概率自然变绿**（愚人节 50%）；管理员可自定义 |
 

@@ -46,6 +46,8 @@
 
 > **终局变体**：部分间谍目标含**偷穿梭机**（steal_the_shuttle 劫机目标）——"Rob the station blind"的终局延伸。
 
+> **说明**：间谍 antag datum **无 stinger 音效/无 suicide_cry**（源码 grep 0 命中）——间谍潜伏入场、无出场音，符合"商业间谍"定位。此为源码事实，非漏写。
+
 ---
 
 ## 二、间谍 Uplink（伪装+界面）

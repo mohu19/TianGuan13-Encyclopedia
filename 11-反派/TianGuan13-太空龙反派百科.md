@@ -37,10 +37,14 @@
 | pref_flag | ROLE_SPACE_DRAGON |
 | 阵营 | FACTION_CARP（太空鲤阵营）|
 
+> **说明**：太空龙 antag datum 极简——**无 moodlet/无 stinger/无 suicide_cry/无 hijack_speed**（源码 grep 0 命中），力量完全来自裂隙召唤机制。此为源码事实，非漏写。
+
 **基础属性**:
 | 项 | 值 |
 |---|---|
 | 阵营 | FACTION_CARP（太空鲤阵营）|
+
+> **说明**：太空龙 antag datum 极简——**无 moodlet/无 stinger/无 suicide_cry/无 hijack_speed**（源码 grep 0 命中），力量完全来自裂隙召唤机制。此为源码事实，非漏写。
 | 能力 | 召唤裂隙（Summon Rift）+ 定位裂隙（Locate Rift）|
 | 职业 | /datum/job/space_dragon（太空龙职业）|
 | 裂隙计时 | 300（maxRiftTimer）|
