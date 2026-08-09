@@ -30,6 +30,13 @@
 - **目标**：裂隙充能完成（maxRiftTimer = 300）
 - **5 个候选裂隙区**：随机选择站内合法区域
 
+**Antag 属性**（space_dragon.dm datum）:
+| 项 | 值 |
+|---|---|
+| roundend_category | "space dragons" |
+| pref_flag | ROLE_SPACE_DRAGON |
+| 阵营 | FACTION_CARP（太空鲤阵营）|
+
 **基础属性**:
 | 项 | 值 |
 |---|---|
